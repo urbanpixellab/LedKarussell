@@ -1,0 +1,6 @@
+ofxArtnetProtocol
+ofxMidi
+ofxNetwork
+ofxOsc
+ofxSyphon
+ofxXmlSettings
