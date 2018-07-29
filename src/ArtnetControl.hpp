@@ -13,13 +13,18 @@
 #include "ofxArtnetProtocol.h"
 #include "SceneControl.hpp"
 #include "MidiControl.hpp"
+#include "ofxXmlSettings.h"
 
 class ArtnetControl
 {
 public:
-    struct NODE
+    struct Node
     {
-        //artnet node
+        //artnet node maybe as seperate class
+        string                  _ip;
+        ofxArtnetProtocol       _artnet;
+        //artnet.begin("192.168.12.200");
+        u_int8_t                _universes[8][450]; //3*150 led per stripe max
     };
     
     ArtnetControl(MidiControl *mc,SceneControl *live);
@@ -28,9 +33,16 @@ public:
     void update();
     void sendToNodes();
     
+    void specialFunction(int id);
+    
+    void loadNodes(); //load the artnet controler nodes from an xml
+    
 private:
+    void clearNodes();
+    
     MidiControl             *_MC;
     SceneControl            *_Scene; // the actual output scene
+    vector<Node*>           _nodes;
 };
 
 #endif /* ArtnetControl_hpp */

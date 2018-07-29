@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Visualizer.hpp"
 #include "MidiControl.hpp"
+#include "Colorizer.hpp"
 
 class SceneControl
 {
@@ -36,6 +37,7 @@ private:
     void                updateSequencer();
     MidiControl         *_MC;
     Visualizer          _visualizer;
+    Colorizer           _colorizer;
     int                 _step;      //the step sequence
     int                 _maxStep;   // the maximum length of steps in the selected pattern
 };
