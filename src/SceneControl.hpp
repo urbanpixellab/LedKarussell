@@ -23,11 +23,18 @@ public:
         LIVE
     };
     
+    enum ANIMATION
+    {
+        FUNCTION = 0,
+        SHADER
+    };
+    
     SceneControl(MidiControl *mc);
     ~SceneControl();
     
     void update();
     void drawGui();
+    
     
     void addListener();
     void removeListener();
@@ -38,6 +45,9 @@ private:
     MidiControl         *_MC;
     Visualizer          _visualizer;
     Colorizer           _colorizer;
+    
+    bool                _sceneSelector; // is it a function or a shader
+    
     int                 _step;      //the step sequence
     int                 _maxStep;   // the maximum length of steps in the selected pattern
 };

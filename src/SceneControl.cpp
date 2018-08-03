@@ -9,7 +9,9 @@
 #include "SceneControl.hpp"
 
 SceneControl::SceneControl(MidiControl *mc):_MC(mc)
-{}
+{
+    _sceneSelector = 0;//init with function
+}
 
 SceneControl::~SceneControl()
 {
