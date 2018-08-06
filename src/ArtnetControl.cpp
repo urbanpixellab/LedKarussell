@@ -32,18 +32,26 @@ void ArtnetControl::loadNodes()
 {
     clearNodes();
     //load nodes from xml
-    Node *n = new Node();
-    n->_ip = "192.168.12.200";
-    n->_artnet.begin("192.168.12.200");
+    Segment::Node *n = new Segment::Node();
+    n->ip = "192.168.12.200";
+    n->artnet.begin("192.168.12.200");
     //fill universes black
     for (int u = 0; u < 8; u++)
     {
-        for (int l = 0; l < 450; l++)
+        for (int l = 0; l < 512; l++)
         {
-            n->_universes[u][l] = 0;
+            n->universes[u][l] = 0;
         }
     }
     _nodes.push_back(n);
+    // now load the segments
+    for (int i = 0; i < 34; i++)
+    {
+        //int universe,int begin,int end, Node * node
+        //or settings based on an xml
+        Segment *newSeg = new Segment(0,0,150,_nodes[0]);
+        _segments.push_back(newSeg);
+    }
 }
 
 void ArtnetControl::update()
@@ -52,6 +60,15 @@ void ArtnetControl::update()
     // which is overriding the actual state
     // also use the delta time and next beat from the mmidi controler
     // to run through the step sequences from the on off function
+
+    //fill all nodes by segment
+    int segments = 34;// the linear elements starting top left to right bottom, the lines
+    for (int i = 0; i < segments; i++)
+    {
+        
+        //writeSegment(the id of the segment from left to right,char[150]); these are the max per stripe
+        
+    }
 }
 
 void ArtnetControl::sendToNodes()
@@ -60,6 +77,8 @@ void ArtnetControl::sendToNodes()
     //int universe = 0;
     //int chnCount = 450;//33 leds * 3
     //artnet.send(universe1,universe,chnCount);
+
+    //send all nodes
 
 }
 

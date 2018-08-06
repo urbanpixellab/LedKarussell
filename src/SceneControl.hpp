@@ -29,6 +29,12 @@ public:
         SHADER
     };
     
+    struct Controler
+    {
+        string  ip;
+        int     id;
+    };
+    
     SceneControl(MidiControl *mc);
     ~SceneControl();
     

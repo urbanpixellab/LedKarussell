@@ -26,6 +26,7 @@
 		622D9E63210E14240006B0B0 /* ArtnetControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E61210E14240006B0B0 /* ArtnetControl.cpp */; };
 		622D9E66210E36A90006B0B0 /* Colorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E64210E36A90006B0B0 /* Colorizer.cpp */; };
 		622D9E6A210E37910006B0B0 /* LedMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E68210E37910006B0B0 /* LedMapper.cpp */; };
+		622D9E772118CF370006B0B0 /* Segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E752118CF370006B0B0 /* Segment.cpp */; };
 		62545D179C94265CA1389D4A /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */; };
 		631702104AFC104323A9EB79 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AC32CCCB56FAABA3E1BDE0 /* CoreMIDI.framework */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
@@ -131,6 +132,8 @@
 		622D9E65210E36A90006B0B0 /* Colorizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Colorizer.hpp; sourceTree = "<group>"; };
 		622D9E68210E37910006B0B0 /* LedMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LedMapper.cpp; sourceTree = "<group>"; };
 		622D9E69210E37910006B0B0 /* LedMapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LedMapper.hpp; sourceTree = "<group>"; };
+		622D9E752118CF370006B0B0 /* Segment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Segment.cpp; sourceTree = "<group>"; };
+		622D9E762118CF370006B0B0 /* Segment.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Segment.hpp; sourceTree = "<group>"; };
 		63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = OscOutboundPacketStream.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp; sourceTree = SOURCE_ROOT; };
 		65EEFA3DA3526E9CDD9C21F9 /* ofxOscBundle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscBundle.cpp; path = ../../../addons/ofxOsc/src/ofxOscBundle.cpp; sourceTree = SOURCE_ROOT; };
 		6B65E6930994CC4B2D2B8B33 /* OscPacketListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = OscPacketListener.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h; sourceTree = SOURCE_ROOT; };
@@ -546,6 +549,8 @@
 				622D9E62210E14240006B0B0 /* ArtnetControl.hpp */,
 				622D9E68210E37910006B0B0 /* LedMapper.cpp */,
 				622D9E69210E37910006B0B0 /* LedMapper.hpp */,
+				622D9E752118CF370006B0B0 /* Segment.cpp */,
+				622D9E762118CF370006B0B0 /* Segment.hpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -719,6 +724,7 @@
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
+				622D9E772118CF370006B0B0 /* Segment.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
