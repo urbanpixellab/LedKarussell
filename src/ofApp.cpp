@@ -3,8 +3,6 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    _LiveScene = new SceneControl(&_MC);
-    _PrepareScene = new SceneControl(&_MC);
 /* not needed here
     _PresetScenes[0] = new SceneControl(&_MC);
     _PresetScenes[1] = new SceneControl(&_MC);
@@ -15,31 +13,28 @@ void ofApp::setup()
     _PresetScenes[6] = new SceneControl(&_MC);
     _PresetScenes[7] = new SceneControl(&_MC);
     */
-    _AC = new ArtnetControl(&_MC,_LiveScene);
+    _AC = new ArtnetControl(&_MC);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     _MC.update();
-    _LiveScene->update();
-    _PrepareScene->update();
     _AC->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    _LiveScene->drawGui();
-    _PrepareScene->drawGui();
-    
     //test visualizer
     // for every segment
-    for (int uni = 0; uni< 8; uni++)
+    for (int s = 0; s< 8; s++) // acht sequenzen erstmal
     {
         for (int x = 0; x < 150; x++)
         {
-            ofSetColor(_AC->getNode(0)->universes[uni%2][x]);//only for preview must been done with setpixels, is faster
-            ofDrawRectangle(x * ofGetWidth() / 150, uni * 10, ofGetWidth() / 150, 10);
-            
+            int r = int(_AC->getPreSegment(8)->getArray()[(x*3) + 0]);
+            int g = int(_AC->getPreSegment(8)->getArray()[(x*3) + 1]);
+            int b = int(_AC->getPreSegment(8)->getArray()[(x*3) + 2]);
+            ofSetColor(r,g,b);
+            ofDrawRectangle(x * ofGetWidth() / 150, s * 10, ofGetWidth() / 150, 10);
         }
     }
 }
@@ -102,12 +97,5 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 void ofApp::exit()
 {
     
-    for (int i = 0; i < 8; i++)
-    {
-        delete _PresetScenes[i];
-    }
-
-    delete _PrepareScene;
-    delete _LiveScene;
     delete _AC;
 }

@@ -21,6 +21,11 @@ MidiControl::~MidiControl()
     
 }
 
+void MidiControl::drawGUI()
+{
+    //tap button and bpm or step counter must been implemented 
+}
+
 void MidiControl::update()
 {
     //first the midi notes and store them in an array

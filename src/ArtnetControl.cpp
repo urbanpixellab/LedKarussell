@@ -8,8 +8,10 @@
 
 #include "ArtnetControl.hpp"
 
-ArtnetControl::ArtnetControl(MidiControl *mc,SceneControl *live):_MC(mc),_Scene(live)
+ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
+    _preAnimator = new LedAnimator(_MC);
+    _LiveAnimator = new LedAnimator(_MC);
     loadNodes();
 }
 
@@ -34,7 +36,7 @@ void ArtnetControl::loadNodes()
     //load nodes from xml
     for (int i = 0; i < 1; i++)
     {
-        Segment::Node *n = new Segment::Node();
+        Node *n = new Node();
         string ip = "192.168.12."+ ofToString(100+i);
         n->ip = ip;
         n->artnet.begin(ip.c_str());
@@ -50,14 +52,23 @@ void ArtnetControl::loadNodes()
     }
     // now load the segments
     
-    _segments.clear();
+    _preSegments.clear();
+    _liveSegments.clear();
     for (int i = 0; i < 34; i++)
     {
         //int universe,int begin,int end, Node * node
         //or settings based on an xml from the settings
-        Segment *newSeg = new Segment(0,0,150,_nodes[0]);
-        _segments.push_back(newSeg);
+        int node = 0;
+        int universe = 0;
+        //int nodeID,int universe,int beginLed,int endLed,int segmentID
+        Segment *newSegP = new Segment(node,universe,0,150,i);
+        Segment *newSegL = new Segment(node,universe,0,150,i);
+        _preSegments.push_back(newSegP);
+        _liveSegments.push_back(newSegL);
     }
+    //whiteout
+    _preAnimator->setAnimation(2);
+    _LiveAnimator->setAnimation(2);
 }
 
 void ArtnetControl::update()
@@ -67,21 +78,21 @@ void ArtnetControl::update()
     // also use the delta time and next beat from the mmidi controler
     // to run through the step sequences from the on off function
 
-    //fill all nodes by segment
-    u_int8_t rgb[450] = {0};
-    for (int i = 0; i < 450; i++)
+    if(_MC->getBeat() == true)
     {
-        rgb[i] = ofRandom(255);
+        _preAnimator->addStep();
+        _LiveAnimator->addStep();
     }
-    
-    for (int i = 0; i < _segments.size(); i++)
+    //fill all nodes by segment
+    for (int i = 0; i < _liveSegments.size(); i++)
     {
         //writeSegment(the id of the segment from left to right,char[150]); these are the max per stripe
         //_segments[i]->setArrayByArray(rgb);
         //or
-        _segments[i]->setArrayByFunction(0, _MC->getDt(), i);//color select
-        
+        _preAnimator->animationToArray(i, _preSegments[i]->getArray(), 450, 0);
+        _LiveAnimator->animationToArray(i, _liveSegments[i]->getArray(), 450, 0);
     }
+    sendToNodes();
 }
 
 void ArtnetControl::sendToNodes()
@@ -91,14 +102,10 @@ void ArtnetControl::sendToNodes()
     //int chnCount = 450;//33 leds * 3
     //artnet.send(universe1,universe,chnCount);
 
-    //send all nodes
-    for (int i = 0; i < _nodes.size(); i++)
+    //send all nodes but only from live
+    for (int i = 0; i < _liveSegments.size(); i++)
     {
-        
-        for (int j = 0; j < 8; j++)
-        {
-            _nodes[i]->artnet.send(_nodes[i]->universes[j],j,450);
-        }
+            _nodes[_liveSegments[i]->getNodeID()]->artnet.send(_liveSegments[i]->getArray(),_liveSegments[i]->getUniverse(),512);
     }
 
 }

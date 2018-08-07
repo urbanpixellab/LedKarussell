@@ -18,41 +18,24 @@
 class Segment
 {
 public:
-    enum FUNCTIONS
-    {
-        BLINK = 1,
-        SIN01,
-        SIN02,
-        COUNT,
-        WHITE_FLASH,
-        INVERT
-    };
-    
-    struct Node
-    {
-        //artnet node maybe as seperate class
-        string                  ip;
-        ofxArtnetProtocol       artnet;
-        //artnet.begin("192.168.12.200");
-        u_int8_t                universes[8][512]; //8 full dm universes
-        //u_int8_t                _universes[8][450]; //3*150 led per stripe max
-    };
-
-    
-    Segment(int universe,int begin,int end, Node * n);
+    Segment(int nodeID,int universe,int begin,int end,int segmentID);
     ~Segment();
     
-    void setSegment(Node *n,int universe,int begin = 0,int end = 0);
-    void setArrayByArray(u_int8_t *array);// 150 * 3 length
-    void setArrayByFunction(int select, float dt,int colorSelect);
+    u_int8_t *getArray(){return _values;};
+    int &getBegin(){return _begin;};
+    int &getEnd(){return _end;};
+    int &getNodeID(){return _nodeID;};
+    int &getUniverse(){return _universe;};
+    
     
 private:
-    int     _universe;//maybe more than on if it has more than one unoverse
-    int     _begin;
-    int     _mid;
-    int     _end;
-    Node    *_node;// the note to write on
-    int     _funcSelect;
+    int             _universe;//maybe more than on if it has more than one unoverse
+    int             _begin;
+    int             _mid;
+    int             _end;
+    int             _funcSelect;
+    u_int8_t        _values[512];//max size
+    int             _nodeID;
     
 };
 
