@@ -41,6 +41,7 @@ public:
     
     void loadNodes(); //load the artnet controler nodes from an xml
     
+    Segment::Node *getNode(int id){return _nodes[id];};
     
 private:
     void clearNodes();

@@ -32,23 +32,29 @@ void ArtnetControl::loadNodes()
 {
     clearNodes();
     //load nodes from xml
-    Segment::Node *n = new Segment::Node();
-    n->ip = "192.168.12.200";
-    n->artnet.begin("192.168.12.200");
-    //fill universes black
-    for (int u = 0; u < 8; u++)
+    for (int i = 0; i < 1; i++)
     {
-        for (int l = 0; l < 512; l++)
+        Segment::Node *n = new Segment::Node();
+        string ip = "192.168.12."+ ofToString(100+i);
+        n->ip = ip;
+        n->artnet.begin(ip.c_str());
+        //fill universes black
+        for (int u = 0; u < 8; u++)
         {
-            n->universes[u][l] = 0;
+            for (int l = 0; l < 512; l++)
+            {
+                n->universes[u][l] = 0;
+            }
         }
+        _nodes.push_back(n);
     }
-    _nodes.push_back(n);
     // now load the segments
+    
+    _segments.clear();
     for (int i = 0; i < 34; i++)
     {
         //int universe,int begin,int end, Node * node
-        //or settings based on an xml
+        //or settings based on an xml from the settings
         Segment *newSeg = new Segment(0,0,150,_nodes[0]);
         _segments.push_back(newSeg);
     }
@@ -62,11 +68,18 @@ void ArtnetControl::update()
     // to run through the step sequences from the on off function
 
     //fill all nodes by segment
-    int segments = 34;// the linear elements starting top left to right bottom, the lines
-    for (int i = 0; i < segments; i++)
+    u_int8_t rgb[450] = {0};
+    for (int i = 0; i < 450; i++)
     {
-        
+        rgb[i] = ofRandom(255);
+    }
+    
+    for (int i = 0; i < _segments.size(); i++)
+    {
         //writeSegment(the id of the segment from left to right,char[150]); these are the max per stripe
+        //_segments[i]->setArrayByArray(rgb);
+        //or
+        _segments[i]->setArrayByFunction(0, _MC->getDt(), i);//color select
         
     }
 }
@@ -79,6 +92,14 @@ void ArtnetControl::sendToNodes()
     //artnet.send(universe1,universe,chnCount);
 
     //send all nodes
+    for (int i = 0; i < _nodes.size(); i++)
+    {
+        
+        for (int j = 0; j < 8; j++)
+        {
+            _nodes[i]->artnet.send(_nodes[i]->universes[j],j,450);
+        }
+    }
 
 }
 

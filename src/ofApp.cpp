@@ -5,7 +5,7 @@ void ofApp::setup()
 {
     _LiveScene = new SceneControl(&_MC);
     _PrepareScene = new SceneControl(&_MC);
-
+/* not needed here
     _PresetScenes[0] = new SceneControl(&_MC);
     _PresetScenes[1] = new SceneControl(&_MC);
     _PresetScenes[2] = new SceneControl(&_MC);
@@ -14,7 +14,7 @@ void ofApp::setup()
     _PresetScenes[5] = new SceneControl(&_MC);
     _PresetScenes[6] = new SceneControl(&_MC);
     _PresetScenes[7] = new SceneControl(&_MC);
-    
+    */
     _AC = new ArtnetControl(&_MC,_LiveScene);
 }
 
@@ -30,9 +30,18 @@ void ofApp::update(){
 void ofApp::draw(){
     _LiveScene->drawGui();
     _PrepareScene->drawGui();
-    ofSetColor(_MC.getDt() * 255,0,0);//only for preview
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
     
+    //test visualizer
+    // for every segment
+    for (int uni = 0; uni< 8; uni++)
+    {
+        for (int x = 0; x < 150; x++)
+        {
+            ofSetColor(_AC->getNode(0)->universes[uni%2][x]);//only for preview must been done with setpixels, is faster
+            ofDrawRectangle(x * ofGetWidth() / 150, uni * 10, ofGetWidth() / 150, 10);
+            
+        }
+    }
 }
 
 //--------------------------------------------------------------

@@ -18,6 +18,16 @@
 class Segment
 {
 public:
+    enum FUNCTIONS
+    {
+        BLINK = 1,
+        SIN01,
+        SIN02,
+        COUNT,
+        WHITE_FLASH,
+        INVERT
+    };
+    
     struct Node
     {
         //artnet node maybe as seperate class
@@ -33,14 +43,16 @@ public:
     ~Segment();
     
     void setSegment(Node *n,int universe,int begin = 0,int end = 0);
-    void setArray(char *array, int length = 450);// 150 * 3 length
+    void setArrayByArray(u_int8_t *array);// 150 * 3 length
+    void setArrayByFunction(int select, float dt,int colorSelect);
     
 private:
-    int     _universe;
+    int     _universe;//maybe more than on if it has more than one unoverse
     int     _begin;
     int     _mid;
     int     _end;
     Node    *_node;// the note to write on
+    int     _funcSelect;
     
 };
 

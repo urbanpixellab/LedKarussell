@@ -38,7 +38,7 @@ void Visualizer::draw()
     _fbo.begin();
     ofClear(0,0,0);
     //_texture.bind();
-    _geometry.draw();
+//    _geometry.draw();
     //_texture.unbind();
     _fbo.end();
     ofPopMatrix();
