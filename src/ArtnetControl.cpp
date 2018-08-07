@@ -10,6 +10,9 @@
 
 ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
+    _GUI = new AnimatorGUI(ofRectangle(100,100,500,500));
+    _GUI->createAnimationGUI(LedAnimator::COUNT);
+    ofAddListener(_GUI->buttonPressed, this, &ArtnetControl::guiPressed);
     _preAnimator = new LedAnimator(_MC);
     _LiveAnimator = new LedAnimator(_MC);
     loadNodes();
@@ -18,7 +21,15 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 ArtnetControl::~ArtnetControl()
 {
     // blackout all
+    ofRemoveListener(_GUI->buttonPressed, this, &ArtnetControl::guiPressed);
     clearNodes();
+    delete _preAnimator;
+    delete _LiveAnimator;
+    for (int i = 0; i < _liveSegments.size(); i++)
+    {
+        delete _preSegments[i];
+        delete _liveSegments[i];
+    }
 }
 
 void ArtnetControl::clearNodes()
@@ -89,11 +100,24 @@ void ArtnetControl::update()
         //writeSegment(the id of the segment from left to right,char[150]); these are the max per stripe
         //_segments[i]->setArrayByArray(rgb);
         //or
-        _preAnimator->animationToArray(i, _preSegments[i]->getArray(), 450, 0);
-        _LiveAnimator->animationToArray(i, _liveSegments[i]->getArray(), 450, 0);
+        _preAnimator->animationToArray(i, _preSegments[i]->getArray(), _preSegments[i]->getLength(), 0);
+        _LiveAnimator->animationToArray(i, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), 0);
     }
     sendToNodes();
 }
+
+void ArtnetControl::setAnimation(int id)
+{
+    _preAnimator->setAnimation(id);
+    _LiveAnimator->setAnimation(id);
+}
+
+void ArtnetControl::drawGui()
+{
+    // draw som buttons from a controler gui class
+    _GUI->draw();
+}
+
 
 void ArtnetControl::sendToNodes()
 {
@@ -109,6 +133,12 @@ void ArtnetControl::sendToNodes()
     }
 
 }
+
+void ArtnetControl::guiPressed(int &buttonid)
+{
+    setAnimation(buttonid);
+}
+
 
 void ArtnetControl::specialFunction(int id)
 {

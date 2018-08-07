@@ -24,6 +24,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    _AC->drawGui();
     //test visualizer
     // for every segment
     for (int s = 0; s< 8; s++) // acht sequenzen erstmal
@@ -40,7 +41,13 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(int key)
+{
+    if (key == ' ')
+    {
+        int select = ofRandom(LedAnimator::COUNT);
+        _AC->setAnimation(select);
+    }
 
 }
 

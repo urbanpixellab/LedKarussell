@@ -30,6 +30,8 @@ void LedAnimator::drawGui()
 
 void LedAnimator::animationToArray(int id,u_int8_t * array,int length,int colorSelect)
 {
+    //_col.getPrimColor(colorSelect);
+    // what is the best way to combine it
     switch (_aniSelect)
     {
         case ANIMATIONS::BLACK:
@@ -46,6 +48,10 @@ void LedAnimator::animationToArray(int id,u_int8_t * array,int length,int colorS
             
         case ANIMATIONS::FADE_OUT:
             fade(id, array, length,true);
+            break;
+            
+        case ANIMATIONS::SMOOTH_FADE:
+            smoothFade(id, array, length,true);
             break;
             
         default: // default is black
@@ -77,5 +83,13 @@ void LedAnimator::fade(int &id,u_int8_t * array,int &length,bool direction)
     for (int i = 0; i < length; i++)
     {
         array[i] = abs(direction-_MC->getDt()) * 255.;
+    }
+}
+
+void LedAnimator::smoothFade(int &id,u_int8_t * array,int &length,bool direction)
+{
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = (0.5 + sin(_MC->getDt()* TWO_PI) * 0.5) * 255.;
     }
 }

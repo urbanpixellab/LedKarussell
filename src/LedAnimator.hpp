@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "MidiControl.hpp"
+#include "Colorizer.hpp"
 
 
 class LedAnimator
@@ -24,7 +25,8 @@ public:
         WHITE,
         FADE_IN,
         FADE_OUT,
-        Count
+        SMOOTH_FADE,
+        COUNT
     };
     
     LedAnimator(MidiControl *mc);
@@ -39,11 +41,13 @@ private:
     void blackout(int &id,u_int8_t * array,int &length);
     void whiteout(int &id,u_int8_t * array,int &length);
     void fade(int &id,u_int8_t * array,int &length,bool direction);
+    void smoothFade(int &id,u_int8_t * array,int &length,bool direction);
     
     int         _aniSelect;
     MidiControl*_MC;
     int         _step;
     int         _maxStep;
+    Colorizer   _col;
 };
 
 #endif /* LedAnimator_hpp */

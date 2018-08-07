@@ -26,6 +26,7 @@ public:
     int &getEnd(){return _end;};
     int &getNodeID(){return _nodeID;};
     int &getUniverse(){return _universe;};
+    int &getLength(){return _length;};
     
     
 private:
@@ -33,6 +34,7 @@ private:
     int             _begin;
     int             _mid;
     int             _end;
+    int             _length; // the used array length
     int             _funcSelect;
     u_int8_t        _values[512];//max size
     int             _nodeID;

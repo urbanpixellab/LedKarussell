@@ -26,6 +26,7 @@
 		622D9E66210E36A90006B0B0 /* Colorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E64210E36A90006B0B0 /* Colorizer.cpp */; };
 		622D9E772118CF370006B0B0 /* Segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E752118CF370006B0B0 /* Segment.cpp */; };
 		622D9E7A211A1E210006B0B0 /* LedAnimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E78211A1E210006B0B0 /* LedAnimator.cpp */; };
+		622D9E7D211A42610006B0B0 /* AnimatorGUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */; };
 		62545D179C94265CA1389D4A /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */; };
 		631702104AFC104323A9EB79 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AC32CCCB56FAABA3E1BDE0 /* CoreMIDI.framework */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
@@ -131,6 +132,8 @@
 		622D9E762118CF370006B0B0 /* Segment.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Segment.hpp; sourceTree = "<group>"; };
 		622D9E78211A1E210006B0B0 /* LedAnimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LedAnimator.cpp; sourceTree = "<group>"; };
 		622D9E79211A1E210006B0B0 /* LedAnimator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LedAnimator.hpp; sourceTree = "<group>"; };
+		622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatorGUI.cpp; sourceTree = "<group>"; };
+		622D9E7C211A42610006B0B0 /* AnimatorGUI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AnimatorGUI.hpp; sourceTree = "<group>"; };
 		63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = OscOutboundPacketStream.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp; sourceTree = SOURCE_ROOT; };
 		65EEFA3DA3526E9CDD9C21F9 /* ofxOscBundle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscBundle.cpp; path = ../../../addons/ofxOsc/src/ofxOscBundle.cpp; sourceTree = SOURCE_ROOT; };
 		6B65E6930994CC4B2D2B8B33 /* OscPacketListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = OscPacketListener.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h; sourceTree = SOURCE_ROOT; };
@@ -540,6 +543,8 @@
 				622D9E67210E37780006B0B0 /* Scene */,
 				622D9E61210E14240006B0B0 /* ArtnetControl.cpp */,
 				622D9E62210E14240006B0B0 /* ArtnetControl.hpp */,
+				622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */,
+				622D9E7C211A42610006B0B0 /* AnimatorGUI.hpp */,
 				622D9E752118CF370006B0B0 /* Segment.cpp */,
 				622D9E762118CF370006B0B0 /* Segment.hpp */,
 				622D9E78211A1E210006B0B0 /* LedAnimator.cpp */,
@@ -710,6 +715,7 @@
 				1F558B76FB3412843DDAA031 /* ofxSyphonClient.mm in Sources */,
 				8D60C222CBD3F869382832E9 /* ofxSyphonServer.mm in Sources */,
 				621894FC21091F49006B027D /* Clock.cpp in Sources */,
+				622D9E7D211A42610006B0B0 /* AnimatorGUI.cpp in Sources */,
 				11DF9AB1B4EAA63E3B190CA0 /* ofxSyphonServerDirectory.mm in Sources */,
 				C9109422648B170B07A778CF /* SyphonNameboundClient.m in Sources */,
 				622D9E66210E36A90006B0B0 /* Colorizer.cpp in Sources */,
