@@ -22,10 +22,11 @@
 		621894F921091DF1006B027D /* MidiControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 621894F721091DF1006B027D /* MidiControl.cpp */; };
 		621894FC21091F49006B027D /* Clock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 621894FA21091F49006B027D /* Clock.cpp */; };
 		622D9E5A210E01020006B0B0 /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E58210E01020006B0B0 /* Visualizer.cpp */; };
-		622D9E60210E041D0006B0B0 /* SceneControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E5E210E041D0006B0B0 /* SceneControl.cpp */; };
 		622D9E63210E14240006B0B0 /* ArtnetControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E61210E14240006B0B0 /* ArtnetControl.cpp */; };
 		622D9E66210E36A90006B0B0 /* Colorizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E64210E36A90006B0B0 /* Colorizer.cpp */; };
-		622D9E6A210E37910006B0B0 /* LedMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E68210E37910006B0B0 /* LedMapper.cpp */; };
+		622D9E772118CF370006B0B0 /* Segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E752118CF370006B0B0 /* Segment.cpp */; };
+		622D9E7A211A1E210006B0B0 /* LedAnimator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E78211A1E210006B0B0 /* LedAnimator.cpp */; };
+		622D9E7D211A42610006B0B0 /* AnimatorGUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */; };
 		62545D179C94265CA1389D4A /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */; };
 		631702104AFC104323A9EB79 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AC32CCCB56FAABA3E1BDE0 /* CoreMIDI.framework */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
@@ -123,14 +124,16 @@
 		621894FB21091F49006B027D /* Clock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Clock.hpp; sourceTree = "<group>"; };
 		622D9E58210E01020006B0B0 /* Visualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
 		622D9E59210E01020006B0B0 /* Visualizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
-		622D9E5E210E041D0006B0B0 /* SceneControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneControl.cpp; sourceTree = "<group>"; };
-		622D9E5F210E041D0006B0B0 /* SceneControl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneControl.hpp; sourceTree = "<group>"; };
 		622D9E61210E14240006B0B0 /* ArtnetControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArtnetControl.cpp; sourceTree = "<group>"; };
 		622D9E62210E14240006B0B0 /* ArtnetControl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ArtnetControl.hpp; sourceTree = "<group>"; };
 		622D9E64210E36A90006B0B0 /* Colorizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Colorizer.cpp; sourceTree = "<group>"; };
 		622D9E65210E36A90006B0B0 /* Colorizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Colorizer.hpp; sourceTree = "<group>"; };
-		622D9E68210E37910006B0B0 /* LedMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LedMapper.cpp; sourceTree = "<group>"; };
-		622D9E69210E37910006B0B0 /* LedMapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LedMapper.hpp; sourceTree = "<group>"; };
+		622D9E752118CF370006B0B0 /* Segment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Segment.cpp; sourceTree = "<group>"; };
+		622D9E762118CF370006B0B0 /* Segment.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Segment.hpp; sourceTree = "<group>"; };
+		622D9E78211A1E210006B0B0 /* LedAnimator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LedAnimator.cpp; sourceTree = "<group>"; };
+		622D9E79211A1E210006B0B0 /* LedAnimator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LedAnimator.hpp; sourceTree = "<group>"; };
+		622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimatorGUI.cpp; sourceTree = "<group>"; };
+		622D9E7C211A42610006B0B0 /* AnimatorGUI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AnimatorGUI.hpp; sourceTree = "<group>"; };
 		63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = OscOutboundPacketStream.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp; sourceTree = SOURCE_ROOT; };
 		65EEFA3DA3526E9CDD9C21F9 /* ofxOscBundle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscBundle.cpp; path = ../../../addons/ofxOsc/src/ofxOscBundle.cpp; sourceTree = SOURCE_ROOT; };
 		6B65E6930994CC4B2D2B8B33 /* OscPacketListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = OscPacketListener.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h; sourceTree = SOURCE_ROOT; };
@@ -352,10 +355,6 @@
 		622D9E67210E37780006B0B0 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				622D9E5E210E041D0006B0B0 /* SceneControl.cpp */,
-				622D9E5F210E041D0006B0B0 /* SceneControl.hpp */,
-				622D9E64210E36A90006B0B0 /* Colorizer.cpp */,
-				622D9E65210E36A90006B0B0 /* Colorizer.hpp */,
 			);
 			name = Scene;
 			sourceTree = "<group>";
@@ -544,8 +543,14 @@
 				622D9E67210E37780006B0B0 /* Scene */,
 				622D9E61210E14240006B0B0 /* ArtnetControl.cpp */,
 				622D9E62210E14240006B0B0 /* ArtnetControl.hpp */,
-				622D9E68210E37910006B0B0 /* LedMapper.cpp */,
-				622D9E69210E37910006B0B0 /* LedMapper.hpp */,
+				622D9E7B211A42610006B0B0 /* AnimatorGUI.cpp */,
+				622D9E7C211A42610006B0B0 /* AnimatorGUI.hpp */,
+				622D9E752118CF370006B0B0 /* Segment.cpp */,
+				622D9E762118CF370006B0B0 /* Segment.hpp */,
+				622D9E78211A1E210006B0B0 /* LedAnimator.cpp */,
+				622D9E79211A1E210006B0B0 /* LedAnimator.hpp */,
+				622D9E64210E36A90006B0B0 /* Colorizer.cpp */,
+				622D9E65210E36A90006B0B0 /* Colorizer.hpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -683,7 +688,6 @@
 				BCC8D420CBA9217E437D2D76 /* ofxRtMidiIn.cpp in Sources */,
 				3AEFE4FA8AD5C72671AD07F8 /* ofxRtMidiOut.cpp in Sources */,
 				1A86B7721CAEBC6F1C572C45 /* ofxBaseMidi.cpp in Sources */,
-				622D9E6A210E37910006B0B0 /* LedMapper.cpp in Sources */,
 				63F9FE1D90234FA6DE6F509E /* ofxMidi.cpp in Sources */,
 				0BFC9C20FD7E3C8D5873AA97 /* ofxMidiIn.cpp in Sources */,
 				C6FE64F74F1EA1D98C8F9847 /* ofxMidiMessage.cpp in Sources */,
@@ -694,7 +698,6 @@
 				66CA411C5A9664E27326BF36 /* ofxTCPServer.cpp in Sources */,
 				E2564CF7DDB3713772BB682E /* ofxUDPManager.cpp in Sources */,
 				72A929D3561B8232A182ABFC /* ofxOscBundle.cpp in Sources */,
-				622D9E60210E041D0006B0B0 /* SceneControl.cpp in Sources */,
 				622D9E63210E14240006B0B0 /* ArtnetControl.cpp in Sources */,
 				621894F921091DF1006B027D /* MidiControl.cpp in Sources */,
 				5864AD82E20F15536D054EA3 /* ofxOscMessage.cpp in Sources */,
@@ -712,13 +715,16 @@
 				1F558B76FB3412843DDAA031 /* ofxSyphonClient.mm in Sources */,
 				8D60C222CBD3F869382832E9 /* ofxSyphonServer.mm in Sources */,
 				621894FC21091F49006B027D /* Clock.cpp in Sources */,
+				622D9E7D211A42610006B0B0 /* AnimatorGUI.cpp in Sources */,
 				11DF9AB1B4EAA63E3B190CA0 /* ofxSyphonServerDirectory.mm in Sources */,
 				C9109422648B170B07A778CF /* SyphonNameboundClient.m in Sources */,
 				622D9E66210E36A90006B0B0 /* Colorizer.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */,
+				622D9E7A211A1E210006B0B0 /* LedAnimator.cpp in Sources */,
 				9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */,
 				5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */,
+				622D9E772118CF370006B0B0 /* Segment.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

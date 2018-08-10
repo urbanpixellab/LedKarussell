@@ -16,18 +16,23 @@
 class MidiControl
 {
 public:
+    
     MidiControl();
     ~MidiControl();
     
     void update();//update first the midi notes and store them in an array
+    void drawGUI();
     int &getNoteValue(int id);
     float &getDt(){return _clk.getDeltaTime();}; // get the delta time
     bool &getBeat(){return _clk.getBeat();};
-
-private:
-    int         _data[127];// every midi note is one array position
-    Clock       _clk;
     
+    void mousePressed(ofMouseEventArgs &args);
+    
+private:
+    int             _data[127];// every midi note is one array position
+    Clock           _clk;
+    
+    ofRectangle     _tapButton;
     
 };
 #endif /* MidiControl_hpp */

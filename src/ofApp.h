@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MidiControl.hpp"
-#include "SceneControl.hpp"
 #include "ArtnetControl.hpp"
 
 class ofApp : public ofBaseApp{
@@ -26,10 +25,6 @@ public:
     void exit();
 private:
     MidiControl     _MC;// the midi control including clock
-    
-    SceneControl    *_LiveScene; // this is the live scene
-    SceneControl    *_PrepareScene; // this is the prparation scene
-    SceneControl    *_PresetScenes[8]; // this are the stored presets
     
     ArtnetControl   *_AC;// the artnetcontrol
 };
