@@ -10,21 +10,25 @@
 
 ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
-    _GUI = new AnimatorGUI(ofRectangle(100,100,500,500));
-    _GUI->createAnimationGUI(LedAnimator::COUNT);
-    ofAddListener(_GUI->buttonPressed, this, &ArtnetControl::guiPressed);
+    _GUI = new AnimatorGUI(ofRectangle(200,200,500,500));
+    _GUI->createAnimationGUI(LedAnimator::ANIMATION_COUNT,LedAnimator::ENABLE_COUNT);
+    ofAddListener(_GUI->animationPressed, this, &ArtnetControl::guiAnimationPressed);
+    ofAddListener(_GUI->enablePressed, this, &ArtnetControl::guiEnablePressed);
     _preAnimator = new LedAnimator(_MC);
-    _LiveAnimator = new LedAnimator(_MC);
+    _liveAnimator = new LedAnimator(_MC);
     loadNodes();
+    //init the gui
+    _GUI->init();
 }
 
 ArtnetControl::~ArtnetControl()
 {
     // blackout all
-    ofRemoveListener(_GUI->buttonPressed, this, &ArtnetControl::guiPressed);
+    ofRemoveListener(_GUI->animationPressed, this, &ArtnetControl::guiAnimationPressed);
+    ofRemoveListener(_GUI->enablePressed, this, &ArtnetControl::guiEnablePressed);
     clearNodes();
     delete _preAnimator;
-    delete _LiveAnimator;
+    delete _liveAnimator;
     for (int i = 0; i < _liveSegments.size(); i++)
     {
         delete _preSegments[i];
@@ -44,6 +48,8 @@ void ArtnetControl::clearNodes()
 void ArtnetControl::loadNodes()
 {
     clearNodes();
+    //important for the mapping a segment cant go from one univcerse to another,
+    //otherwise its is getting complicated!!!!
     //load nodes from xml
     for (int i = 0; i < 1; i++)
     {
@@ -72,14 +78,25 @@ void ArtnetControl::loadNodes()
         int node = 0;
         int universe = 0;
         //int nodeID,int universe,int beginLed,int endLed,int segmentID
-        Segment *newSegP = new Segment(node,universe,0,150,i);
-        Segment *newSegL = new Segment(node,universe,0,150,i);
+        int begin = 0;
+        int length = ofRandom(150); // should be max 150
+        Segment *newSegP = new Segment(node,universe,begin,length,i);
+        Segment *newSegL = new Segment(node,universe,begin,length,i);
         _preSegments.push_back(newSegP);
         _liveSegments.push_back(newSegL);
     }
+    // update the ledanimator size
     //whiteout
+    //also create the preview images
+    _preIMG.allocate(170, _preSegments.size(),OF_IMAGE_COLOR); // max of 510 channels
+    _liveIMG.allocate(170, _preSegments.size(),OF_IMAGE_COLOR);
+    _preIMG.setColor(ofColor(0,0,0));
+    _liveIMG.setColor(ofColor(0,0,0));
+    // fill the images black!!!
     _preAnimator->setAnimation(2);
-    _LiveAnimator->setAnimation(2);
+    _preAnimator->setSegmentSize(_preSegments.size());
+    _liveAnimator->setAnimation(2);
+    _liveAnimator->setSegmentSize(_liveSegments.size());
 }
 
 void ArtnetControl::update()
@@ -92,51 +109,90 @@ void ArtnetControl::update()
     if(_MC->getBeat() == true)
     {
         _preAnimator->addStep();
-        _LiveAnimator->addStep();
+        _liveAnimator->addStep();
     }
     //fill all nodes by segment
     for (int i = 0; i < _liveSegments.size(); i++)
     {
-        //writeSegment(the id of the segment from left to right,char[150]); these are the max per stripe
-        //_segments[i]->setArrayByArray(rgb);
-        //or
         _preAnimator->animationToArray(i, _preSegments[i]->getArray(), _preSegments[i]->getLength(), 0);
-        _LiveAnimator->animationToArray(i, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), 0);
+        _liveAnimator->animationToArray(i, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), 0);
     }
+    // now updaste the arrays to the visualizer
+    writeSegmentsToImage(_preSegments, _preIMG);
+    writeSegmentsToImage(_liveSegments, _liveIMG);
+    
     sendToNodes();
 }
 
-void ArtnetControl::setAnimation(int id)
+void ArtnetControl::writeSegmentsToImage(vector<Segment*> seg, ofImage& img)
 {
-    _preAnimator->setAnimation(id);
-    _LiveAnimator->setAnimation(id);
+    /// every segments get his own line
+    for (int i = 0; i < seg.size(); i++)
+    {
+        int start = seg[i]->getBegin(); // is not in led is in array
+        for (int l = 0; l < seg[i]->getLength()/3; l++)
+        {
+            int x = (start / 3) + l;
+            int r = seg[i]->getArray()[start + (l*3) + 0];
+            int g = seg[i]->getArray()[start + (l*3) + 1];
+            int b = seg[i]->getArray()[start + (l*3) + 2];
+            ofColor c = ofColor(r,g,b);//seg[i]->getArray()
+            img.setColor(x, i, c);
+        }
+    }
+    img.update();
 }
+
 
 void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
-    _GUI->draw();
+    _GUI->draw(_preIMG,_liveIMG);
 }
 
 
 void ArtnetControl::sendToNodes()
 {
+    //copy segment arrays to nodes
+    int nodeID,universe,first,last = 0;
+    for (int i = 0; i < _liveSegments.size(); i++)
+    {
+        nodeID = _liveSegments[i]->getNodeID();
+        universe = _liveSegments[i]->getUniverse();
+        first = _liveSegments[i]->getBegin();
+        last = _liveSegments[i]->getEnd();
+        for (int cell = first; cell < last; cell++)
+        {
+            _nodes[nodeID]->universes[universe][cell] = _liveSegments[i]->getArray()[first+cell];
+        }
+    }
+    //then send the nodes
     //basic sending
     //int universe = 0;
     //int chnCount = 450;//33 leds * 3
     //artnet.send(universe1,universe,chnCount);
-
-    //send all nodes but only from live
-    for (int i = 0; i < _liveSegments.size(); i++)
+    for (int n = 0; n < _nodes.size(); n++)
     {
-            _nodes[_liveSegments[i]->getNodeID()]->artnet.send(_liveSegments[i]->getArray(),_liveSegments[i]->getUniverse(),512);
+        for (int u = 0; u < 8; u++)
+        {
+            // we set the length to 3x170 = 510 has to been tested
+            _nodes[n]->artnet.send(_nodes[n]->universes[u],u,510);
+        }
     }
-
 }
 
-void ArtnetControl::guiPressed(int &buttonid)
+void ArtnetControl::guiAnimationPressed(int &buttonid)
 {
-    setAnimation(buttonid);
+    setAnimationPreview(buttonid);
+    //only by now is later automated and hidden
+    setAnimationLive(buttonid);
+}
+
+void ArtnetControl::guiEnablePressed(int &buttonid)
+{
+    setEnablePreview(buttonid);
+    //only by now is later automated and hidden
+    setEnableLive(buttonid);
 }
 
 

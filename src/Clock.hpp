@@ -20,6 +20,8 @@ public:
     ~Clock();
     
     void update();
+    void tap();
+    
     
     float &getValue(){return _actValue;};
     float &getDeltaTime(){return _dT;}; // 0...1

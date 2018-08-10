@@ -58,3 +58,8 @@ void Clock::update()
     }
     //cout << _dT << endl;
 }
+
+void Clock::tap()
+{
+    //do the tap calculation
+}

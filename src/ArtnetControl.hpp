@@ -30,18 +30,16 @@ public:
         //u_int8_t                _universes[8][450]; //3*150 led per stripe max
     };
     
-
-    
     ArtnetControl(MidiControl *mc);
     ~ArtnetControl();
     
-    void setAnimation(int id);
-    
+
     void update();
     void drawGui();
     void specialFunction(int id);
-    void guiPressed(int &buttonid);
-    
+    void guiAnimationPressed(int &buttonid);
+    void guiEnablePressed(int &buttonid);
+
     void loadNodes(); //load the artnet controler nodes from an xml
     
     Node        *getNode(int id){return _nodes[id];};
@@ -49,17 +47,28 @@ public:
     Segment     *getLiveSegment(int id){return _liveSegments[id];};
     
 private:
+    void setAnimationLive(int id){_liveAnimator->setAnimation(id);};
+    void setAnimationPreview(int id){_preAnimator->setAnimation(id);};
+
+    void setEnableLive(int id){_liveAnimator->setEnableMode(id);};
+    void setEnablePreview(int id){_preAnimator->setEnableMode(id);};
+
     void sendToNodes();
     void clearNodes();
+    
+    void writeSegmentsToImage(vector<Segment*> seg, ofImage& img);
     
     MidiControl             *_MC;
     vector<Node*>           _nodes;
     vector<Segment*>        _preSegments;
     vector<Segment*>        _liveSegments;
     LedAnimator             *_preAnimator;
-    LedAnimator             *_LiveAnimator;
+    LedAnimator             *_liveAnimator;
     
     AnimatorGUI             *_GUI;
+    
+    ofImage                 _preIMG;
+    ofImage                 _liveIMG;
 };
 
 #endif /* ArtnetControl_hpp */

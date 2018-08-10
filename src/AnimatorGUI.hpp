@@ -28,17 +28,22 @@ public:
     AnimatorGUI(ofRectangle area);
     ~AnimatorGUI();
     
-    void createAnimationGUI(int count);
-    void draw();
+    void init();
+    void createAnimationGUI(int animationCount,int enableCount);
+    void draw(ofImage &pre, ofImage &live);
     
     void mousePressed(ofMouseEventArgs &args);
-    ofEvent<int>    buttonPressed;
-    
+    ofEvent<int>    animationPressed;
+    ofEvent<int>    enablePressed;
+
 private:
     void newAnimation(int id);
-    
+    void newEnable(int id);
+
     ofRectangle         _drawArea;
-    vector<Button>      _buttons;
+    vector<Button>      _animationButtons;
+    vector<Button>      _enableButtons;
+    
 };
 
 #endif /* AnimatorGUI_hpp */

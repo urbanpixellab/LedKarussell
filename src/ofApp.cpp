@@ -23,32 +23,15 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw()
+{
+    _MC.drawGUI();
     _AC->drawGui();
-    //test visualizer
-    // for every segment
-    for (int s = 0; s< 8; s++) // acht sequenzen erstmal
-    {
-        for (int x = 0; x < 150; x++)
-        {
-            int r = int(_AC->getPreSegment(8)->getArray()[(x*3) + 0]);
-            int g = int(_AC->getPreSegment(8)->getArray()[(x*3) + 1]);
-            int b = int(_AC->getPreSegment(8)->getArray()[(x*3) + 2]);
-            ofSetColor(r,g,b);
-            ofDrawRectangle(x * ofGetWidth() / 150, s * 10, ofGetWidth() / 150, 10);
-        }
-    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-    if (key == ' ')
-    {
-        int select = ofRandom(LedAnimator::COUNT);
-        _AC->setAnimation(select);
-    }
-
 }
 
 //--------------------------------------------------------------

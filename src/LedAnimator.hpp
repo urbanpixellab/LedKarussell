@@ -26,13 +26,24 @@ public:
         FADE_IN,
         FADE_OUT,
         SMOOTH_FADE,
-        COUNT
+        ANIMATION_COUNT
+    };
+    
+    enum ENABLES
+    {
+        ALL_OFF = 0,
+        ALL_ON,
+        RANDOM,
+        KNIT_RIDER,
+        ENABLE_COUNT
     };
     
     LedAnimator(MidiControl *mc);
     ~LedAnimator();
-    
+    void setSegmentSize(int size); // used for enable disable petterns
     void setAnimation(int newAnimation){_aniSelect = newAnimation;};
+    void setEnableMode(int mode);
+    void updateEnable();
     void drawGui();// d
     void animationToArray(int id,u_int8_t * array,int length,int colorSelect);
     void addStep();
@@ -43,11 +54,18 @@ private:
     void fade(int &id,u_int8_t * array,int &length,bool direction);
     void smoothFade(int &id,u_int8_t * array,int &length,bool direction);
     
-    int         _aniSelect;
-    MidiControl*_MC;
-    int         _step;
-    int         _maxStep;
-    Colorizer   _col;
+    void enableAll();
+    void disableAll();
+    void enableRandom();
+    void knitRider();
+
+    int                 _aniSelect;
+    MidiControl         *_MC;
+    int                 _step;
+    int                 _maxStep;
+    Colorizer           _col;
+    vector<bool>        _enables;
+    int                 _enableMode;
 };
 
 #endif /* LedAnimator_hpp */
