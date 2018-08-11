@@ -27,8 +27,14 @@ public:
     bool &getBeat(){return _clk.getBeat();};
     
     void mousePressed(ofMouseEventArgs &args);
-    
+
+    void tapControler();
+    void newTapEvent(string &name); //tap bpm
+    void resetTapCount();
+
 private:
+
+    
     int             _data[127];// every midi note is one array position
     Clock           _clk;
     
