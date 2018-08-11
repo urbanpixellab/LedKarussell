@@ -26,14 +26,16 @@ MidiControl::~MidiControl()
 void MidiControl::drawGUI()
 {
     //tap button and bpm or step counter must been implemented
-    ofSetColor(255);
+    ofSetColor(255*_clk.getDeltaTime(),0,0);
     ofDrawRectangle(_tapButton);
+    ofDrawBitmapString(_clk.getBPM() + " BPM", 20,70);
 }
 
 void MidiControl::update()
 {
     //first the midi notes and store them in an array
     // then update clock
+    
     _clk.update();
 }
 
@@ -48,6 +50,5 @@ void MidiControl::mousePressed(ofMouseEventArgs &args)
     if (_tapButton.inside(args.x,args.y))
     {
         _clk.tap();
-        cout << "tap" << endl;
     }
 }
