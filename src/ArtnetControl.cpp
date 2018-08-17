@@ -19,6 +19,9 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     loadNodes();
     //init the gui
     _GUI->init();
+    _test = false;
+    
+    ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
 }
 
 ArtnetControl::~ArtnetControl()
@@ -26,6 +29,7 @@ ArtnetControl::~ArtnetControl()
     // blackout all
     ofRemoveListener(_GUI->animationPressed, this, &ArtnetControl::guiAnimationPressed);
     ofRemoveListener(_GUI->enablePressed, this, &ArtnetControl::guiEnablePressed);
+    ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     clearNodes();
     delete _preAnimator;
     delete _liveAnimator;
@@ -54,7 +58,8 @@ void ArtnetControl::loadNodes()
     for (int i = 0; i < 1; i++)
     {
         Node *n = new Node();
-        string ip = "192.168.12."+ ofToString(100+i);
+        string ip = "10.0.0."+ ofToString(50+i);
+        //string ip = "192.168.12."+ ofToString(200+i);
         n->ip = ip;
         n->artnet.begin(ip.c_str());
         //fill universes black
@@ -71,15 +76,15 @@ void ArtnetControl::loadNodes()
     
     _preSegments.clear();
     _liveSegments.clear();
-    for (int i = 0; i < 34; i++)
+    for (int i = 0; i < 16; i++)
     {
         //int universe,int begin,int end, Node * node
         //or settings based on an xml from the settings
         int node = 0;
-        int universe = 0;
+        int universe = i%8;
         //int nodeID,int universe,int beginLed,int endLed,int segmentID
         int begin = 0;
-        int length = ofRandom(150); // should be max 150
+        int length = 150;//ofRandom(150); // should be max 150
         Segment *newSegP = new Segment(node,universe,begin,length,i);
         Segment *newSegL = new Segment(node,universe,begin,length,i);
         _preSegments.push_back(newSegP);
@@ -114,8 +119,87 @@ void ArtnetControl::update()
     //fill all nodes by segment
     for (int i = 0; i < _liveSegments.size(); i++)
     {
-        _preAnimator->animationToArray(i, _preSegments[i]->getArray(), _preSegments[i]->getLength(), 0);
-        _liveAnimator->animationToArray(i, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), 0);
+        //here i can read the old and do a fading or particles and decrreasing the rray before writing a new
+         ///do something
+        //_preSegments[i]->getArray() decrease value of 5 and let stay at zero or decrease it and sinewave or beat conrtroled shift of a static sinfunction array (pixel shifting )
+        if(_test == 0) // crazy blink blik
+        {
+            //holly shit function
+            
+            for (int e=0; e < _preSegments[i]->getLength() - 3; e++)
+            {
+                //wegfaden
+                float curve = 0.96 * (ofNoise(ofGetElapsedTimef() + i*3 + floor(e/3))) * 2; // giv it a offset
+                //oder funky
+                _preSegments[i]->getArray()[e] *= curve;//maybe another curve
+                _liveSegments[i]->getArray()[e] *= curve;//maybe another curve
+                
+                //hier kann zufaellig noch nen neur dot entstehen wie ein stern,bling bling
+                int isPixelID = e/3;
+                // and shift them by pixel
+                _preSegments[i]->getArray()[e + 3] = _preSegments[i]->getArray()[e];
+            }
+            if (_MC->getBeat())
+            {
+                //zum schluss fuege ein pixel random zu
+                int selectPixel = ofRandom(_preSegments[i]->getLength()/3);
+                _preSegments[i]->setPixel(selectPixel,255,255,255);
+//                _preSegments[i]->setPixel(selectPixel+1,255,255,255);
+//                _preSegments[i]->setPixel(selectPixel+2,255,255,255);
+//                _preSegments[i]->setPixel(selectPixel+3,255,255,255);
+//                _preSegments[i]->setPixel(selectPixel+4,255,255,255);
+                cout << "set pixel " << selectPixel << endl;
+            }
+        }
+        else if(_test == 1) /// another function
+        {
+            
+            for (int e=0; e < _preSegments[i]->getLength(); e++)
+            {
+                //wegfaden
+                float curve = 0.96; // giv it a offset
+                _preSegments[i]->getArray()[e] *= curve;//maybe another curve
+                _liveSegments[i]->getArray()[e] *= curve;//maybe another curve
+                //hier kann zufaellig noch nen neur dot entstehen wie ein stern,bling bling
+                //int isPixelID = e/3;
+            }
+            if (_MC->getBeat())
+            {
+                //zum schluss fuege ein pixel random zu
+                int selectPixel = ofRandom(_preSegments[i]->getLength()/3);
+                _preSegments[i]->setPixel(selectPixel,255,255,255);
+                _preSegments[i]->setPixel(selectPixel+1,255,255,255);
+                _preSegments[i]->setPixel(selectPixel+2,255,255,255);
+                _preSegments[i]->setPixel(selectPixel+3,255,255,255);
+                _preSegments[i]->setPixel(selectPixel+4,255,255,255);
+                cout << "set pixel " << selectPixel << endl;
+            }
+        }
+        else if(_test == 2) /// inverse by beat
+        {
+            if (_MC->getBeat())
+            {
+                for (int e=0; e < _preSegments[i]->getPixelLength(); e++)
+                {
+
+                    
+                    float curve = 0.96; // giv it a offset
+                    _preSegments[i]->getPixel(e)[0] = 255 -_preSegments[i]->getPixel(e)[0];//maybe another curve
+                    _preSegments[i]->getPixel(e)[1] = 255 -_preSegments[i]->getPixel(e)[1];//maybe another curve
+                    _preSegments[i]->getPixel(e)[2] = 255 -_preSegments[i]->getPixel(e)[2];//maybe another curve
+                    _liveSegments[i]->getPixel(e)[0] = 255 -_liveSegments[i]->getPixel(e)[0];//maybe another curve
+                    _liveSegments[i]->getPixel(e)[1] = 255 -_liveSegments[i]->getPixel(e)[1];//maybe another curve
+                    _liveSegments[i]->getPixel(e)[2] = 255 -_liveSegments[i]->getPixel(e)[2];//maybe another curve
+                    //hier kann zufaellig noch nen neur dot entstehen wie ein stern,bling bling
+                    //int isPixelID = e/3;
+                }
+            }
+        }
+        else if(_test == 3) /// the original function
+        {
+            _preAnimator->animationToArray(i, _preSegments[i]->getArray(), _preSegments[i]->getLength(), 0);
+            _liveAnimator->animationToArray(i, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), 0);
+        }
     }
     // now updaste the arrays to the visualizer
     writeSegmentsToImage(_preSegments, _preIMG);
@@ -157,13 +241,20 @@ void ArtnetControl::sendToNodes()
     int nodeID,universe,first,last = 0;
     for (int i = 0; i < _liveSegments.size(); i++)
     {
+        //each segment is drawn by the Segment abstraction
+        
         nodeID = _liveSegments[i]->getNodeID();
         universe = _liveSegments[i]->getUniverse();
         first = _liveSegments[i]->getBegin();
         last = _liveSegments[i]->getEnd();
         for (int cell = first; cell < last; cell++)
         {
-            _nodes[nodeID]->universes[universe][cell] = _liveSegments[i]->getArray()[first+cell];
+            //get the array where to write which function
+            //and write it to the nodes
+            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+//            u_int64_t data = _liveSegments[i]->getArray()[first+cell];
+            // mach was damit
+            _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
         }
     }
     //then send the nodes
@@ -206,4 +297,12 @@ void ArtnetControl::specialFunction(int id)
     {
         //invert the output colors
     }
+}
+
+void ArtnetControl::keyPressed(ofKeyEventArgs &key)
+{
+    _test++;
+    _test = _test%4;
+    cout << key.keycode << endl;
+    
 }

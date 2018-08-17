@@ -178,7 +178,6 @@ void LedAnimator::enableRandom()
     {
         if(ofRandom(10) < 5) _enables[i] = false;
         else _enables[i] = true;
-        cout << i << " " << _enables[i]<< endl;
     }
 }
 

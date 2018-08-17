@@ -41,6 +41,8 @@ public:
     void guiEnablePressed(int &buttonid);
 
     void loadNodes(); //load the artnet controler nodes from an xml
+    //add key listener for test commands
+    void keyPressed(ofKeyEventArgs &key);
     
     Node        *getNode(int id){return _nodes[id];};
     Segment     *getPreSegment(int id){return _preSegments[id];};
@@ -69,6 +71,8 @@ private:
     
     ofImage                 _preIMG;
     ofImage                 _liveIMG;
+    
+    int                     _test;
 };
 
 #endif /* ArtnetControl_hpp */

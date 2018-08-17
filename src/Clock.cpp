@@ -11,13 +11,18 @@
 Clock::Clock()
 {
     _dT = 0;
+    for (int i = 0; i < 7; i++)
+    {
+        _deltas[i] = 0;
+    }
     _actValue = 0;
     _beatLength = 500 * 1000;//120bpm
+    _bpm = "120";
     _lastBeat = ofGetElapsedTimeMicros();
     _nextBeat = _lastBeat + _beatLength;
-    _beatScale = 1;//normal
     _isBeat = false;
     _tapCount = 0;
+    _stepCounter = 0;
     
 }
 Clock::~Clock(){}
@@ -29,13 +34,14 @@ void Clock::update()
     {
         //it is a new beat
 //        _lastBeat = _nextBeat;
-        _nextBeat = now + (_beatLength*_beatScale);
+        _nextBeat = now + _beatLength;
         ofSetBackgroundColor(ofRandom(255), ofRandom(255), ofRandom(255));
         _dT = 1;
         _actValue = _dT; /// gets later manipulated by the time and the beat scale faktor
         //cout << "beat" << endl;
         _nextBeat = now;
         _isBeat = true;
+        _stepCounter++;
     }
     else if(now > _nextBeat)
     {
@@ -43,8 +49,9 @@ void Clock::update()
         _dT = (now - _lastBeat) / _beatLength;
         if(_dT >= 1.0)_dT = 1;//limit it to one
         _actValue = _dT; /// gets later manipulated by the time and the beat scale faktor
-        _nextBeat = _lastBeat+  (_beatLength*_beatScale);
+        _nextBeat = _lastBeat+ _beatLength;
         _isBeat = true;
+        _stepCounter++;
     }
     else
     {
@@ -53,6 +60,23 @@ void Clock::update()
         _actValue = _dT; /// gets later manipulated by the time and the beat scale faktor
         _isBeat = false;
     }
+    
+    // the other delta times
+    //dT = (now - lastBeatTime) / beatDuration; old version
+
+    if (_stepCounter >= 16) _stepCounter = 0;
+    //now is in micros not in milli
+    float modDelta = (now - _lastBeat) / (_beatLength * 16 * 1000);
+    _deltas[0] = fmod(fmod(modDelta,0.015625) * 64000,1.); //0.25
+    _deltas[1] = fmod(fmod(modDelta,0.03125) * 32000,0.5); //0.5
+    _deltas[2] = fmod(modDelta,0.0625) * 16000; // the original
+    _deltas[3] = ((_deltas[2] * (_stepCounter%2)) + _deltas[2]*0.5); //2
+    _deltas[4] = (fmod(modDelta,0.25) * 4000) * (_stepCounter%4) + fmod(modDelta,0.25) * 4000; //2
+    _deltas[5] = (fmod(modDelta,0.5) * 2000) * (_stepCounter%4) + fmod(modDelta,0.5) * 2000; //2
+    _deltas[6] = (fmod(modDelta,1.) * 1000) * (_stepCounter%4) + fmod(modDelta,1.) * 1000; //2
+//    _deltas[6] = modDelta * 1000; //16
+//    cout << _stepCounter%2 << " "<< _deltas[0] << " " << _deltas[1] << " " << _deltas[2] << " " << _deltas[3] <<  " " << _deltas[4] << " " << _deltas[5] << " " << _deltas[6] << endl;
+    if(now >= _lastTapTime) _tapCount = 0; // if no tap after 10 seconds reset the counter
 }
 
 void Clock::tap()
@@ -68,7 +92,7 @@ void Clock::tap()
         //calculate bpm and reset timer
         _bpm = calculateBPM(_timer,2);
     }
-    int timeout = 10000000;///10 sec then tap is automaticaly reset
+    int timeout = 5000000;///5 sec then tap is automaticaly reset
     _lastTapTime = now + timeout;
 }
 
