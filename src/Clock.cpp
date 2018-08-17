@@ -11,10 +11,6 @@
 Clock::Clock()
 {
     _dT = 0;
-    for (int i = 0; i < 7; i++)
-    {
-        _deltas[i] = 0;
-    }
     _actValue = 0;
     _beatLength = 500 * 1000;//120bpm
     _bpm = "120";
@@ -68,16 +64,20 @@ void Clock::update()
     //we use _dt as basement and the stepcounter
     
     //now is in micros not in milli
-    float modDelta = _dT;
-    
-    _deltas[0] = fmod(modDelta,0.25) * 4; //0.25
-    _deltas[1] = fmod(_dT,0.5) * 2; //0.5
-    _deltas[2] = _dT; // the original
-    _deltas[3] = (fmod(_stepCounter,2) * 0.5) +_dT*0.5; //2
-    _deltas[4] = (fmod(_stepCounter,4) * 0.25) +_dT*0.25;; //4
-    _deltas[5] = (fmod(_stepCounter,8) * 0.125) +_dT*0.125;; //8
-    _deltas[6] = (fmod(_stepCounter,16) * 0.0625) +_dT*0.0625;; //16
     if(now >= _lastTapTime) _tapCount = 0; // if no tap after 10 seconds reset the counter
+}
+
+float Clock::getDeltaTimeMultiplyed(int id)
+{
+    float result = _dT;
+    
+    if(id == 0) result = fmod(_dT,0.25) * 4; //0.25
+    else if(id == 1)result = fmod(_dT,0.5) * 2; //0.5
+    else if(id == 3)result = (fmod(_stepCounter,2) * 0.5) +_dT*0.5; //2
+    else if(id == 4)result = (fmod(_stepCounter,4) * 0.25) +_dT*0.25; //4
+    else if(id == 5)result = (fmod(_stepCounter,8) * 0.125) +_dT*0.125; //8
+    else result = (fmod(_stepCounter,16) * 0.0625) +_dT*0.0625; //16
+    return result;
 }
 
 void Clock::tap()
