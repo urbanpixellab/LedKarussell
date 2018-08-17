@@ -55,10 +55,10 @@ void ArtnetControl::loadNodes()
     //important for the mapping a segment cant go from one univcerse to another,
     //otherwise its is getting complicated!!!!
     //load nodes from xml
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 2; i++)
     {
         Node *n = new Node();
-        string ip = "10.0.0."+ ofToString(50+i);
+        string ip = "10.0.0."+ ofToString(30+(i*10));
         //string ip = "192.168.12."+ ofToString(200+i);
         n->ip = ip;
         n->artnet.begin(ip.c_str());
@@ -76,11 +76,11 @@ void ArtnetControl::loadNodes()
     
     _preSegments.clear();
     _liveSegments.clear();
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 8; i++)
     {
         //int universe,int begin,int end, Node * node
         //or settings based on an xml from the settings
-        int node = 0;
+        int node = i/4;
         int universe = i%8;
         //int nodeID,int universe,int beginLed,int endLed,int segmentID
         int begin = 0;
@@ -148,7 +148,6 @@ void ArtnetControl::update()
 //                _preSegments[i]->setPixel(selectPixel+2,255,255,255);
 //                _preSegments[i]->setPixel(selectPixel+3,255,255,255);
 //                _preSegments[i]->setPixel(selectPixel+4,255,255,255);
-                cout << "set pixel " << selectPixel << endl;
             }
         }
         else if(_test == 1) /// another function
@@ -172,7 +171,6 @@ void ArtnetControl::update()
                 _preSegments[i]->setPixel(selectPixel+2,255,255,255);
                 _preSegments[i]->setPixel(selectPixel+3,255,255,255);
                 _preSegments[i]->setPixel(selectPixel+4,255,255,255);
-                cout << "set pixel " << selectPixel << endl;
             }
         }
         else if(_test == 2) /// inverse by beat
