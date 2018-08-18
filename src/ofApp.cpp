@@ -14,6 +14,9 @@ void ofApp::setup()
     _PresetScenes[7] = new SceneControl(&_MC);
     */
     _AC = new ArtnetControl(&_MC);
+    
+    rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),3,true);
+    
 }
 
 //--------------------------------------------------------------
@@ -27,6 +30,8 @@ void ofApp::draw()
 {
     _MC.drawGUI();
     _AC->drawGui();
+    
+    rl.draw();
 }
 
 //--------------------------------------------------------------
