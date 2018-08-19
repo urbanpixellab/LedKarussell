@@ -1,0 +1,65 @@
+<select>
+	<name>LEFT_BIG</name>
+	<segement>0</segement>
+	<segement>1</segement>
+	<segement>2</segement>
+</select>
+
+<select>
+	<name>LEFT_MID</name>
+	<segement>3</segement>
+	<segement>4</segement>
+	<segement>5</segement>
+</select>
+
+<select>
+	<name>LEFT_SMALL</name>
+	<segement>6</segement>
+	<segement>7</segement>
+	<segement>8</segement>
+</select>
+
+<select>
+	<name>LEFT_ALL</name>
+	<selection>LEFT_BIG</selection>
+	<selection>LEFT_MID</selection>
+	<selection>LEFT_SMALL</selection>
+</select>
+
+<select>
+	<name>RIGHT_BIG</name>
+	<segement>25</segement>
+	<segement>26</segement>
+	<segement>27</segement>
+</select>
+
+<select>
+	<name>RIGHT_MID</name>
+	<segement>28</segement>
+	<segement>29</segement>
+	<segement>30</segement>
+</select>
+
+<select>
+	<name>RIGHT_SMALL</name>
+	<segement>31</segement>
+	<segement>32</segement>
+	<segement>33</segement>
+</select>
+
+<select>
+	<name>RIGHT_ALL</name>
+	<selection>LEFT_BIG</selection>
+	<selection>LEFT_MID</selection>
+	<selection>LEFT_SMALL</selection>
+</select>
+
+<select>
+	<name>ALL_HORIZONTAL</name>
+	<segement>2</segement>
+	<segement>5</segement>
+	<segement>8</segement>
+	<segement>27</segement>
+	<segement>30</segement>
+	<segement>33</segement>
+</select>
