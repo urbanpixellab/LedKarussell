@@ -2,6 +2,8 @@
 
 #include "MidiControl.hpp"
 #include "ArtnetControl.hpp"
+#include "RotarySlider.hpp"
+
 
 class ofApp : public ofBaseApp{
 
@@ -21,6 +23,9 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    
+    RotarySlider rl;
+    
 
     void exit();
 private:
