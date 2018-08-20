@@ -29,22 +29,19 @@ public:
     ~AnimatorGUI();
     
     void init();
-    void createAnimationGUI(int animationCount,int enableCount);
+    void createAnimationGUI(int animationCount);
     void draw(ofImage &pre, ofImage &live);
     
     ofMesh &getMesh(){return _realStructure;}; //here we can work on the mesh
     
     void mousePressed(ofMouseEventArgs &args);
-    ofEvent<int>    animationPressed;
-    ofEvent<int>    enablePressed;
+    ofEvent<int>    curvePressed;
 
 private:
-    void newAnimation(int id);
-    void newEnable(int id);
+    void newCurve(int id);
 
     ofRectangle         _drawArea;
-    vector<Button>      _animationButtons;
-    vector<Button>      _enableButtons;
+    vector<Button>      _curveButtons;
     
     ofMesh              _realStructure;// the mesh to paint on
     

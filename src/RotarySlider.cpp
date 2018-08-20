@@ -14,7 +14,7 @@ RotarySlider::RotarySlider()
     ofAddListener(ofEvents().mousePressed, this, &RotarySlider::mousePressed);
     ofAddListener(ofEvents().mouseReleased, this, &RotarySlider::mouseReleased);
     xStart = -1;
-    font.load("verdana.ttf", 10);
+//    font.load("verdana.ttf", 10);
     resolution = 128;
     comma = 0;
     active = true;
@@ -147,8 +147,8 @@ void RotarySlider::updateSlider()
          */
     }
     string number = ofToString(range.x + ((range.y - range.x) * value),comma);
-    float shift = font.getStringBoundingBox(number, 0, 0).width / 2.;
-    font.drawString(number, circleCenter.x - shift, fbo.getHeight() - 2);
+//    float shift = font.getStringBoundingBox(number, 0, 0).width / 2.;
+//    font.drawString(number, circleCenter.x - shift, fbo.getHeight() - 2);
     fbo.end();
 
     
