@@ -55,13 +55,17 @@ void ArtnetControl::loadNodes()
     //important for the mapping a segment cant go from one univcerse to another,
     //otherwise its is getting complicated!!!!
     //load nodes from xml
-    for (int i = 0; i < 1; i++)
+    ofxXmlSettings nodes("nodes.xml");
+    int count = nodes.getNumTags("node");
+    for (int i = 0; i < count; i++)
     {
+        nodes.pushTag("node",i);
         Node *n = new Node();
-        string ip = "10.0.0."+ ofToString(50+i);
+        n->ip = nodes.getValue("ip", "127.0.0.1");
+        n->name = nodes.getValue("name", "A1");
+        cout << n->ip << " " << n->name << endl;
         //string ip = "192.168.12."+ ofToString(200+i);
-        n->ip = ip;
-        n->artnet.begin(ip.c_str());
+        n->artnet.begin(n->ip.c_str());
         //fill universes black
         for (int u = 0; u < 8; u++)
         {
@@ -71,30 +75,42 @@ void ArtnetControl::loadNodes()
             }
         }
         _nodes.push_back(n);
+        nodes.popTag();
     }
     // now load the segments
-    
     _preSegments.clear();
     _liveSegments.clear();
-    for (int i = 0; i < 16; i++)
+    ofxXmlSettings segments("segments.xml");
+    int numSegments = segments.getNumTags("segment");
+    /*	<id>0</id>
+     <node>0</node>
+     <universe>0</universe>
+     <beginPixel>0</beginPixel>
+     <length>150</length>
+     */
+    for (int i = 0; i < numSegments; i++)
     {
+        segments.pushTag("segment",i);
+        
         //int universe,int begin,int end, Node * node
         //or settings based on an xml from the settings
-        int node = 0;
-        int universe = i%8;
+        int node = segments.getValue("node", 0);
+        int universe = segments.getValue("universe", 0);
         //int nodeID,int universe,int beginLed,int endLed,int segmentID
-        int begin = 0;
-        int length = 150;//ofRandom(150); // should be max 150
+        int begin = segments.getValue("beginPixel", 0);
+        int length = segments.getValue("length", 150);//ofRandom(150); // should be max 150
         Segment *newSegP = new Segment(node,universe,begin,length,i);
         Segment *newSegL = new Segment(node,universe,begin,length,i);
         _preSegments.push_back(newSegP);
         _liveSegments.push_back(newSegL);
+        segments.popTag();
     }
+    
     // update the ledanimator size
     //whiteout
     //also create the preview images
-    _preIMG.allocate(170, _preSegments.size(),OF_IMAGE_COLOR); // max of 510 channels
-    _liveIMG.allocate(170, _preSegments.size(),OF_IMAGE_COLOR);
+    _preIMG.allocate(150, _preSegments.size(),OF_IMAGE_COLOR); // max of 510 channels
+    _liveIMG.allocate(150, _preSegments.size(),OF_IMAGE_COLOR);
     _preIMG.setColor(ofColor(0,0,0));
     _liveIMG.setColor(ofColor(0,0,0));
     // fill the images black!!!
@@ -102,6 +118,46 @@ void ArtnetControl::loadNodes()
     _preAnimator->setSegmentSize(_preSegments.size());
     _liveAnimator->setAnimation(2);
     _liveAnimator->setSegmentSize(_liveSegments.size());
+    //setup the mesh
+    _GUI->getMesh().clear();
+    _GUI->getMesh().setMode(OF_PRIMITIVE_LINES);
+    for (int i = 0; i < 16; i++)
+    {
+        float x = 0.25 + (i * (0.5/16.));
+        float y = 0.10;
+        _GUI->getMesh().addVertex(ofVec2f(x,y));
+        _GUI->getMesh().addTexCoord(ofVec2f(0,i));
+        y = 1-y;
+        _GUI->getMesh().addVertex(ofVec2f(x,y));
+        _GUI->getMesh().addTexCoord(ofVec2f(150,i));
+    }
+    
+    // now the triangles left and right, as losse lines
+    //left and right
+    for (int s = 0; s < 2; s++)
+    {
+        ofVec2f center = ofVec2f(0.125 + (s * 0.75),0.5);
+        for (int d = 0; d < 3; d++)//every driehoek
+        {
+            float rad = 0.66 - (d * (0.66/3));//inverse great to small
+            
+            _GUI->getMesh().addVertex(ofVec2f(center.x,center.y - center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,0 + (d*3)));
+            _GUI->getMesh().addVertex(ofVec2f(center.x + 0.125*rad,center.y + center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,0 + (d*3)));
+            
+            _GUI->getMesh().addVertex(ofVec2f(center.x + 0.125*rad,center.y + center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,1 + (d*3)));
+            _GUI->getMesh().addVertex(ofVec2f(center.x - 0.125*rad,center.y + center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,1 + (d*3)));
+            
+            _GUI->getMesh().addVertex(ofVec2f(center.x - 0.125*rad,center.y + center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,2 + (d*3)));
+            _GUI->getMesh().addVertex(ofVec2f(center.x,center.y - center.y*rad));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,2));
+        }
+    }
+    
 }
 
 void ArtnetControl::update()
@@ -148,7 +204,6 @@ void ArtnetControl::update()
 //                _preSegments[i]->setPixel(selectPixel+2,255,255,255);
 //                _preSegments[i]->setPixel(selectPixel+3,255,255,255);
 //                _preSegments[i]->setPixel(selectPixel+4,255,255,255);
-                cout << "set pixel " << selectPixel << endl;
             }
         }
         else if(_test == 1) /// another function
@@ -172,7 +227,6 @@ void ArtnetControl::update()
                 _preSegments[i]->setPixel(selectPixel+2,255,255,255);
                 _preSegments[i]->setPixel(selectPixel+3,255,255,255);
                 _preSegments[i]->setPixel(selectPixel+4,255,255,255);
-                cout << "set pixel " << selectPixel << endl;
             }
         }
         else if(_test == 2) /// inverse by beat

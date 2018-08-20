@@ -25,7 +25,7 @@ public:
     
     float &getValue(){return _actValue;};
     float &getDeltaTime(){return _dT;}; // 0...1
-    float &getDeltaTimeMultiplyed(int id = 2){return _deltas[id];}; // 0...1
+    float getDeltaTimeMultiplyed(int id = 2);
     bool &getBeat(){return _isBeat;};
     string &getBPM(){return _bpm;};
 
@@ -33,7 +33,6 @@ public:
     
 private:
     float       _dT;//the originale deltatime
-    float       _deltas[7];//the deltatime in the selected beats/size //1/4-1/2-1-2-4-8-16
     float       _actValue; /// the actual value
     float       _beatLength; //in ms
     u_int64_t   _lastBeat;// the time in millisec when last beat

@@ -84,6 +84,15 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofSetColor(255);
     pre.draw(_drawArea.x, _drawArea.y + 200,170,100);
     live.draw(_drawArea.x + 180, _drawArea.y + 200,170,100);
+    
+    //draw it under the preview windows
+    ofPushMatrix();
+    ofTranslate(_drawArea.x,_drawArea.getBottom() -200);
+    ofScale(ofGetWidth()/3, 100);
+    pre.bind();
+    _realStructure.draw();
+    pre.unbind();
+    ofPopMatrix();
 }
 
 void AnimatorGUI::newAnimation(int id)

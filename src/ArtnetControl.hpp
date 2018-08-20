@@ -25,6 +25,7 @@ public:
         string                  ip;
         int                     nodeID;
         ofxArtnetProtocol       artnet;
+        string                  name;
         //artnet.begin("192.168.12.200");
         u_int8_t                universes[8][512]; //8 full dm universes
         //u_int8_t                _universes[8][450]; //3*150 led per stripe max

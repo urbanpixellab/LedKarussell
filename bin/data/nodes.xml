@@ -1,0 +1,32 @@
+<node>
+	<ip>10.0.0.30</ip>
+	<name>A1</name>
+</node>
+<node>
+	<ip>10.0.0.40</ip>
+	<name>A2</name>
+</node>
+<node>
+	<ip>10.0.0.50</ip>
+	<name>B1</name>
+</node>
+<node>
+	<ip>10.0.0.60</ip>
+	<name>B2</name>
+</node>
+<node>
+	<ip>10.0.0.70</ip>
+	<name>C1</name>
+</node>
+<node>
+	<ip>10.0.0.80</ip>
+	<name>C2</name>
+</node>
+<node>
+	<ip>10.0.0.90</ip>
+	<name>D1</name>
+</node>
+<node>
+	<ip>10.0.0.100</ip>
+	<name>D2</name>
+</node>

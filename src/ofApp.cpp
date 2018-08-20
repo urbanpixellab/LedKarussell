@@ -3,6 +3,8 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+    ofSetBackgroundColor(21);
+    ofSetLineWidth(2);
 /* not needed here
     _PresetScenes[0] = new SceneControl(&_MC);
     _PresetScenes[1] = new SceneControl(&_MC);
