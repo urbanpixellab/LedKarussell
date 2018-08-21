@@ -10,185 +10,124 @@
 
 LedAnimator::LedAnimator(MidiControl * mc): _MC(mc)
 {
-    _step = 0;
-    _maxStep = 16;
-    _aniSelect = 0;
-    _enableMode = 1;
-}
-LedAnimator::~LedAnimator(){}
-
-void LedAnimator::setSegmentSize(int size)
-{
-    _enables.clear();
-    for (int i = 0; i < size; i++)
+    //only have to been called once;
+    // is working on array getting in and function select + parameters like direction and color
+    
+    _aniSelect = 0; //old
+    
+    
+    //load the selections from xml and create buttons for every selection with the name and id
+    ofxXmlSettings sel("selector.xml");
+    cout << "load xml" << endl;
+    for (int i = 0; i < sel.getNumTags("select"); i++)
     {
-        _enables.push_back(false);
+        sel.pushTag("select",i);
+        Selection s;
+        s.name = sel.getValue("name", "untitled");
+        cout << "segment name " << s.name << endl;
+        //how many elements or selections?
+        //maximum one layer down by now
+        //still not working and empty
+        
+        /*
+        for (int s = 0; s < sel.getNumTags("segment"); s++)
+        {
+            // get the already existing items and add this to the selection
+            // check with _selections[]and fill up with them, must been recursive...
+            // but later now only one level down
+            // replace selection with already existin items in the selection based on the name
+            sel.pushTag("selection",s);
+            cout << sel.getValue("id", 0) << endl;
+            sel.popTag();
+//            s.items.push_back(sel.getValue("segment", 0));
+        }*/
+        //here the segments
+        int segments = sel.getNumTags("segment");
+        cout << segments << " segments" << endl;
+        for (int seg = 0; seg < sel.getNumTags("segment"); seg++)
+        {
+            // get the already existing items and add this to the selection
+            // replace selection with already existin items
+            sel.pushTag("segment",seg);
+            int id = sel.getValue("segment", 0);
+            cout << id << endl;
+            s.items.push_back(id);
+            sel.popTag();
+        }
+        
+        // now add the listet segments
+        _selections.push_back(s);
+        sel.popTag();
     }
-}
-
-void LedAnimator::setEnableMode(int mode)
-{
-    _enableMode = mode;
-    _step = 0;
-    //set the lenth of the step sequence only by usefull ones otherwise it is 16
-    switch (_enableMode)
-    {
-        case ENABLES::KNIT_RIDER:
-            _maxStep = _enables.size();
-            break;
-            
-        default:
-            _maxStep = 16;
-            break;
-    }
-    updateEnable();
-}
-
-void LedAnimator::updateEnable()
-{
-    switch (_enableMode)
-    {
-        case ENABLES::ALL_OFF:
-            disableAll();
-            break;
-            
-        case ENABLES::ALL_ON:
-            enableAll();
-            break;
-            
-        case ENABLES::RANDOM:
-            enableRandom();
-            break;
-            
-        case ENABLES::KNIT_RIDER:
-            knitRider();
-            break;
-            
-        default:
-            break;
-    }
-}
-
-void LedAnimator::addStep()
-{
-    _step++;
-    if(_step >= _maxStep) _step = 0;
-    // also update the enable states
-    updateEnable();
-}
-
-void LedAnimator::drawGui()
-{
     
 }
 
-void LedAnimator::animationToArray(int id,u_int8_t * array,int length,int colorSelect)
+LedAnimator::~LedAnimator()
 {
-    //_col.getPrimColor(colorSelect);
-    // what is the best way to combine it
-    //check the enable state
-    if(_enables[id] == false)
-    {
-        blackout(id, array, length);
-        return;
-    }
-    switch (_aniSelect)
-    {
-        case ANIMATIONS::BLACK:
-            blackout(id, array, length);
-            break;
+}
 
-        case ANIMATIONS::WHITE:
-            whiteout(id, array, length);
+//////////////////////niew
+
+void LedAnimator::drawToArray(int drawFunction,u_int8_t * selectionArrays,int &length,ofVec3f colorFunctionSelect)
+{
+    //dt is already existing
+    // plus later 3 offset and frequency parameter
+    //example is simple sinewave on dT
+    float freq = 3;
+    switch (drawFunction) {
+        case CURVE::BLACKOUT:
+            //sinewave on array with freq = 3 on length of input array
+            //
+            for (int i = 0; i < length; i++)
+            {
+                selectionArrays[i] = 0;
+            }
+            
             break;
             
-        case ANIMATIONS::FADE_IN:
-            fade(id, array, length,false);
+        case CURVE::WHITEOUT:
+            //sinewave on array with freq = 3 on length of input array
+            //
+            for (int i = 0; i < length; i++)
+            {
+                selectionArrays[i] = 255;
+            }
+            
+            break;
+
+        case CURVE::RECT://add frequency in repetirion
+            //sinewave on array with freq = 3 on length of input array
+            //
+            for (int i = 0; i < (length/3); i++) //reduce to pixel
+            {
+                selectionArrays[(i * 3) + 0] = 0;
+                selectionArrays[(i * 3) + 1] = 0;
+                selectionArrays[(i * 3) + 2] = 0;
+                if (i < _MC->getDt()* (length/3)) {
+                    //two pi =
+                    selectionArrays[(i * 3) + 0] = 255;
+                    selectionArrays[(i * 3) + 1] = 255;
+                    selectionArrays[(i * 3) + 2] = 255;
+                }
+            }
+            
+            break;
+
+        case CURVE::SINE://blackout
+            //sinewave on array with freq = 3 on length of input array
+            //
+            for (int i = 0; i < (length/3); i++) //reduce to pixel
+            {
+                //two pi =
+                selectionArrays[(i * 3) + 0] = 255 * (0.5+sin(i * 0.01*_MC->getDt()*TWO_PI)*2);
+                selectionArrays[(i * 3) + 1] = 255 * (0.5+sin(i * 0.01*_MC->getDt()*TWO_PI)*2);
+                selectionArrays[(i * 3) + 2] = 255 * (0.5+sin(i *0.01*_MC->getDt()*TWO_PI)*2);
+            }
+            
             break;
             
-        case ANIMATIONS::FADE_OUT:
-            fade(id, array, length,true);
-            break;
             
-        case ANIMATIONS::SMOOTH_FADE:
-            smoothFade(id, array, length,true);
-            break;
-            
-        default: // default is black
-            blackout(id, array, length);
+        default:
             break;
     }
 }
-
-
-void LedAnimator::blackout(int &id,u_int8_t * array,int &length)
-{
-    for (int i = 0; i < length; i++)
-    {
-        array[i] = 0;
-    }
-}
-
-void LedAnimator::whiteout(int &id,u_int8_t * array,int &length)
-{
-    for (int i = 0; i < length; i++)
-    {
-        array[i] = 255;
-    }
-}
-
-
-void LedAnimator::fade(int &id,u_int8_t * array,int &length,bool direction)
-{
-    for (int i = 0; i < length; i++)
-    {
-        array[i] = abs(direction-_MC->getDt()) * 255.;
-    }
-}
-
-void LedAnimator::smoothFade(int &id,u_int8_t * array,int &length,bool direction)
-{
-    for (int i = 0; i < length; i++)
-    {
-        array[i] = (0.5 + sin(_MC->getDt()* TWO_PI) * 0.5) * 255.;
-    }
-}
-
-/////////////////enabler maybe a seperate class
-
-void LedAnimator::enableAll()
-{
-    for (int i = 0; i < _enables.size(); i++)
-    {
-        _enables[i] = true;
-    }
-}
-
-void LedAnimator::disableAll()
-{
-    for (int i = 0; i < _enables.size(); i++)
-    {
-        _enables[i] = false;
-    }
-}
-
-void LedAnimator::enableRandom()
-{
-    for (int i = 0; i < _enables.size(); i++)
-    {
-        if(ofRandom(10) < 5) _enables[i] = false;
-        else _enables[i] = true;
-    }
-}
-
-void LedAnimator::knitRider()
-{
-    for (int i = 0; i < _enables.size(); i++)
-    {
-        _enables[i] = false;
-        if(i == _step) _enables[i] = true;
-    }
-}
-
-
-

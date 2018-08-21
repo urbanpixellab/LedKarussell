@@ -14,58 +14,45 @@
 #include "ofMain.h"
 #include "MidiControl.hpp"
 #include "Colorizer.hpp"
+#include "ofxXmlSettings.h"
 
 
 class LedAnimator
 {
 public:
-    enum ANIMATIONS
+    struct Selection
     {
-        BLACK = 0,
-        WHITE,
-        FADE_IN,
-        FADE_OUT,
-        SMOOTH_FADE,
-        ANIMATION_COUNT
+        string name;//the name for button
+        vector<int> items;// the selected items
     };
     
-    enum ENABLES
+    
+    enum CURVE
     {
-        ALL_OFF = 0,
-        ALL_ON,
-        RANDOM,
-        KNIT_RIDER,
-        ENABLE_COUNT
+        BLACKOUT = 0,
+        WHITEOUT,
+        RAMP,
+        TRI,
+        SAW,
+        RECT,
+        SINE,
+        CURVE_COUNT
     };
+    
     
     LedAnimator(MidiControl *mc);
     ~LedAnimator();
-    void setSegmentSize(int size); // used for enable disable petterns
-    void setAnimation(int newAnimation){_aniSelect = newAnimation;};
-    void setEnableMode(int mode);
-    void updateEnable();
-    void drawGui();// d
-    void animationToArray(int id,u_int8_t * array,int length,int colorSelect);
-    void addStep();
+
+    void drawToArray(int drawFunction,u_int8_t * selectionArrays,int &length,ofVec3f colorFunctionSelect);//dt is already existing
+    // plus later 3 offset and frequency parameter
     
 private:
-    void blackout(int &id,u_int8_t * array,int &length);
-    void whiteout(int &id,u_int8_t * array,int &length);
-    void fade(int &id,u_int8_t * array,int &length,bool direction);
-    void smoothFade(int &id,u_int8_t * array,int &length,bool direction);
     
-    void enableAll();
-    void disableAll();
-    void enableRandom();
-    void knitRider();
-
     int                 _aniSelect;
     MidiControl         *_MC;
-    int                 _step;
-    int                 _maxStep;
     Colorizer           _col;
-    vector<bool>        _enables;
-    int                 _enableMode;
+    //niew selector
+    vector<Selection>   _selections;//ok buttons for
 };
 
 #endif /* LedAnimator_hpp */

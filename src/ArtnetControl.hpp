@@ -38,8 +38,7 @@ public:
     void update();
     void drawGui();
     void specialFunction(int id);
-    void guiAnimationPressed(int &buttonid);
-    void guiEnablePressed(int &buttonid);
+    void guiCurvePressed(int &buttonid);
 
     void loadNodes(); //load the artnet controler nodes from an xml
     //add key listener for test commands
@@ -50,11 +49,6 @@ public:
     Segment     *getLiveSegment(int id){return _liveSegments[id];};
     
 private:
-    void setAnimationLive(int id){_liveAnimator->setAnimation(id);};
-    void setAnimationPreview(int id){_preAnimator->setAnimation(id);};
-
-    void setEnableLive(int id){_liveAnimator->setEnableMode(id);};
-    void setEnablePreview(int id){_preAnimator->setEnableMode(id);};
 
     void sendToNodes();
     void clearNodes();
@@ -70,10 +64,14 @@ private:
     
     AnimatorGUI             *_GUI;
     
+    
     ofImage                 _preIMG;
     ofImage                 _liveIMG;
     
     int                     _test;
+    //niew
+    int                     _curvePreview;
+    int                     _curveLive;
 };
 
 #endif /* ArtnetControl_hpp */

@@ -48,7 +48,7 @@ private:
     float           xStart;
     bool            redraw;
     bool            type;//line drawing or mesh
-    ofTrueTypeFont  font;
+//    ofTrueTypeFont  font;
     int             resolution;// resolution for mouse movement
     int             comma;
 };

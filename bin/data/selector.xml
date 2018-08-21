@@ -1,8 +1,14 @@
 <select>
 	<name>LEFT_BIG</name>
-	<segement>0</segement>
-	<segement>1</segement>
-	<segement>2</segement>
+	<segement>
+		<id>0</id>
+	</segement>
+	<segement>
+		<id>1</id>
+	</segement>
+	<segement>		
+		<id>2</id>
+	</segement>
 </select>
 
 <select>
@@ -55,6 +61,41 @@
 </select>
 
 <select>
+	<name>CENTER_LEFT</name>
+	<segement>9</segement>
+	<segement>10</segement>
+	<segement>11</segement>
+	<segement>12</segement>
+	<segement>13</segement>
+	<segement>14</segement>
+	<segement>15</segement>
+</select>
+
+<select>
+	<name>CENTER_RIGHT</name>
+	<segement>16</segement>
+	<segement>17</segement>
+	<segement>18</segement>
+	<segement>19</segement>
+	<segement>20</segement>
+	<segement>21</segement>
+	<segement>22</segement>
+</select>
+
+<select>
+	<name>CENTER_ALL</name>
+	<selection>CENTER_LEFT</selection>
+	<selection>CENTER_RIGHT</selection>
+</select>
+
+<select>
+	<name>ALL</name>
+	<selection>LEFT_ALL</selection>
+	<selection>CENTER_ALL</selection>
+	<selection>RIGHT_ALL</selection>
+</select>
+
+<select>
 	<name>ALL_HORIZONTAL</name>
 	<segement>2</segement>
 	<segement>5</segement>
@@ -63,3 +104,21 @@
 	<segement>30</segement>
 	<segement>33</segement>
 </select>
+
+<select>
+	<name>ALL_VERTICAL</name>
+	<segement>0</segement>
+	<segement>1</segement>
+	<segement>3</segement>
+	<segement>4</segement>
+	<segement>6</segement>
+	<segement>7</segement>
+	<segement>25</segement>
+	<segement>26</segement>
+	<segement>28</segement>
+	<segement>29</segement>
+	<segement>31</segement>
+	<segement>32</segement>
+	<selection>CENTER_ALL</selection>
+</select>
+

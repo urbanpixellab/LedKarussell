@@ -20,13 +20,12 @@ AnimatorGUI::~AnimatorGUI()
 void AnimatorGUI::init()
 {
     //set the initial things, like blackout
-    newAnimation(0);
-    newEnable(0);
+    newCurve(0);
     
 }
 
 
-void AnimatorGUI::createAnimationGUI(int animationCount, int enableCount)
+void AnimatorGUI::createAnimationGUI(int animationCount)
 {
     //create animation buttons
     int w = 50;
@@ -40,47 +39,25 @@ void AnimatorGUI::createAnimationGUI(int animationCount, int enableCount)
         b.color = ofColor(188,188,190);
         b.toggle = true;
         b.isPressed = false;
-        _animationButtons.push_back(b);
-    }
-    //create enable buttons
-    for (int i = 0; i < enableCount; i++)
-    {
-        Button b;
-        b.id = i;
-        b.name = "test";
-        b.area = ofRectangle(_drawArea.x + (i * (w + 5)),_drawArea.y + 2*h,w,h);
-        b.color = ofColor(188,188,190);
-        b.toggle = true;
-        b.isPressed = false;
-        _enableButtons.push_back(b);
+        _curveButtons.push_back(b);
     }
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
 {
     ofSetColor(255);
-    ofDrawBitmapString("Animation Select", _drawArea.x, _drawArea.y);
-    ofDrawBitmapString("Enable Select", _drawArea.x, _drawArea.y + 60);
-    for (int i = 0; i < _animationButtons.size(); i++)
+    ofDrawBitmapString("Curve Select", _drawArea.x, _drawArea.y);
+    for (int i = 0; i < _curveButtons.size(); i++)
     {
-        ofSetColor(_animationButtons[i].color);
-        if (_animationButtons[i].isPressed)
+        ofSetColor(_curveButtons[i].color);
+        if (_curveButtons[i].isPressed)
         {
             ofSetColor(255,0,0);
         }
-        ofDrawRectangle(_animationButtons[i].area);
+        ofDrawRectangle(_curveButtons[i].area);
     }
     
     ofSetColor(255);
-    for (int i = 0; i < _enableButtons.size(); i++)
-    {
-        ofSetColor(_enableButtons[i].color);
-        if (_enableButtons[i].isPressed)
-        {
-            ofSetColor(255,0,0);
-        }
-        ofDrawRectangle(_enableButtons[i].area);
-    }
     ofSetColor(255);
     pre.draw(_drawArea.x, _drawArea.y + 200,170,100);
     live.draw(_drawArea.x + 180, _drawArea.y + 200,170,100);
@@ -95,48 +72,28 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 }
 
-void AnimatorGUI::newAnimation(int id)
+void AnimatorGUI::newCurve(int id)
 {
-    for (int i = 0; i < _animationButtons.size(); i++)
+    for (int i = 0; i < _curveButtons.size(); i++)
     {
-        _animationButtons[i].isPressed = false;
+        _curveButtons[i].isPressed = false;
     }
-    _animationButtons[id].isPressed = true;
-    ofNotifyEvent(animationPressed, id);
-}
-
-void AnimatorGUI::newEnable(int id)
-{
-    for (int i = 0; i < _enableButtons.size(); i++)
-    {
-        _enableButtons[i].isPressed = false;
-    }
-    _enableButtons[id].isPressed = true;
-    ofNotifyEvent(enablePressed, id);
+    _curveButtons[id].isPressed = true;
+    ofNotifyEvent(curvePressed, id);
 }
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
     if (!_drawArea.inside(args.x, args.y)) return;
     //check animations
-    for (int i = 0; i < _animationButtons.size(); i++)
+    for (int i = 0; i < _curveButtons.size(); i++)
     {
-        if(_animationButtons[i].area.inside(args.x, args.y))
+        if(_curveButtons[i].area.inside(args.x, args.y))
         {
             // reset all programm buttons and enable this one
-            newAnimation(i);
+            newCurve(i);
             return;
         }
     }
     //check enables
-    for (int i = 0; i < _enableButtons.size(); i++)
-    {
-        if(_enableButtons[i].area.inside(args.x, args.y))
-        {
-            // reset all programm buttons and enable this one
-            newEnable(i);
-            return;
-        }
-    }
-
 }
