@@ -165,7 +165,7 @@ void ArtnetControl::update()
     //fill all nodes by segment
     for (int i = 0; i < _liveSegments.size(); i++)
     {
-        cout << i << endl;
+        //cout << i << endl;
         _preAnimator->drawToArray(_curvePreview, _preSegments[i]->getArray(), _preSegments[i]->getLength(), ofVec3f(0,0,0));
         _liveAnimator->drawToArray(_curveLive, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), ofVec3f(0,0,0));
     }
