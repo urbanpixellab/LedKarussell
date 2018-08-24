@@ -17,7 +17,7 @@ void ofApp::setup()
     */
     _AC = new ArtnetControl(&_MC);
     
-    rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),3,true);
+    rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);
     
 }
 

@@ -172,6 +172,7 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
         else if (dir < 0 && mouseValue > 0 )mouseValue--;
         // notify or direct update the value
         value = ofMap(mouseValue, 0, resolution, 0, 1);
+        cout << value << endl;
         value = ofClamp(value, 0, 1);
         //ofNotifyEvent(newValue, value);
         cout << "dragged" << value << endl;
