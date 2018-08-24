@@ -32,18 +32,27 @@ public:
         BLACKOUT = 0,
         WHITEOUT,
         RAMP,
-        TRI,
         SAW,
+        TRI,
         RECT,
         SINE,
         CURVE_COUNT
+    };
+    
+    enum SEGMENT_DRAW
+    {
+        FORWARD = 0,    //draw from left to right
+        REVERSE,        //draw from rigth to left
+        OUTSIDE,        // draw from the ouside to the mid
+        MID,            // draw from the mid to the outside
+        SEGMENT_DRAW_COUNT
     };
     
     
     LedAnimator(MidiControl *mc);
     ~LedAnimator();
 
-    void drawToArray(int drawFunction,u_int8_t * selectionArrays,int &length,ofVec3f colorFunctionSelect);//dt is already existing
+    void drawToArray(int &drawFunction,int &drawMode,float &freq,u_int8_t * selectionArrays,int &length);//dt is already existing
     // plus later 3 offset and frequency parameter
     
 private:
