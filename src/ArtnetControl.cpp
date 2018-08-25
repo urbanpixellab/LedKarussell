@@ -163,11 +163,13 @@ void ArtnetControl::update()
     // to run through the step sequences from the on off function
 
     //fill all nodes by segment
+    float freq = 2;
+    int direction = LedAnimator::FORWARD;
     for (int i = 0; i < _liveSegments.size(); i++)
     {
         //cout << i << endl;
-        _preAnimator->drawToArray(_curvePreview, _preSegments[i]->getArray(), _preSegments[i]->getLength(), ofVec3f(0,0,0));
-        _liveAnimator->drawToArray(_curveLive, _liveSegments[i]->getArray(), _liveSegments[i]->getLength(), ofVec3f(0,0,0));
+        _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[i]->getArray(), _preSegments[i]->getLength());
+        _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[i]->getArray(), _liveSegments[i]->getLength());
     }
     //dont forget the fade out function to the beat and the blink function
     

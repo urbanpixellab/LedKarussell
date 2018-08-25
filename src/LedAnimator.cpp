@@ -68,14 +68,14 @@ LedAnimator::~LedAnimator()
 
 //////////////////////niew
 
-void LedAnimator::drawToArray(int drawFunction,u_int8_t * selectionArrays,int &length,ofVec3f colorFunctionSelect)
+void LedAnimator::drawToArray(int &drawFunction,int &drawMode,float &freq,u_int8_t * selectionArrays,int &length)
 {
-    //dt is already existing
-    // plus later 3 offset and frequency parameter
-    //example is simple sinewave on dT
-    float freq = 3;
+    // frequency moet op en draaiknop !!!
+    float len = (length/3); // convert to pixel position
+    //implement the color function
     switch (drawFunction) {
         case CURVE::BLACKOUT:
+        {
             //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < length; i++)
@@ -84,9 +84,11 @@ void LedAnimator::drawToArray(int drawFunction,u_int8_t * selectionArrays,int &l
             }
             
             break;
-            
+        }
         case CURVE::WHITEOUT:
-            //sinewave on array with freq = 3 on length of input array
+        {
+            
+        //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < length; i++)
             {
@@ -94,38 +96,73 @@ void LedAnimator::drawToArray(int drawFunction,u_int8_t * selectionArrays,int &l
             }
             
             break;
-
-        case CURVE::RECT://add frequency in repetirion
-            //sinewave on array with freq = 3 on length of input array
-            //
-            for (int i = 0; i < (length/3); i++) //reduce to pixel
+        }
+        case CURVE::RECT://add frequency in repetition
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
             {
-                selectionArrays[(i * 3) + 0] = 0;
-                selectionArrays[(i * 3) + 1] = 0;
-                selectionArrays[(i * 3) + 2] = 0;
-                if (i < _MC->getDt()* (length/3)) {
-                    //two pi =
-                    selectionArrays[(i * 3) + 0] = 255;
-                    selectionArrays[(i * 3) + 1] = 255;
-                    selectionArrays[(i * 3) + 2] = 255;
-                }
+                float delta = len/freq;
+                float value = 0;
+                float shift = _MC->getDt()*delta;
+                if(fmod(i+delta+shift,delta) > delta/2) value = 1;
+                selectionArrays[(i * 3) + 0] = 255 * value;
+                selectionArrays[(i * 3) + 1] = 255 * value;
+                selectionArrays[(i * 3) + 2] = 255 * value;
             }
             
             break;
-
-        case CURVE::SINE://blackout
-            //sinewave on array with freq = 3 on length of input array
-            //
-            for (int i = 0; i < (length/3); i++) //reduce to pixel
+        }
+        case CURVE::RAMP:
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
             {
-                //two pi =
-                selectionArrays[(i * 3) + 0] = 255 * (0.5+sin(i * 0.01*_MC->getDt()*TWO_PI)*2);
-                selectionArrays[(i * 3) + 1] = 255 * (0.5+sin(i * 0.01*_MC->getDt()*TWO_PI)*2);
-                selectionArrays[(i * 3) + 2] = 255 * (0.5+sin(i *0.01*_MC->getDt()*TWO_PI)*2);
+                float value = fmod(((i/len) + _MC->getDt())*freq,1);
+                selectionArrays[(i * 3) + 0] = 255 * value;
+                selectionArrays[(i * 3) + 1] = 255 * value;
+                selectionArrays[(i * 3) + 2] = 255 * value;
             }
             
             break;
+        }
+        case CURVE::SAW:
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
+            {
+                float value = 1.0 - fmod(((i/len) + _MC->getDt())*freq,1);
+                selectionArrays[(i * 3) + 0] = 255 * value;
+                selectionArrays[(i * 3) + 1] = 255 * value;
+                selectionArrays[(i * 3) + 2] = 255 * value;
+            }
             
+            break;
+        }
+        case CURVE::TRI:
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
+            {
+                
+                float value = fmod(((i/len) + _MC->getDt())*freq,1) * 2.;
+                if(value > 1.0) value = 1-value;
+                selectionArrays[(i * 3) + 0] = 255 * value;
+                selectionArrays[(i * 3) + 1] = 255 * value;
+                selectionArrays[(i * 3) + 2] = 255 * value;
+            }
+            
+            break;
+        }
+        case CURVE::SINE:
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
+            {
+                float value = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDt() * TWO_PI))*0.5);
+                
+                selectionArrays[(i * 3) + 0] = 255 * value;
+                selectionArrays[(i * 3) + 1] = 255 * value;
+                selectionArrays[(i * 3) + 2] = 255 * value;
+            }
+            
+            break;
+        }
             
         default:
             break;
