@@ -97,11 +97,11 @@ void ArtnetControl::loadNodes()
         //int nodeID,int universe,int beginLed,int endLed,int segmentID
         int begin = segments.getValue("beginPixel", 0);
         int length = segments.getValue("length", 150);//ofRandom(150); // should be max 150
+        cout << "segment " << i << " node " << node << " " << universe << endl;
         Segment *newSegP = new Segment(node,universe,begin,length,i);
         Segment *newSegL = new Segment(node,universe,begin,length,i);
         _preSegments.push_back(newSegP);
         _liveSegments.push_back(newSegL);
-        cout << "create segments " << i << endl;
         segments.popTag();
     }
     
