@@ -5,16 +5,6 @@ void ofApp::setup()
 {
     ofSetBackgroundColor(21);
     ofSetLineWidth(2);
-/* not needed here
-    _PresetScenes[0] = new SceneControl(&_MC);
-    _PresetScenes[1] = new SceneControl(&_MC);
-    _PresetScenes[2] = new SceneControl(&_MC);
-    _PresetScenes[3] = new SceneControl(&_MC);
-    _PresetScenes[4] = new SceneControl(&_MC);
-    _PresetScenes[5] = new SceneControl(&_MC);
-    _PresetScenes[6] = new SceneControl(&_MC);
-    _PresetScenes[7] = new SceneControl(&_MC);
-    */
     _AC = new ArtnetControl(&_MC);
     
     rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);

@@ -140,9 +140,9 @@ void LedAnimator::drawToArray(int &drawFunction,int &drawMode,float &freq,u_int8
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                
+                //have some glitch in the middle
                 float value = fmod(((i/len) + _MC->getDt())*freq,1) * 2.;
-                if(value > 1.0) value = 1-value;
+                if(value > 1.0) value = 1.0-value;
                 selectionArrays[(i * 3) + 0] = 255 * value;
                 selectionArrays[(i * 3) + 1] = 255 * value;
                 selectionArrays[(i * 3) + 2] = 255 * value;

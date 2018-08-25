@@ -43,12 +43,14 @@ public:
 private:
     stringstream text;//should been removed
 
-    ofxMidiIn       _midiIn;
+    ofxMidiIn       _midiTeensy; // this is now one controler,
+    ofxMidiIn       _midiNanoKontrol2; // this is now one controler,
+    //combining the nanokontrol and the ownbuil can be done, but we have to map the own ones cc to not used ones by the nanokontrol
     ofxMidiMessage  _midiMessage;
 
     
     int             _data[127];// every midi note is one array position
-    int             _control[25];// control chenge values
+    int             _control[127];// control chenge values
     Clock           _clk;
     
     ofRectangle     _tapButton;
@@ -60,4 +62,17 @@ private:
 
 //control = control change(knob)
 //value  = value
+/*
+ nanokontrol  uses only cc used control channel
+ 0-7   tm
+ 16-23 tm
+ 32-39 tm
+ 48-55 tm
+ 64-71 tm
+ 58 59 tm
+ 46
+ 60-62 tm
+ 41-45 tm
+ */
+
 #endif /* MidiControl_hpp */
