@@ -29,7 +29,7 @@ public:
     bool &getBeat(){return _isBeat;};
     string &getBPM(){return _bpm;};
 
-    
+    ofEvent<bool>    newStep;
     
 private:
     float       _dT;//the originale deltatime

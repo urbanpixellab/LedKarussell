@@ -96,7 +96,6 @@ void MidiControl::newMidiMessage(ofxMidiMessage& msg) {
         int noteID = (int)_midiMessage.bytes[1];
         _data[noteID] = 127;
         ofNotifyEvent(noteON, noteID);
-        //directly mapped to clock
         //if (noteID == 51) _clk.tap();
         cout << "NOTE " << noteID << " ON" << endl;
     }

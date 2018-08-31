@@ -112,44 +112,48 @@ void ArtnetControl::loadNodes()
     _liveIMG.allocate(150, _preSegments.size(),OF_IMAGE_COLOR);
     _preIMG.setColor(ofColor(0,0,0));
     _liveIMG.setColor(ofColor(0,0,0));
+    
     // fill the images black!!!
     //setup the mesh
     _GUI->getMesh().clear();
     _GUI->getMesh().setMode(OF_PRIMITIVE_LINES);
+    int offset = 9;//row texture offset
     for (int i = 0; i < 16; i++)
     {
         float x = 0.25 + (i * (0.5/16.));
         float y = 0.10;
         _GUI->getMesh().addVertex(ofVec2f(x,y));
-        _GUI->getMesh().addTexCoord(ofVec2f(0,i));
+        _GUI->getMesh().addTexCoord(ofVec2f(0,i + offset)); // offset of 9 rows
         y = 1-y;
         _GUI->getMesh().addVertex(ofVec2f(x,y));
-        _GUI->getMesh().addTexCoord(ofVec2f(150,i));
+        _GUI->getMesh().addTexCoord(ofVec2f(150,i + offset));
     }
+    // to fix the texture is right for the leds, but it is not sharp on the preview
     
     // now the triangles left and right, as losse lines
     //left and right
     for (int s = 0; s < 2; s++)
     {
+        offset = s*25;
         ofVec2f center = ofVec2f(0.125 + (s * 0.75),0.5);
         for (int d = 0; d < 3; d++)//every driehoek
         {
             float rad = 0.66 - (d * (0.66/3));//inverse great to small
             
             _GUI->getMesh().addVertex(ofVec2f(center.x,center.y - center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(0,0 + (d*3)));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,0 + (d*3) + offset));
             _GUI->getMesh().addVertex(ofVec2f(center.x + 0.125*rad,center.y + center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(150,0 + (d*3)));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,0 + (d*3) + offset));
             
             _GUI->getMesh().addVertex(ofVec2f(center.x + 0.125*rad,center.y + center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(0,1 + (d*3)));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,1 + (d*3) + offset));
             _GUI->getMesh().addVertex(ofVec2f(center.x - 0.125*rad,center.y + center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(150,1 + (d*3)));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,1 + (d*3) + offset));
             
             _GUI->getMesh().addVertex(ofVec2f(center.x - 0.125*rad,center.y + center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(0,2 + (d*3)));
+            _GUI->getMesh().addTexCoord(ofVec2f(0,2 + (d*3) + offset));
             _GUI->getMesh().addVertex(ofVec2f(center.x,center.y - center.y*rad));
-            _GUI->getMesh().addTexCoord(ofVec2f(150,2));
+            _GUI->getMesh().addTexCoord(ofVec2f(150,2 + (d*3) + offset));
         }
     }
 }
@@ -162,18 +166,28 @@ void ArtnetControl::update()
     // to run through the step sequences from the on off function
 
     //fill all nodes by segment
-    float freq = 20;
+    float freq = 2;
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    for (int i = 0; i < _liveSegments.size(); i++)
+    int selection = 7;
+    
+    if(solo)
     {
-        //cout << i << endl;
-        _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[i]->getArray(), _preSegments[i]->getLength());
-        _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[i]->getArray(), _liveSegments[i]->getLength());
+        //testwise for all driehoeck
+        for (int i = 0; i < _preAnimator->getSelection(selection)->items.size(); i++)
+        {
+            int seg = _preAnimator->getSelection(selection)->items[i];
+            _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[seg]->getArray(), _preSegments[seg]->getLength());
+            _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength());
+        }
     }
+    else
+    {
+        //all segments in one array as one long array, create them first after inloading of the selector
+    }
+    
+
     //dont forget the fade out function to the beat and the blink function
-    
-    
 
     // now updaste the arrays to the visualizer
     writeSegmentsToImage(_preSegments, _preIMG);

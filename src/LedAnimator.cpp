@@ -14,11 +14,8 @@ LedAnimator::LedAnimator(MidiControl * mc): _MC(mc)
     // is working on array getting in and function select + parameters like direction and color
     
     _aniSelect = 0; //old
-    
-    
     //load the selections from xml and create buttons for every selection with the name and id
     ofxXmlSettings sel("selector.xml");
-    cout << "load xml" << endl;
     for (int i = 0; i < sel.getNumTags("select"); i++)
     {
         sel.pushTag("select",i);
