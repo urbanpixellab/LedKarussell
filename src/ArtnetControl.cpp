@@ -104,8 +104,17 @@ void ArtnetControl::loadNodes()
         _liveSegments.push_back(newSegL);
         segments.popTag();
     }
-    
     // update the ledanimator size
+    // now create the selction arrays for faSTER WRITING
+    int size = _preAnimator->getSelectionMax();
+    for (int i = 0; i < size; i++)
+    {
+        vector<u_int8_t*> array;
+        
+    }
+    
+    
+    
     //whiteout
     //also create the preview images
     _preIMG.allocate(150, _preSegments.size(),OF_IMAGE_COLOR); // max of 510 channels
@@ -162,23 +171,37 @@ void ArtnetControl::update()
 {
     // update artnet based on the selected sce or use the hottbutton function
     // which is overriding the actual state
-    // also use the delta time and next beat from the mmidi controler
-    // to run through the step sequences from the on off function
-
-    //fill all nodes by segment
-    float freq = 2;
+    //fill all nodes by selection
+    float freq = 0.12;
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int selection = 7;
+    int cA = _test;
+    int cB = 10;
     
+    //first fill all with background color
+    ofColor black(0,0,0);
+    ofColor c1(255,0,0);
+    ofColor c2(0,0,255);
+    fillAllBackgroundColor(black);
     if(solo)
     {
+        int s = _preAnimator->getSelection(cA)->items.size();
         //testwise for all driehoeck
-        for (int i = 0; i < _preAnimator->getSelection(selection)->items.size(); i++)
+        for (int i = 0; i < s; i++)
         {
-            int seg = _preAnimator->getSelection(selection)->items[i];
-            _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[seg]->getArray(), _preSegments[seg]->getLength());
-            _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength());
+            int seg = _preAnimator->getSelection(cA)->items[i];
+            
+            _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1);
+            _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1);
+        }
+        //add mode second color
+        s = _preAnimator->getSelection(cB)->items.size();
+        for (int i = 0; i < s; i++)
+        {
+            int seg = _preAnimator->getSelection(cB)->items[i];
+            
+            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c2);
+            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c2);
         }
     }
     else
@@ -194,6 +217,15 @@ void ArtnetControl::update()
     writeSegmentsToImage(_liveSegments, _liveIMG);
     
     sendToNodes();
+}
+
+void ArtnetControl::fillAllBackgroundColor(ofColor & color)
+{
+    for (int i = 0; i < _preSegments.size(); i++)
+    {
+        _preSegments[i]->setAllPixel(color);
+        _liveSegments[i]->setAllPixel(color);
+    }
 }
 
 void ArtnetControl::writeSegmentsToImage(vector<Segment*> seg, ofImage& img)
@@ -281,7 +313,7 @@ void ArtnetControl::specialFunction(int id)
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
-    _test = _test%5;
+    _test = _test%12;
     cout << key.keycode << endl;
     
 }

@@ -43,6 +43,14 @@ u_int8_t *Segment::getPixel(int id)
     return *_pixel;
 };
 
+void Segment::setAllPixel(ofColor &c)
+{
+    for (int i = 0; i < _pixLength; i++)
+    {
+        setPixel(i, c.r,c.g,c.b);
+    }
+}
+
 void Segment::setPixel(int id,int r,int g,int b)
 {
     _values[(id*3) + 0] = r;

@@ -25,6 +25,7 @@ public:
     u_int8_t *getPixel(int id);
     void setPixel(int id, int r, int g, int b);
     void setPixel(int id, ofColor color);
+    void setAllPixel(ofColor &color);
     u_int8_t getPixelLength(){return _pixLength;};
     
     int &getBegin(){return _begin;};
