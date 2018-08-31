@@ -37,6 +37,7 @@ void Clock::update()
         //cout << "beat" << endl;
         _nextBeat = now;
         _isBeat = true;
+        ofNotifyEvent(newStep, _isBeat);
         _stepCounter++;
     }
     else if(now > _nextBeat)
@@ -47,6 +48,7 @@ void Clock::update()
         _actValue = _dT; /// gets later manipulated by the time and the beat scale faktor
         _nextBeat = _lastBeat+ _beatLength;
         _isBeat = true;
+        ofNotifyEvent(newStep, _isBeat);
         _stepCounter++;
     }
     else
