@@ -162,15 +162,15 @@ void ArtnetControl::update()
 {
     // update artnet based on the selected sce or use the hottbutton function
     // which is overriding the actual state
-    // also use the delta time and next beat from the mmidi controler
-    // to run through the step sequences from the on off function
-
-    //fill all nodes by segment
+    //fill all nodes by selection
     float freq = 2;
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int selection = 7;
+    int selection = _test;
     
+    //first fill all with background color
+    ofColor c(0,0,0);
+    fillAllBackgroundColor(c);
     if(solo)
     {
         //testwise for all driehoeck
@@ -194,6 +194,17 @@ void ArtnetControl::update()
     writeSegmentsToImage(_liveSegments, _liveIMG);
     
     sendToNodes();
+}
+
+void ArtnetControl::fillAllBackgroundColor(ofColor & color)
+{
+    int func = LedAnimator::BLACKOUT;
+    int direction = LedAnimator::FORWARD;
+    float freq = 1;
+    for (int i = 0; i < _preSegments.size(); i++)
+    {
+        _preSegments[i]->setAllPixel(color);
+    }
 }
 
 void ArtnetControl::writeSegmentsToImage(vector<Segment*> seg, ofImage& img)
@@ -281,7 +292,7 @@ void ArtnetControl::specialFunction(int id)
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
-    _test = _test%5;
+    _test = _test%12;
     cout << key.keycode << endl;
     
 }

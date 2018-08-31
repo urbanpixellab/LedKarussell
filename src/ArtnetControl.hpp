@@ -37,6 +37,7 @@ public:
 
     void update();
     void drawGui();
+    void fillAllBackgroundColor(ofColor & color);
     void specialFunction(int id);
     void guiCurvePressed(int &buttonid);
 
@@ -58,7 +59,9 @@ private:
     MidiControl             *_MC;
     vector<Node*>           _nodes;
     vector<Segment*>        _preSegments;
+    vector<vector<u_int8_t*>>_preSelection;
     vector<Segment*>        _liveSegments;
+    vector<vector<Segment*>>_liveSelection;
     LedAnimator             *_preAnimator;
     LedAnimator             *_liveAnimator;
     
