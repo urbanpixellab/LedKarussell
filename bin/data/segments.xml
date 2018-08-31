@@ -29,28 +29,28 @@
 <segment>
 	<id>4</id>
 	<node>1</node>
-	<universe>0</universe>
+	<universe>4</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>5</id>
 	<node>1</node>
-	<universe>1</universe>
+	<universe>5</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>6</id>
 	<node>1</node>
-	<universe>2</universe>
+	<universe>6</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>7</id>
 	<node>1</node>
-	<universe>3</universe>
+	<universe>7</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
