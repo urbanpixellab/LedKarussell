@@ -24,42 +24,15 @@ LedAnimator::LedAnimator(MidiControl * mc): _MC(mc)
         sel.pushTag("select",i);
         Selection s;
         s.name = sel.getValue("name", "untitled");
-        cout << "segment name " << s.name << endl;
-        //how many elements or selections?
-        //maximum one layer down by now
-        //still not working and empty
-        
-        /*
-        for (int s = 0; s < sel.getNumTags("segment"); s++)
+        string segments = sel.getValue("segment", "");
+        vector<string> segmentSelection = ofSplitString(segments, ",");
+        for (int seg = 0; seg < segmentSelection.size(); seg++)
         {
-            // get the already existing items and add this to the selection
-            // check with _selections[]and fill up with them, must been recursive...
-            // but later now only one level down
-            // replace selection with already existin items in the selection based on the name
-            sel.pushTag("selection",s);
-            cout << sel.getValue("id", 0) << endl;
-            sel.popTag();
-//            s.items.push_back(sel.getValue("segment", 0));
-        }*/
-        //here the segments
-        int segments = sel.getNumTags("segment");
-        cout << segments << " segments" << endl;
-        for (int seg = 0; seg < sel.getNumTags("segment"); seg++)
-        {
-            // get the already existing items and add this to the selection
-            // replace selection with already existin items
-            sel.pushTag("segment",seg);
-            int id = sel.getValue("segment", 0);
-            cout << id << endl;
-            s.items.push_back(id);
-            sel.popTag();
+            s.items.push_back(ofToInt(segmentSelection[seg]));
         }
-        
-        // now add the listet segments
         _selections.push_back(s);
         sel.popTag();
     }
-    
 }
 
 LedAnimator::~LedAnimator()

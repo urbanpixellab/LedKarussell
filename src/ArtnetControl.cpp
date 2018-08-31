@@ -152,7 +152,6 @@ void ArtnetControl::loadNodes()
             _GUI->getMesh().addTexCoord(ofVec2f(150,2));
         }
     }
-    
 }
 
 void ArtnetControl::update()
@@ -163,8 +162,9 @@ void ArtnetControl::update()
     // to run through the step sequences from the on off function
 
     //fill all nodes by segment
-    float freq = 2;
+    float freq = 20;
     int direction = LedAnimator::FORWARD;
+    bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     for (int i = 0; i < _liveSegments.size(); i++)
     {
         //cout << i << endl;
