@@ -104,16 +104,24 @@ void ArtnetControl::loadNodes()
         _liveSegments.push_back(newSegL);
         segments.popTag();
     }
-    // update the ledanimator size
-    // now create the selction arrays for faSTER WRITING
-    int size = _preAnimator->getSelectionMax();
-    for (int i = 0; i < size; i++)
+    
+    //load the selections from xml and create buttons for every selection with the name and id
+    ofxXmlSettings sel("selector.xml");
+    for (int i = 0; i < sel.getNumTags("select"); i++)
     {
-        vector<u_int8_t*> array;
-        
+        sel.pushTag("select",i);
+        Selection s;
+        s.name = sel.getValue("name", "untitled");
+        string segments = sel.getValue("segment", "");
+        vector<string> segmentSelection = ofSplitString(segments, ",");
+        for (int seg = 0; seg < segmentSelection.size(); seg++)
+        {
+            s.items.push_back(ofToInt(segmentSelection[seg]));
+        }
+        _selections.push_back(s);
+        sel.popTag();
     }
-    
-    
+
     
     //whiteout
     //also create the preview images
@@ -172,36 +180,40 @@ void ArtnetControl::update()
     // update artnet based on the selected sce or use the hottbutton function
     // which is overriding the actual state
     //fill all nodes by selection
-    float freq = 0.12;
+    float freq = 6;
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int cA = _test;
-    int cB = 10;
+    int selectionA = _test;
+    int selectionB = 10;
     
     //first fill all with background color
     ofColor black(0,0,0);
     ofColor c1(255,0,0);
     ofColor c2(0,0,255);
+    ofColor c3(0,255,0);
+    ofColor c4(255,0,255);
     fillAllBackgroundColor(black);
     if(solo)
     {
-        int s = _preAnimator->getSelection(cA)->items.size();
-        //testwise for all driehoeck
+        int s = _selections[selectionA].items.size();
+        
+        
         for (int i = 0; i < s; i++)
         {
-            int seg = _preAnimator->getSelection(cA)->items[i];
+            int seg = _selections[selectionA].items[i];
             
-            _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1);
-            _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1);
+            _preAnimator->drawToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
-        //add mode second color
-        s = _preAnimator->getSelection(cB)->items.size();
+        
+        //add now the second color
+        s = _selections[selectionB].items.size();
         for (int i = 0; i < s; i++)
         {
-            int seg = _preAnimator->getSelection(cB)->items[i];
+            int seg = _selections[selectionB].items[i];
             
-            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c2);
-            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c2);
+            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     else

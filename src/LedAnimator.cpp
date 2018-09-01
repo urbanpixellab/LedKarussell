@@ -14,22 +14,6 @@ LedAnimator::LedAnimator(MidiControl * mc): _MC(mc)
     // is working on array getting in and function select + parameters like direction and color
     
     _aniSelect = 0; //old
-    //load the selections from xml and create buttons for every selection with the name and id
-    ofxXmlSettings sel("selector.xml");
-    for (int i = 0; i < sel.getNumTags("select"); i++)
-    {
-        sel.pushTag("select",i);
-        Selection s;
-        s.name = sel.getValue("name", "untitled");
-        string segments = sel.getValue("segment", "");
-        vector<string> segmentSelection = ofSplitString(segments, ",");
-        for (int seg = 0; seg < segmentSelection.size(); seg++)
-        {
-            s.items.push_back(ofToInt(segmentSelection[seg]));
-        }
-        _selections.push_back(s);
-        sel.popTag();
-    }
 }
 
 LedAnimator::~LedAnimator()
@@ -38,7 +22,7 @@ LedAnimator::~LedAnimator()
 
 //////////////////////niew
 
-void LedAnimator::drawToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a)
+void LedAnimator::drawToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
 {
     int blendMode = 0;// direct
     // frequency moet op en draaiknop !!!
@@ -76,9 +60,9 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,float freq,u_int8_t 
                 float value = 0;
                 float shift = _MC->getDt()*delta;
                 if(fmod(i+delta+shift,delta) > delta/2) value = 1;
-                selectionArrays[(i * 3) + 0] = a.r * value;
-                selectionArrays[(i * 3) + 1] = a.g * value;
-                selectionArrays[(i * 3) + 2] = a.b * value;
+                selectionArrays[(i * 3) + 0] = a.r * value + b.r * (1-value);
+                selectionArrays[(i * 3) + 1] = a.g * value + b.r * (1-value);
+                selectionArrays[(i * 3) + 2] = a.b * value + b.r * (1-value);
             }
             
             break;
@@ -140,7 +124,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,float freq,u_int8_t 
     }
 }
 
-void LedAnimator::addToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a)
+void LedAnimator::addToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
 {
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
@@ -180,9 +164,9 @@ void LedAnimator::addToArray(int drawFunction,int drawMode,float freq,u_int8_t *
                 float value = 0;
                 float shift = _MC->getDt()*delta;
                 if(fmod(i+delta+shift,delta) > delta/2) value = 1;
-                selectionArrays[(i * 3) + 0] += a.r * value;
-                selectionArrays[(i * 3) + 1] += a.g * value;
-                selectionArrays[(i * 3) + 2] += a.b * value;
+                selectionArrays[(i * 3) + 0] += a.r * value + b.r * (1-value);
+                selectionArrays[(i * 3) + 1] += a.g * value + b.r * (1-value);
+                selectionArrays[(i * 3) + 2] += a.b * value + b.r * (1-value);
             }
             
             break;

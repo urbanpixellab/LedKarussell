@@ -18,6 +18,13 @@
 class ArtnetControl
 {
 public:
+    struct Selection
+    {
+        string name;//the name for button
+        vector<int> items;// the selected items
+    };
+
+    
     
     struct Node
     {
@@ -59,9 +66,7 @@ private:
     MidiControl             *_MC;
     vector<Node*>           _nodes;
     vector<Segment*>        _preSegments;
-    vector<vector<u_int8_t*>>_preSelection;
     vector<Segment*>        _liveSegments;
-    vector<vector<Segment*>>_liveSelection;
     LedAnimator             *_preAnimator;
     LedAnimator             *_liveAnimator;
     
@@ -75,6 +80,9 @@ private:
     //niew
     int                     _curvePreview;
     int                     _curveLive;
+    
+    vector<Selection>       _selections;//ok buttons for
+
 };
 
 #endif /* ArtnetControl_hpp */
