@@ -122,6 +122,7 @@ void ArtnetControl::loadNodes()
         sel.popTag();
     }
 
+    loadPatroon();
     
     //whiteout
     //also create the preview images
@@ -174,6 +175,37 @@ void ArtnetControl::loadNodes()
         }
     }
 }
+
+void ArtnetControl::loadPatroon()
+{
+    ofxXmlSettings sel("patroonen.xml");
+    for (int i = 0; i < sel.getNumTags("patroon"); i++)
+    {
+        sel.pushTag("patroon",i);
+        //int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD
+        int id = sel.getValue("id", i);
+        //shift layer
+        sel.getNumTags("layer");
+        int curve[sel.getNumTags("layer")];
+        float freq[sel.getNumTags("layer")];
+        
+        for (int l = 0; l < sel.getNumTags("layer"); l++)
+        {
+            sel.pushTag("layer",l);
+            curve[l] = sel.getValue("curve", 0);
+            freq[l] = sel.getValue("cFreq", 1);
+            cout << l << " curve " << curve[l] << endl;
+            sel.popTag();
+        }
+        Patroon p(id,curve[0],curve[1],freq[0],freq[1],0,0,0,0,0,0,0,0);
+        // add the sequence matrix
+        _patronen.push_back(p);
+        sel.popTag();
+    }
+}
+
+void ArtnetControl::savePatroon(){}
+
 
 void ArtnetControl::update()
 {

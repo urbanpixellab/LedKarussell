@@ -14,6 +14,7 @@
 #include "Segment.hpp"
 #include "LedAnimator.hpp"
 #include "AnimatorGUI.hpp"
+#include "Patroon.hpp"
 
 class ArtnetControl
 {
@@ -41,7 +42,9 @@ public:
     ArtnetControl(MidiControl *mc);
     ~ArtnetControl();
     
-
+    void loadPatroon();
+    void savePatroon();
+    
     void update();
     void drawGui();
     void fillAllBackgroundColor(ofColor & color);
@@ -82,7 +85,8 @@ private:
     int                     _curveLive;
     
     vector<Selection>       _selections;//ok buttons for
-
+    vector<Patroon>         _patronen;
+    Patroon                 *_editPatroon;//this is directly writing to the output
 };
 
 #endif /* ArtnetControl_hpp */
