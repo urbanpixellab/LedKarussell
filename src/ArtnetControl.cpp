@@ -188,20 +188,44 @@ void ArtnetControl::loadPatroon()
         sel.getNumTags("layer");
         int curve[sel.getNumTags("layer")];
         float freq[sel.getNumTags("layer")];
+        int dir[sel.getNumTags("layer")];
+        int time[sel.getNumTags("layer")];
+        int color[sel.getNumTags("layer") * 2];
         
         for (int l = 0; l < sel.getNumTags("layer"); l++)
         {
             sel.pushTag("layer",l);
             curve[l] = sel.getValue("curve", 0);
             freq[l] = sel.getValue("cFreq", 1);
-            cout << l << " curve " << curve[l] << endl;
+            dir[l] = sel.getValue("cFreq", 0);
+            time[l] = sel.getValue("cTime", 2);
+            color[(l * 2) + 0] = sel.getValue("colorA", 0);
+            color[(l * 2) + 1] = sel.getValue("colorB", 0);
             sel.popTag();
         }
-        Patroon p(id,curve[0],curve[1],freq[0],freq[1],0,0,0,0,0,0,0,0);
-        // add the sequence matrix
+        Patroon p(id,curve[0],curve[1],freq[0],freq[1],dir[0],dir[1],time[0],time[1],color[0],color[1],color[2],color[3]);
+        // add the sequence matrix based on the indices
+        //vector<int>
+        string steps[8] = {"step0","step1","step2","step3","step4","step5","step6","step7"};
+        for (int l = 0; l < sel.getNumTags("layer"); l++)
+        {
+            sel.pushTag("layer",l);
+            for (int step = 0; step < 8; step++)
+            {
+                vector<string> result = ofSplitString(sel.getValue(steps[step], ""), ",");
+                for (int selection = 0; selection < result.size(); selection++)
+                {
+                    cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
+                    if(l == 0) p.setSeqA(step, ofToInt(result[selection]), true);
+                    else if(l == 1) p.setSeqB(step, ofToInt(result[selection]), true);
+                }
+            }
+            sel.popTag();
+        }
         _patronen.push_back(p);
         sel.popTag();
     }
+    cout << _patronen.size() << endl;
 }
 
 void ArtnetControl::savePatroon(){}

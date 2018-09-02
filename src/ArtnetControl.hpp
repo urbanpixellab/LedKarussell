@@ -86,7 +86,7 @@ private:
     
     vector<Selection>       _selections;//ok buttons for
     vector<Patroon>         _patronen;
-    Patroon                 *_editPatroon;//this is directly writing to the output
+    Patroon                 *_editPatroon;//this is directly writing to the patroon
 };
 
 #endif /* ArtnetControl_hpp */
