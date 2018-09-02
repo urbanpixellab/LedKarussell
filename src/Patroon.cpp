@@ -26,6 +26,44 @@ Patroon::Patroon(int id,int curveA,int curveB,float freqA,float freqB,float dirA
     _color[1] = colorB;
     _color[2] = colorC;
     _color[3] = colorD;
+    
+    clear();
 }
 
 Patroon::~Patroon(){}
+
+void Patroon::clear()
+{
+    for (int step = 0; step < 8; step++)
+    {
+        for (int row = 0; row < 13; row++)
+        {
+            _sequenceA[step][row] = false;
+            _sequenceB[step][row] = false;
+        }
+    }
+}
+
+void Patroon::nextStep()
+{
+    _step++;
+    if(_step >= 8)_step = 0;
+}
+
+void Patroon::setSeqSel(int layer,int step,int *selection,int length)
+{
+    if (layer == 0)
+    {
+        for (int i = 0; i < length; i++)
+        {
+            _sequenceA[step][selection[i]] = true;
+        }
+    }
+    else if(layer == 1)
+    {
+        for (int i = 0; i < length; i++)
+        {
+            _sequenceA[step][selection[i]] = true;
+        }
+    }
+}
