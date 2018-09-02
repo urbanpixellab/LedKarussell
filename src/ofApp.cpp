@@ -9,6 +9,8 @@ void ofApp::setup()
     
     rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);
     
+    colorselector.setup(ofRectangle(550,50,300,200));
+    
 }
 
 //--------------------------------------------------------------
@@ -24,6 +26,8 @@ void ofApp::draw()
     _AC->drawGui();
     
     rl.draw();
+    
+    colorselector.draw();
 }
 
 //--------------------------------------------------------------
