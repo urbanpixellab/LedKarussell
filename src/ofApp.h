@@ -3,6 +3,7 @@
 #include "MidiControl.hpp"
 #include "ArtnetControl.hpp"
 #include "RotarySlider.hpp"
+#include "ColorSelector.hpp"
 
 
 class ofApp : public ofBaseApp{
@@ -25,6 +26,8 @@ public:
     void gotMessage(ofMessage msg);
     
     RotarySlider rl;
+    
+    ColorSelector colorselector;
     
 
     void exit();

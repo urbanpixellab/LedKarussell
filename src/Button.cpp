@@ -49,8 +49,15 @@ void Button::updateFbo(bool isPressed)
     ofFill();
     ofDrawRectRounded(2,2,fbo.getWidth() - 4,fbo.getHeight() - 4, 4);
     ofSetColor(textColor);
-    ofDrawBitmapString(name, 10, 14);
+    ofDrawBitmapString(name, 6, 14);
     fbo.end();
+}
+
+void Button::setColors(ofColor nonactive, ofColor active, ofColor text){
+    nonActive = nonactive;
+    Active = active;
+    textColor = text;
+    updateFbo(false);
 }
 
 void Button::draw()
@@ -78,6 +85,7 @@ void Button::mousePressed(ofMouseEventArgs &arg)
     }
     else
     {
+        
         isPressed = true;
         pressTimeout = ofGetElapsedTimef() + 0.05;
     }
