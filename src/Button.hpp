@@ -27,15 +27,12 @@ public:
 
     void activateListener();
     void deactivateListener();
+    void setColors(ofColor _nonActive, ofColor _active, ofColor text);
     
     ofEvent<string>   buttonPressed;
     void pressedControler();
     ofRectangle &getArea(){return drawArea;};
     
-    ofColor nonActive;
-    ofColor Active;
-    ofColor textColor;
-
 private:
     void            updateFbo(bool isPressed);
     
@@ -46,6 +43,11 @@ private:
     bool            isToggle;
     bool            isPressed;
     float           pressTimeout;
+    
+    ofColor nonActive;
+    ofColor Active;
+    ofColor textColor;
+
     
 };
 
