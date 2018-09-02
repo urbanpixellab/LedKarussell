@@ -14,10 +14,18 @@
 #include "Segment.hpp"
 #include "LedAnimator.hpp"
 #include "AnimatorGUI.hpp"
+#include "Patroon.hpp"
 
 class ArtnetControl
 {
 public:
+    struct Selection
+    {
+        string name;//the name for button
+        vector<int> items;// the selected items
+    };
+
+    
     
     struct Node
     {
@@ -34,7 +42,9 @@ public:
     ArtnetControl(MidiControl *mc);
     ~ArtnetControl();
     
-
+    void loadPatroon();
+    void savePatroon();
+    
     void update();
     void drawGui();
     void fillAllBackgroundColor(ofColor & color);
@@ -59,9 +69,7 @@ private:
     MidiControl             *_MC;
     vector<Node*>           _nodes;
     vector<Segment*>        _preSegments;
-    vector<vector<u_int8_t*>>_preSelection;
     vector<Segment*>        _liveSegments;
-    vector<vector<Segment*>>_liveSelection;
     LedAnimator             *_preAnimator;
     LedAnimator             *_liveAnimator;
     
@@ -75,6 +83,10 @@ private:
     //niew
     int                     _curvePreview;
     int                     _curveLive;
+    
+    vector<Selection>       _selections;//ok buttons for
+    vector<Patroon>         _patronen;
+    Patroon                 *_editPatroon;//this is directly writing to the patroon
 };
 
 #endif /* ArtnetControl_hpp */

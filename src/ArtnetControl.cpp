@@ -104,16 +104,25 @@ void ArtnetControl::loadNodes()
         _liveSegments.push_back(newSegL);
         segments.popTag();
     }
-    // update the ledanimator size
-    // now create the selction arrays for faSTER WRITING
-    int size = _preAnimator->getSelectionMax();
-    for (int i = 0; i < size; i++)
+    
+    //load the selections from xml and create buttons for every selection with the name and id
+    ofxXmlSettings sel("selector.xml");
+    for (int i = 0; i < sel.getNumTags("select"); i++)
     {
-        vector<u_int8_t*> array;
-        
+        sel.pushTag("select",i);
+        Selection s;
+        s.name = sel.getValue("name", "untitled");
+        string segments = sel.getValue("segment", "");
+        vector<string> segmentSelection = ofSplitString(segments, ",");
+        for (int seg = 0; seg < segmentSelection.size(); seg++)
+        {
+            s.items.push_back(ofToInt(segmentSelection[seg]));
+        }
+        _selections.push_back(s);
+        sel.popTag();
     }
-    
-    
+
+    loadPatroon();
     
     //whiteout
     //also create the preview images
@@ -167,41 +176,100 @@ void ArtnetControl::loadNodes()
     }
 }
 
+void ArtnetControl::loadPatroon()
+{
+    ofxXmlSettings sel("patroonen.xml");
+    for (int i = 0; i < sel.getNumTags("patroon"); i++)
+    {
+        sel.pushTag("patroon",i);
+        //int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD
+        int id = sel.getValue("id", i);
+        //shift layer
+        sel.getNumTags("layer");
+        int curve[sel.getNumTags("layer")];
+        float freq[sel.getNumTags("layer")];
+        int dir[sel.getNumTags("layer")];
+        int time[sel.getNumTags("layer")];
+        int color[sel.getNumTags("layer") * 2];
+        
+        for (int l = 0; l < sel.getNumTags("layer"); l++)
+        {
+            sel.pushTag("layer",l);
+            curve[l] = sel.getValue("curve", 0);
+            freq[l] = sel.getValue("cFreq", 1);
+            dir[l] = sel.getValue("cFreq", 0);
+            time[l] = sel.getValue("cTime", 2);
+            color[(l * 2) + 0] = sel.getValue("colorA", 0);
+            color[(l * 2) + 1] = sel.getValue("colorB", 0);
+            sel.popTag();
+        }
+        Patroon p(id,curve[0],curve[1],freq[0],freq[1],dir[0],dir[1],time[0],time[1],color[0],color[1],color[2],color[3]);
+        // add the sequence matrix based on the indices
+        //vector<int>
+        string steps[8] = {"step0","step1","step2","step3","step4","step5","step6","step7"};
+        for (int l = 0; l < sel.getNumTags("layer"); l++)
+        {
+            sel.pushTag("layer",l);
+            for (int step = 0; step < 8; step++)
+            {
+                vector<string> result = ofSplitString(sel.getValue(steps[step], ""), ",");
+                for (int selection = 0; selection < result.size(); selection++)
+                {
+                    cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
+                    if(l == 0) p.setSeqA(step, ofToInt(result[selection]), true);
+                    else if(l == 1) p.setSeqB(step, ofToInt(result[selection]), true);
+                }
+            }
+            sel.popTag();
+        }
+        _patronen.push_back(p);
+        sel.popTag();
+    }
+    cout << _patronen.size() << endl;
+}
+
+void ArtnetControl::savePatroon(){}
+
+
 void ArtnetControl::update()
 {
     // update artnet based on the selected sce or use the hottbutton function
     // which is overriding the actual state
     //fill all nodes by selection
-    float freq = 0.12;
+    float freq = 6;
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int cA = _test;
-    int cB = 10;
+    int selectionA = _test;
+    int selectionB = 10;
     
     //first fill all with background color
     ofColor black(0,0,0);
     ofColor c1(255,0,0);
     ofColor c2(0,0,255);
+    ofColor c3(0,255,0);
+    ofColor c4(255,0,255);
     fillAllBackgroundColor(black);
     if(solo)
     {
-        int s = _preAnimator->getSelection(cA)->items.size();
-        //testwise for all driehoeck
+        int s = _selections[selectionA].items.size();
+        
+        
         for (int i = 0; i < s; i++)
         {
-            int seg = _preAnimator->getSelection(cA)->items[i];
+            int seg = _selections[selectionA].items[i];
             
-            _preAnimator->drawToArray(_curvePreview,direction,freq, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1);
-            _liveAnimator->drawToArray(_curveLive,direction,freq, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1);
+            _preAnimator->drawToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
-        //add mode second color
-        s = _preAnimator->getSelection(cB)->items.size();
+        
+        //add now the second color
+        s = _selections[selectionB].items.size();
         for (int i = 0; i < s; i++)
         {
-            int seg = _preAnimator->getSelection(cB)->items[i];
+            int seg = _selections[selectionB].items[i];
             
-            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c2);
-            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c2);
+            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     else
