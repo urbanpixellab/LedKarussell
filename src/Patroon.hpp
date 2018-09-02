@@ -18,11 +18,21 @@ public:
     Patroon(int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD);
     ~Patroon();
     
+    void clear();
+    
+    void nextStep();
+    void resetStep(){_step = 0;};
+    
     int *getCurve(int id){return &_curve[id];};
     
-    int *getSeqA(int id){return _sequenceA[id];};
-    int *getSeqB(int id){return _sequenceB[id];};
+    bool *getSeqStepA(int id){return _sequenceA[id];};
+    bool *getSeqStepB(int id){return _sequenceB[id];};
     
+    void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
+    void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};
+
+    void setSeqSel(int layer,int step,int *selection,int length);
+
 private:
     int             _id;
     int             _curve[2] = {0,0};
@@ -30,9 +40,10 @@ private:
     int             _dir[2] = {0,0};
     int             _time[2] = {0,0};
     int             _color[4] = {0,0,0,0};
-    int             _sequenceA[8][13];
-    int             _sequenceB[8][13];
+    bool            _sequenceA[8][13];
+    bool            _sequenceB[8][13];
     
+    int             _step;
 };
 /*
 	<layerA>
