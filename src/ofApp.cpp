@@ -5,11 +5,13 @@ void ofApp::setup()
 {
     ofSetBackgroundColor(21);
     ofSetLineWidth(2);
+    ofTrueTypeFont::setGlobalDpi(72);
     _AC = new ArtnetControl(&_MC);
     
+   
+    // TEMP
+    int x = 650;
     rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);
-    
-    colorselector.setup(ofRectangle(550,50,300,200));
     
 }
 
@@ -22,12 +24,14 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+    
+    ofSetBackgroundColor(21);
     _MC.drawGUI();
     _AC->drawGui();
     
+    // TEMP
     rl.draw();
-    
-    colorselector.draw();
+   
 }
 
 //--------------------------------------------------------------

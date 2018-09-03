@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Clock.hpp"
 #include "ofxMidi.h"
+#include "Button.hpp"
 
 class MidiControl:public ofxMidiListener
 {
@@ -27,8 +28,6 @@ public:
     float &getDt(){return _clk.getDeltaTime();}; // get the delta time
     bool &getBeat(){return _clk.getBeat();};
     
-    void mousePressed(ofMouseEventArgs &args);
-
     void tapControler();
     void newTapEvent(string &name); //tap bpm
     void resetTapCount();
@@ -53,7 +52,9 @@ private:
     int             _control[127];// control chenge values
     Clock           _clk;
     
-    ofRectangle     _tapButton;
+    ofRectangle     _tapButton_old;
+    
+    Button          _tapButton;
     
 };
 

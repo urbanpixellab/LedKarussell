@@ -32,6 +32,12 @@ public:
     
     void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
     void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};
+    
+    void setSeqAColor(string &c);
+    void setSeqBColor(string &c);
+    
+    vector<int> getColorIDs();
+    
 
     void setSeqSel(int layer,int step,int *selection,int length);
 

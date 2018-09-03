@@ -67,3 +67,33 @@ void Patroon::setSeqSel(int layer,int step,int *selection,int length)
         }
     }
 }
+
+void Patroon::setSeqAColor(string &s){
+    
+    vector<string> a = ofSplitString(s, ",");
+    _color[0] = ofToInt(a[0]);
+    _color[1] = ofToInt(a[1]);
+     cout << " Patroon Got an event " << a.size() << " " << ofToString(a[0]) << " " << ofToString(a[1]) << endl;
+}
+
+void Patroon::setSeqBColor(string &s){
+    
+    vector<string> a = ofSplitString(s, ",");
+    _color[2] = ofToInt(a[0]);
+    _color[3] = ofToInt(a[1]);
+
+    cout << " Patroon Got an event" << ofToString(a[0]) << " " << ofToString(a[1]) << endl;
+}
+
+vector<int> Patroon::getColorIDs(){
+    vector<int> c;
+    
+    int l = sizeof(_color)/sizeof(_color[0]);
+    for(int i=0;i<l;i++)
+    {
+        c.push_back(_color[i]);
+    }
+    return c;
+}
+
+
