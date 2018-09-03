@@ -284,7 +284,8 @@ void ArtnetControl::update()
     ofColor c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
     ofColor c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
     ofColor c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
-       
+    
+    // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
     if(solo)
     {
@@ -296,7 +297,6 @@ void ArtnetControl::update()
             int seg = _selections[selectionA].items[i];
             
             _preAnimator->drawToArray(_curvePreview,direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
-            _liveAnimator->drawToArray(_curveLive,direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -306,9 +306,50 @@ void ArtnetControl::update()
             int seg = _selections[selectionB].items[i];
             
             _preAnimator->addToArray(_curvePreview,direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+        }
+    }
+    // do the live led animator
+    freqA = _editPatroon->getFreq(0);
+    freqB = _editPatroon->getFreq(1);
+    
+    direction = LedAnimator::FORWARD;
+    solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
+    selectionA = _test; // take selection a from patroon
+    selectionB = 10; // take selection b from patroon
+    
+    //first fill all with background color
+    //ofColor black(0,0,0);
+    
+    // Get colors from editPatroon
+    getColorIDs.clear();
+    getColorIDs = _livePatroon->getColorIDs();
+    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
+    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
+    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
+    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    
+    // to do add index shift function to phaseshift the curve from index by a curve and freq
+    if(solo)
+    {
+        int s = _selections[selectionA].items.size();
+        
+        
+        for (int i = 0; i < s; i++)
+        {
+            int seg = _selections[selectionA].items[i];
+            _liveAnimator->drawToArray(_curveLive,direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+        }
+        
+        //add now the second color
+        s = _selections[selectionB].items.size();
+        for (int i = 0; i < s; i++)
+        {
+            int seg = _selections[selectionB].items[i];
             _liveAnimator->addToArray(_curveLive,direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
+    
+    
 
     //dont forget the fade out function to the beat and the blink function
 
@@ -352,6 +393,8 @@ void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
     _GUI->draw(_preIMG,_liveIMG);
+    _preIMG.draw(0,00,100,100);
+    _liveIMG.draw(100,0,100,100);
 }
 
 

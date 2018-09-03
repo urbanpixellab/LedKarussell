@@ -75,6 +75,14 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     _realStructure.draw();
     pre.unbind();
     ofPopMatrix();
+
+    ofPushMatrix();
+    ofTranslate(_drawArea.x + 350,_drawArea.getBottom() -200);
+    ofScale(ofGetWidth()/3, 100);
+    live.bind();
+    _realStructure.draw();
+    live.unbind();
+    ofPopMatrix();
     
     // Color Selector
     colorselectorA.draw();
