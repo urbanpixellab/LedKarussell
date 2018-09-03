@@ -15,10 +15,32 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->curvePressed, this, &ArtnetControl::guiCurvePressed);
     _preAnimator = new LedAnimator(_MC);
     _liveAnimator = new LedAnimator(_MC);
-    loadNodes();
+    
     //init the gui
     _GUI->init();
     _test = false;
+    
+    // Load all the nodes form XML
+    loadNodes();
+    
+    // Load aal the patterns from XML
+    loadPatroon();
+    
+    // set the eDit pattern
+    // FIXME: is this the right way to do it?
+    _editPatroon = &_patronen[0];
+    // set colors from editPatroon to color selector
+    vector<int> colIDs = _editPatroon->getColorIDs();
+    cout <<"HIER "<<  colIDs[0] << " " << colIDs[1] << " "<< colIDs[2] << " "<< colIDs[3] << " "<< endl;
+    int a[] = {colIDs[0],colIDs[1]};
+    int b[] = {colIDs[2],colIDs[3]};
+    _GUI->colorselectorA.setColorIDs(a);
+    _GUI->colorselectorB.setColorIDs(b);
+    
+    
+    //Listeners
+    ofAddListener(_GUI->colorselectorA.colorChosen, _editPatroon, &Patroon::setSeqAColor);
+    ofAddListener(_GUI->colorselectorB.colorChosen, _editPatroon, &Patroon::setSeqBColor);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
 }
@@ -122,7 +144,7 @@ void ArtnetControl::loadNodes()
         sel.popTag();
     }
 
-    loadPatroon();
+    
     
     //whiteout
     //also create the preview images
@@ -244,10 +266,14 @@ void ArtnetControl::update()
     
     //first fill all with background color
     ofColor black(0,0,0);
-    ofColor c1(255,0,0);
-    ofColor c2(0,0,255);
-    ofColor c3(0,255,0);
-    ofColor c4(255,0,255);
+    
+    // Get colors from editPatroon
+    vector<int> getColorIDs = _editPatroon->getColorIDs();
+    ofColor c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
+    ofColor c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
+    ofColor c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
+    ofColor c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+       
     fillAllBackgroundColor(black);
     if(solo)
     {

@@ -14,8 +14,11 @@ MidiControl::MidiControl()
     {
         _data[i] = 0;
     }
-    _tapButton = ofRectangle(0,0,50,50);
-    ofAddListener(ofEvents().mousePressed, this, &MidiControl::mousePressed);
+    _tapButton_old = ofRectangle(0,0,50,50);
+    
+    _tapButton.setup(ofRectangle(0,0,50,50), "BPM", false);
+    ofAddListener(_tapButton.buttonPressed, this, &MidiControl::newTapEvent);
+    
     //link every controler to a differenet port
     _midiTeensy.listPorts(); // via instance
     //_midiControl.openPort(2);
@@ -44,14 +47,16 @@ MidiControl::~MidiControl()
     _midiNanoKontrol2.closePort();
     _midiNanoKontrol2.removeListener(this);
 
-    ofRemoveListener(ofEvents().mousePressed, this, &MidiControl::mousePressed);
+    ofRemoveListener(_tapButton.buttonPressed, this, &MidiControl::newTapEvent);
 }
 
 void MidiControl::drawGUI()
 {
+    // Draws the BPM Button
     //tap button and bpm or step counter must been implemented
     ofSetColor(255*_clk.getDeltaTime(),0,0);
-    ofDrawRectangle(_tapButton);
+    //ofDrawRectangle(_tapButton);
+    _tapButton.draw();
     ofDrawBitmapString(_clk.getBPM() + " BPM", 20,70);
 }
 
@@ -74,13 +79,11 @@ int &MidiControl::getControlValue(int id)
         return _control[id];
 }
 
-void MidiControl::mousePressed(ofMouseEventArgs &args)
+void MidiControl::newTapEvent(string &s)
 {
-    if (_tapButton.inside(args.x,args.y))
-    {
-        _clk.tap();
-    }
+    _clk.tap();
 }
+
 
 void MidiControl::newMidiMessage(ofxMidiMessage& msg) {
     
