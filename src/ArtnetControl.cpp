@@ -43,6 +43,11 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->colorselectorB.colorChosen, _editPatroon, &Patroon::setSeqBColor);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
+    //ad listeners to the patroon select buttons for different functions
+    ofAddListener(_GUI->patronPLAY, this, &ArtnetControl::PlayPatronPressed);
+    ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
+    ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
+    
 }
 
 ArtnetControl::~ArtnetControl()
@@ -459,4 +464,21 @@ void ArtnetControl::keyPressed(ofKeyEventArgs &key)
     _test = _test%12;
     cout << key.keycode << endl;
     
+}
+void ArtnetControl::PlayPatronPressed(int & id)
+{
+    _livePatroon = &_patronen[id];
+    cout << "play patron pressed " << id << endl;
+}
+void ArtnetControl::EditPatronPressed(int & id)
+{
+    _editPatroon = &_patronen[id];
+    cout << "edit patron pressed " << id << endl;
+}
+
+void ArtnetControl::PlaySteppedPatronPressed(int & id)
+{
+    //todo make it stepped
+    _livePatroon = &_patronen[id];
+    cout << "play stepped patron pressed " << id << endl;
 }

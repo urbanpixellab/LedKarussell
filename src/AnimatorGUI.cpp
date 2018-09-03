@@ -21,7 +21,20 @@ void AnimatorGUI::init()
 {
     //set the initial things, like blackout
     newCurve(0);
-    
+    //create patern select buttons;
+    int w = 70;
+    int h = 20;
+    for (int i = 0; i < 16; i++)
+    {
+        Button b;
+        b.id = i;
+        b.name = "patron" + ofToString(i);
+        int x = 600 + ((i%4)*w*1.1);
+        int y = 300 + ((i / 4) * h * 1.1);
+        b.area = ofRectangle(x,y,w,h);
+        b.toggle = true;
+        _patSelButtons.push_back(b);
+    }
 }
 
 
@@ -87,6 +100,19 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // Color Selector
     colorselectorA.draw();
     colorselectorB.draw();
+    
+    // the patron selector
+    for (int i = 0; i < _patSelButtons.size(); i++)
+    {
+        //set the color based on the mode
+        if(_isPlay == i) ofSetColor(128,0,0);
+        if (_isEdit == i) ofSetColor(0,0,128);
+        if (_isPlayStepped == i) ofSetColor(128,128,128);
+        ofDrawRectangle(_patSelButtons[i].area);
+        ofSetColor(255);
+        ofDrawBitmapString("Pl Ed Ps", _patSelButtons[i].area.x, _patSelButtons[i].area.getBottom());
+        // the button is 1/3 for play direct 1/3 for edit and 1/3 for play the next beat like in ableton
+    }
 }
 
 void AnimatorGUI::newCurve(int id)
@@ -108,7 +134,7 @@ void AnimatorGUI::setColor(string &s){
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
-    if (!_drawArea.inside(args.x, args.y)) return;
+    //if (!_drawArea.inside(args.x, args.y)) return;
     //check animations
     for (int i = 0; i < _curveButtons.size(); i++)
     {
@@ -119,5 +145,35 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
             return;
         }
     }
-    //check enables
+    //check patron select buttons
+    //tofix check states, not proper working
+    for (int i = 0; i < _patSelButtons.size(); i++)
+    {
+        if(_patSelButtons[i].area.inside(args.x, args.y))
+        {
+            // reset all programm buttons and enable this one
+            //first third
+            ofRectangle r = _patSelButtons[i].area;
+            float value = ofMap(args.x,r.x,r.x+r.width,0.,1.);
+            if (value < 0.33)
+            {
+                ofNotifyEvent(patronPLAY,i);
+                _isPlay = i;
+                //a
+            }
+            else if (value < 0.66)
+            {
+                ofNotifyEvent(patronEDIT,i);
+                _isEdit = i;
+            }
+            else
+            {
+                ofNotifyEvent(patronPLAYSTEPPED,i);
+                _isPlayStepped = i;
+            }
+            
+            return;
+        }
+    }
+    
 }

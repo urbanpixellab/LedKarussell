@@ -54,6 +54,10 @@ public:
     void loadNodes(); //load the artnet controler nodes from an xml
     //add key listener for test commands
     void keyPressed(ofKeyEventArgs &key);
+    //more listeners
+    void PlayPatronPressed(int & id);
+    void EditPatronPressed(int & id);
+    void PlaySteppedPatronPressed(int & id);
     
     Node        *getNode(int id){return _nodes[id];};
     Segment     *getPreSegment(int id){return _preSegments[id];};
