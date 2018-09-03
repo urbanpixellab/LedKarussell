@@ -41,6 +41,11 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         b.isPressed = false;
         _curveButtons.push_back(b);
     }
+    
+    // Create colorselectorS
+    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+50,200,200));
+    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+50,200,200));
+
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
@@ -70,6 +75,10 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     _realStructure.draw();
     pre.unbind();
     ofPopMatrix();
+    
+    // Color Selector
+    colorselectorA.draw();
+    colorselectorB.draw();
 }
 
 void AnimatorGUI::newCurve(int id)
@@ -80,6 +89,13 @@ void AnimatorGUI::newCurve(int id)
     }
     _curveButtons[id].isPressed = true;
     ofNotifyEvent(curvePressed, id);
+}
+
+void AnimatorGUI::setColor(string &s){
+    
+    vector<string> arguments = ofSplitString(s, ",");
+   
+    cout << " Got an event" << ofToString(arguments[0]) << " " << ofToString(arguments[1]) << endl;
 }
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)

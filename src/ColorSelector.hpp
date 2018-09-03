@@ -24,13 +24,20 @@ public:
     void setup(ofRectangle area);
     void loadColors();
     void draw();
+    // triggerd by events
     void setColorA(string &s);
     void setColorB(string &s);
+    void setColorIDs(int ids[]);
     void colorSwap(string &s);
+    ofColor getColorFromID(int i);
+    // FIXME: would rather sent the color as color array or int arra but that is not possible?
+    ofEvent<string>   colorChosen;
+    
+    vector <ofColor> colors;
 
 private:
     ofRectangle drawArea;
-    vector <ofColor> colors;
+    
     vector <Button> buttonsA;
     vector <Button> buttonsB;
     Button colorSwapButton;
@@ -39,8 +46,11 @@ private:
     int numCollumns;
     int padding;
     
-    ofColor colorA;
-    ofColor colorB;
+    //ofColor colorA;
+    //ofColor colorB;
+    ofColor         _selectedColors[2] = {ofColor(255),ofColor(255)};
+    int             _selectedColorIDs[2] = {0,0};
+    
 
 
 };

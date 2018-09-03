@@ -27,9 +27,6 @@ public:
     
     RotarySlider rl;
     
-    ColorSelector colorselector;
-    
-
     void exit();
 private:
     MidiControl     _MC;// the midi control including clock

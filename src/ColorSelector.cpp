@@ -17,8 +17,6 @@
 
 ColorSelector::ColorSelector()
 {
-    colorA = ofColor(255);
-    colorB = ofColor(255);
     numCollumns = 6;
     padding = 6;
 }
@@ -94,35 +92,56 @@ void ColorSelector::loadColors(){
     }
 }
 
-void ColorSelector::setColorA(string &s){
-    cout << "COLORSELECTOR A:: have an event " << s << endl;
-    colorA = colors[ofToInt(s)];
+void ColorSelector::setColorIDs(int ids[]){
+    for(int i=0;i<2;i++){
+        _selectedColorIDs[i] = ids[i];
+        _selectedColors[i]      = colors[ids[i]];
+    }
 }
 
-void ColorSelector::setColorB(string &s){
-    cout << "COLORSELECTOR B:: have an event " << s << endl;
-    colorB = colors[ofToInt(s)];
+
+void ColorSelector::setColorA(string &s)
+{    
+    _selectedColorIDs[0]   = ofToInt(s);
+    _selectedColors[0]      = colors[_selectedColorIDs[0]];
+
+    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
+    ofNotifyEvent(colorChosen, t);
+}
+
+void ColorSelector::setColorB(string &s)
+{
+    _selectedColorIDs[1]   = ofToInt(s);
+    _selectedColors[1]      = colors[_selectedColorIDs[1]];
+    
+    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
+    ofNotifyEvent(colorChosen, t);
+    
 }
 
 void ColorSelector::colorSwap(string &s){
-    ofColor a = colorA;
-    ofColor b = colorB;
+    ofColor a = _selectedColors[0];
+    ofColor b = _selectedColors[1];
     
-    colorA = b;
-    colorB = a;
+    _selectedColors[0] = b;
+    _selectedColors[1] = a;
+}
+
+ofColor ColorSelector::getColorFromID(int i){
+    return colors[i];
 }
 
 
 void ColorSelector::draw(){
     
     ofPushStyle();
-    ofSetColor(colorA);
+    ofSetColor(_selectedColors[0]);
     ofFill();
     ofDrawRectRounded(drawArea.getX(), drawArea.getY(), drawArea.getWidth()/4, tilesize, 4);
     ofPopStyle();
     
     ofPushStyle();
-    ofSetColor(colorB);
+    ofSetColor(_selectedColors[1]);
     ofFill();
     ofDrawRectRounded(10+drawArea.getX()+drawArea.getWidth()/2, drawArea.getY(), drawArea.getWidth()/4, tilesize, 4);
     ofPopStyle();

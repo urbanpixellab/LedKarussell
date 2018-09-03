@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "ColorSelector.hpp"
 
 class AnimatorGUI
 {
@@ -36,6 +37,11 @@ public:
     
     void mousePressed(ofMouseEventArgs &args);
     ofEvent<int>    curvePressed;
+    
+    void setColor(string &c);
+    
+    ColorSelector colorselectorA;
+    ColorSelector colorselectorB;
 
 private:
     void newCurve(int id);
