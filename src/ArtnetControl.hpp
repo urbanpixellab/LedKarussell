@@ -49,15 +49,17 @@ public:
     void drawGui();
     void fillAllBackgroundColor(ofColor & color);
     void specialFunction(int id);
-    void guiCurvePressed(int &buttonid);
-
-    void loadNodes(); //load the artnet controler nodes from an xml
-    //add key listener for test commands
-    void keyPressed(ofKeyEventArgs &key);
+    void guiCurveAPressed(int &buttonid);
+    void guiCurveBPressed(int &buttonid);
+    void guiCOlorSelectPressed(bool &resetColors);
     //more listeners
     void PlayPatronPressed(int & id);
     void EditPatronPressed(int & id);
     void PlaySteppedPatronPressed(int & id);
+    
+    void loadNodes(); //load the artnet controler nodes from an xml
+    //add key listener for test commands
+    void keyPressed(ofKeyEventArgs &key);
     
     Node        *getNode(int id){return _nodes[id];};
     Segment     *getPreSegment(int id){return _preSegments[id];};
@@ -85,7 +87,6 @@ private:
     
     int                     _test;
     //niew
-    int                     _curvePreview;
     int                     _curveLive;
     
     vector<Selection>       _selections;//ok buttons for

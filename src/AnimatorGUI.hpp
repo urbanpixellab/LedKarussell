@@ -37,21 +37,27 @@ public:
     ofMesh &getMesh(){return _realStructure;}; //here we can work on the mesh
     
     void mousePressed(ofMouseEventArgs &args);
-    ofEvent<int>    curvePressed;
+    ofEvent<int>    curveAPressed;
+    ofEvent<int>    curveBPressed;
     ofEvent<int>    patronPLAY;
     ofEvent<int>    patronEDIT;
     ofEvent<int>    patronPLAYSTEPPED;
     
-    void setColor(string &c);
+//    void setColor(string &c);
     
     ColorSelector colorselectorA;
     ColorSelector colorselectorB;
 
+    ColorSelector &getColorselectorA(){return colorselectorA;};
+    ColorSelector &getColorselectorB(){return colorselectorB;};
+
 private:
-    void newCurve(int id);
+    void newACurve(int id);
+    void newBCurve(int id);
 
     ofRectangle         _drawArea;
-    vector<Button>      _curveButtons;
+    vector<Button>      _curveAButtons;
+    vector<Button>      _curveBButtons;
     
     ofMesh              _realStructure;// the mesh to paint on
     vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie

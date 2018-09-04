@@ -85,6 +85,14 @@ void Patroon::setSeqBColor(string &s){
     cout << " Patroon Got an event" << ofToString(a[0]) << " " << ofToString(a[1]) << endl;
 }
 
+void Patroon::setColors(int * array,int length)
+{
+    _color[0]= array[0];
+    _color[1]= array[1];
+    _color[2]= array[2];
+    _color[3]= array[3];
+}
+
 vector<int> Patroon::getColorIDs(){
     vector<int> c;
     

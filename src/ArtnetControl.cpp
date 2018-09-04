@@ -12,7 +12,10 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
     _GUI = new AnimatorGUI(ofRectangle(200,200,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
-    ofAddListener(_GUI->curvePressed, this, &ArtnetControl::guiCurvePressed);
+    ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
+    ofAddListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
+//    ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::guiCurveBPressed);
+
     _preAnimator = new LedAnimator(_MC);
     _liveAnimator = new LedAnimator(_MC);
     
@@ -39,8 +42,8 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     
     
     //Listeners
-    ofAddListener(_GUI->colorselectorA.colorChosen, _editPatroon, &Patroon::setSeqAColor);
-    ofAddListener(_GUI->colorselectorB.colorChosen, _editPatroon, &Patroon::setSeqBColor);
+    ofAddListener(_GUI->colorselectorA.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
+    ofAddListener(_GUI->colorselectorB.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
@@ -53,7 +56,8 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 ArtnetControl::~ArtnetControl()
 {
     // blackout all
-    ofRemoveListener(_GUI->curvePressed, this, &ArtnetControl::guiCurvePressed);
+    ofRemoveListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
+    ofRemoveListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     clearNodes();
     delete _preAnimator;
@@ -254,7 +258,6 @@ void ArtnetControl::loadPatroon()
     }
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
-    cout << _patronen.size() << endl;
 }
 
 void ArtnetControl::savePatroon(){}
@@ -301,7 +304,7 @@ void ArtnetControl::update()
         {
             int seg = _selections[selectionA].items[i];
             
-            _preAnimator->drawToArray(_curvePreview,direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -310,12 +313,13 @@ void ArtnetControl::update()
         {
             int seg = _selections[selectionB].items[i];
             
-            _preAnimator->addToArray(_curvePreview,direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
     // do the live led animator
-    freqA = _editPatroon->getFreq(0);
-    freqB = _editPatroon->getFreq(1);
+    //read everything from live
+    freqA = _livePatroon->getFreq(0);
+    freqB = _livePatroon->getFreq(1);
     
     direction = LedAnimator::FORWARD;
     solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
@@ -328,21 +332,20 @@ void ArtnetControl::update()
     // Get colors from editPatroon
     getColorIDs.clear();
     getColorIDs = _livePatroon->getColorIDs();
-    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
-    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
-    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
-    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    c1 = _livePatroon->getColorIDs()[0];
+    c2 = _livePatroon->getColorIDs()[1];
+    c3 = _livePatroon->getColorIDs()[2];
+    c4 = _livePatroon->getColorIDs()[3];
     
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     if(solo)
     {
         int s = _selections[selectionA].items.size();
         
-        
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            _liveAnimator->drawToArray(_curveLive,direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -350,7 +353,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            _liveAnimator->addToArray(_curveLive,direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -440,10 +443,27 @@ void ArtnetControl::sendToNodes()
     }
 }
 
-void ArtnetControl::guiCurvePressed(int &buttonid)
+void ArtnetControl::guiCurveAPressed(int &buttonid)
 {
-    _curvePreview = buttonid;
-    _curveLive = buttonid; // must been changed later
+    //write this to the patroon
+    // the same for color and the other functions
+    
+    _editPatroon->setCurve(0, buttonid);
+//    _curvePreviewB = buttonid;//*_editPatroon->getCurve(1);
+//    _curveLive = buttonid; // must been changed later
+//    _curveLive = buttonid; // must been changed later
+}
+
+void ArtnetControl::guiCurveBPressed(int &buttonid)
+{
+    //write this to the patroon
+    // the same for color and the other functions
+    
+ //   _curvePreviewA = buttonid;
+    _editPatroon->setCurve(1, buttonid);
+ //   _curvePreviewB = buttonid;//*_editPatroon->getCurve(1);
+ //   _curveLive = buttonid; // must been changed later
+ //   _curveLive = buttonid; // must been changed later
 }
 
 void ArtnetControl::specialFunction(int id)
@@ -456,6 +476,18 @@ void ArtnetControl::specialFunction(int id)
     {
         //invert the output colors
     }
+}
+
+void ArtnetControl::guiCOlorSelectPressed(bool &resetColors)
+{
+    //set all colors from gui to edit
+    int colors[4];
+    colors[0] = _GUI->getColorselectorA().getSelectedColorIDs()[0];
+    colors[1] = _GUI->getColorselectorA().getSelectedColorIDs()[1];
+    colors[2] = _GUI->getColorselectorB().getSelectedColorIDs()[0];
+    colors[3] = _GUI->getColorselectorB().getSelectedColorIDs()[1];
+    
+    _editPatroon->setColors(colors, 4);
 }
 
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
