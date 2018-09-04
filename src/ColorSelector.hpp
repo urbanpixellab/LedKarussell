@@ -25,16 +25,19 @@ public:
     void loadColors();
     void draw();
     // triggerd by events
+    void setColorFromIDs(int colorIDa,int colorIDb);
     void setColorA(string &s);
     void setColorB(string &s);
     void setColorIDs(int ids[]);
     void colorSwap(string &s);
-    ofColor getColorFromID(int i);
+    ofColor &getColorFromID(int id){return _selectedColors[id];};
     // FIXME: would rather sent the color as color array or int arra but that is not possible?
-    ofEvent<string>   colorChosen;
+    //ofEvent<string>   colorChosen;
     
     vector <ofColor> colors;
-
+    ofEvent<bool> colorPressed;
+    int *getSelectedColorIDs(){return _selectedColorIDs;};
+    
 private:
     ofRectangle drawArea;
     
@@ -50,7 +53,7 @@ private:
     //ofColor colorB;
     ofColor         _selectedColors[2] = {ofColor(255),ofColor(255)};
     int             _selectedColorIDs[2] = {0,0};
-    
+    bool            _pressed;
 
 
 };

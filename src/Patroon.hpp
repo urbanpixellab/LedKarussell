@@ -36,9 +36,11 @@ public:
     void setSeqAColor(string &c);
     void setSeqBColor(string &c);
     
+    void setCurve(int id,int value){_curve[id] = value;};
+    
     vector<int> getColorIDs();
     
-
+    void setColors(int * array,int length);
     void setSeqSel(int layer,int step,int *selection,int length);
 
 private:
