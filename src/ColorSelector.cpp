@@ -92,6 +92,7 @@ void ColorSelector::loadColors(){
     }
 }
 
+
 void ColorSelector::setColorIDs(int ids[]){
     for(int i=0;i<2;i++){
         _selectedColorIDs[i] = ids[i];

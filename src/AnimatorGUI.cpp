@@ -49,8 +49,8 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     }
     
     // Create colorselectorS
-    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+50,200,200));
-    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+50,200,200));
+    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+100,200,200));
+    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+100,200,200));
 
     
     //set the initial things, like blackout

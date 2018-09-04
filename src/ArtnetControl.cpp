@@ -55,6 +55,8 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 
 ArtnetControl::~ArtnetControl()
 {
+    //save everything
+    
     // blackout all
     ofRemoveListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
     ofRemoveListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
@@ -316,6 +318,7 @@ void ArtnetControl::update()
             _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
+    
     // do the live led animator
     //read everything from live
     freqA = _livePatroon->getFreq(0);
@@ -332,10 +335,15 @@ void ArtnetControl::update()
     // Get colors from editPatroon
     getColorIDs.clear();
     getColorIDs = _livePatroon->getColorIDs();
-    c1 = _livePatroon->getColorIDs()[0];
-    c2 = _livePatroon->getColorIDs()[1];
-    c3 = _livePatroon->getColorIDs()[2];
-    c4 = _livePatroon->getColorIDs()[3];
+    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
+    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
+    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
+    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+
+//    c1 = _livePatroon->getColorIDs()[0];
+//    c2 = _livePatroon->getColorIDs()[1];
+//    c3 = _livePatroon->getColorIDs()[2];
+//    c4 = _livePatroon->getColorIDs()[3];
     
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     if(solo)
@@ -443,29 +451,6 @@ void ArtnetControl::sendToNodes()
     }
 }
 
-void ArtnetControl::guiCurveAPressed(int &buttonid)
-{
-    //write this to the patroon
-    // the same for color and the other functions
-    
-    _editPatroon->setCurve(0, buttonid);
-//    _curvePreviewB = buttonid;//*_editPatroon->getCurve(1);
-//    _curveLive = buttonid; // must been changed later
-//    _curveLive = buttonid; // must been changed later
-}
-
-void ArtnetControl::guiCurveBPressed(int &buttonid)
-{
-    //write this to the patroon
-    // the same for color and the other functions
-    
- //   _curvePreviewA = buttonid;
-    _editPatroon->setCurve(1, buttonid);
- //   _curvePreviewB = buttonid;//*_editPatroon->getCurve(1);
- //   _curveLive = buttonid; // must been changed later
- //   _curveLive = buttonid; // must been changed later
-}
-
 void ArtnetControl::specialFunction(int id)
 {
     if(id == 0)
@@ -502,10 +487,19 @@ void ArtnetControl::PlayPatronPressed(int & id)
     _livePatroon = &_patronen[id];
     cout << "play patron pressed " << id << endl;
 }
-void ArtnetControl::EditPatronPressed(int & id)
+void ArtnetControl::EditPatronPressed(int & iD)
 {
-    _editPatroon = &_patronen[id];
-    cout << "edit patron pressed " << id << endl;
+    //if this one is playing than fine edit him
+    _editPatroon = &_patronen[iD];
+    //also update the gui to this selection
+    int id[2];
+    id[0] = _editPatroon->getColorIDs()[0];
+    id[1] = _editPatroon->getColorIDs()[1];
+    _GUI->getColorselectorA().setColorIDs(id);
+    id[0] = _editPatroon->getColorIDs()[2];
+    id[1] = _editPatroon->getColorIDs()[3];
+    _GUI->getColorselectorB().setColorIDs(id);
+    cout << "edit patron pressed " << iD << endl;
 }
 
 void ArtnetControl::PlaySteppedPatronPressed(int & id)

@@ -25,6 +25,7 @@ public:
     void loadColors();
     void draw();
     // triggerd by events
+    void setColorFromIDs(int colorIDa,int colorIDb);
     void setColorA(string &s);
     void setColorB(string &s);
     void setColorIDs(int ids[]);
