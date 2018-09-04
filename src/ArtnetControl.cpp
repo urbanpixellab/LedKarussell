@@ -43,6 +43,11 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->colorselectorB.colorChosen, _editPatroon, &Patroon::setSeqBColor);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
+    //ad listeners to the patroon select buttons for different functions
+    ofAddListener(_GUI->patronPLAY, this, &ArtnetControl::PlayPatronPressed);
+    ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
+    ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
+    
 }
 
 ArtnetControl::~ArtnetControl()
@@ -247,6 +252,8 @@ void ArtnetControl::loadPatroon()
         _patronen.push_back(p);
         sel.popTag();
     }
+    _editPatroon = &_patronen[0];
+    _livePatroon = &_patronen[0];
     cout << _patronen.size() << endl;
 }
 
@@ -255,14 +262,23 @@ void ArtnetControl::savePatroon(){}
 
 void ArtnetControl::update()
 {
+    
     // update artnet based on the selected sce or use the hottbutton function
     // which is overriding the actual state
     //fill all nodes by selection
-    float freq = 6;
+    //here ow the values from the selected patron for edit and live appart
+
+    //first maak the edit patroon then the live patroon
+    
+    
+    
+    float *freqA = _editPatroon->getFreq(0);
+    float *freqB = _editPatroon->getFreq(1);
+    
     int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int selectionA = _test;
-    int selectionB = 10;
+    int selectionA = _test; // take selection a from patroon
+    int selectionB = 10; // take selection b from patroon
     
     //first fill all with background color
     ofColor black(0,0,0);
@@ -273,7 +289,8 @@ void ArtnetControl::update()
     ofColor c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
     ofColor c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
     ofColor c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
-       
+    
+    // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
     if(solo)
     {
@@ -284,8 +301,7 @@ void ArtnetControl::update()
         {
             int seg = _selections[selectionA].items[i];
             
-            _preAnimator->drawToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
-            _liveAnimator->drawToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+            _preAnimator->drawToArray(_curvePreview,direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -294,14 +310,50 @@ void ArtnetControl::update()
         {
             int seg = _selections[selectionB].items[i];
             
-            _preAnimator->addToArray(_curvePreview,direction,1, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
-            _liveAnimator->addToArray(_curveLive,direction,1, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+            _preAnimator->addToArray(_curvePreview,direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
-    else
+    // do the live led animator
+    freqA = _editPatroon->getFreq(0);
+    freqB = _editPatroon->getFreq(1);
+    
+    direction = LedAnimator::FORWARD;
+    solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
+    selectionA = _test; // take selection a from patroon
+    selectionB = 10; // take selection b from patroon
+    
+    //first fill all with background color
+    //ofColor black(0,0,0);
+    
+    // Get colors from editPatroon
+    getColorIDs.clear();
+    getColorIDs = _livePatroon->getColorIDs();
+    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
+    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
+    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
+    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    
+    // to do add index shift function to phaseshift the curve from index by a curve and freq
+    if(solo)
     {
-        //all segments in one array as one long array, create them first after inloading of the selector
+        int s = _selections[selectionA].items.size();
+        
+        
+        for (int i = 0; i < s; i++)
+        {
+            int seg = _selections[selectionA].items[i];
+            _liveAnimator->drawToArray(_curveLive,direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+        }
+        
+        //add now the second color
+        s = _selections[selectionB].items.size();
+        for (int i = 0; i < s; i++)
+        {
+            int seg = _selections[selectionB].items[i];
+            _liveAnimator->addToArray(_curveLive,direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+        }
     }
+    
     
 
     //dont forget the fade out function to the beat and the blink function
@@ -346,6 +398,8 @@ void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
     _GUI->draw(_preIMG,_liveIMG);
+    _preIMG.draw(0,00,100,100);
+    _liveIMG.draw(100,0,100,100);
 }
 
 
@@ -410,4 +464,21 @@ void ArtnetControl::keyPressed(ofKeyEventArgs &key)
     _test = _test%12;
     cout << key.keycode << endl;
     
+}
+void ArtnetControl::PlayPatronPressed(int & id)
+{
+    _livePatroon = &_patronen[id];
+    cout << "play patron pressed " << id << endl;
+}
+void ArtnetControl::EditPatronPressed(int & id)
+{
+    _editPatroon = &_patronen[id];
+    cout << "edit patron pressed " << id << endl;
+}
+
+void ArtnetControl::PlaySteppedPatronPressed(int & id)
+{
+    //todo make it stepped
+    _livePatroon = &_patronen[id];
+    cout << "play stepped patron pressed " << id << endl;
 }

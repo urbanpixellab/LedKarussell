@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "ColorSelector.hpp"
+#include "Button.hpp"
 
 class AnimatorGUI
 {
@@ -37,6 +38,9 @@ public:
     
     void mousePressed(ofMouseEventArgs &args);
     ofEvent<int>    curvePressed;
+    ofEvent<int>    patronPLAY;
+    ofEvent<int>    patronEDIT;
+    ofEvent<int>    patronPLAYSTEPPED;
     
     void setColor(string &c);
     
@@ -50,7 +54,10 @@ private:
     vector<Button>      _curveButtons;
     
     ofMesh              _realStructure;// the mesh to paint on
-    
+    vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie
+    int                 _isPlay;
+    int                 _isEdit;
+    int                 _isPlayStepped;
 };
 
 #endif /* AnimatorGUI_hpp */
