@@ -24,7 +24,7 @@ void AnimatorGUI::init()
 
 void AnimatorGUI::createAnimationGUI(int animationCount)
 {
-    //create animation buttons
+    //create curve buttons
     int w = 50;
     int h = 30;
     for (int i = 0; i < animationCount; i++)
@@ -75,7 +75,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
 {
+    
     ofSetColor(255);
+    /*
     ofDrawBitmapString("Curve Select", _drawArea.x, _drawArea.y);
     for (int i = 0; i < _curveAButtons.size(); i++)
     {
@@ -93,7 +95,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
         }
         ofDrawRectangle(_curveBButtons[i].area);
     }
-    
+    */
     ofSetColor(255);
     ofSetColor(255);
     pre.draw(_drawArea.x, _drawArea.y + 200,170,100);
@@ -165,6 +167,7 @@ void AnimatorGUI::setColor(string &s){
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
+/*
     //if (!_drawArea.inside(args.x, args.y)) return;
     //check animations
     for (int i = 0; i < _curveAButtons.size(); i++)
@@ -187,7 +190,7 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
         }
     }
     
-    
+  */  
     
     //check patron select buttons
     //tofix check states, not proper working

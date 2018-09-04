@@ -51,6 +51,9 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
     
+    //set first patern to edit
+    _patronen[0].toggleVisibility(true);
+    
 }
 
 ArtnetControl::~ArtnetControl()
@@ -411,6 +414,8 @@ void ArtnetControl::drawGui()
     _GUI->draw(_preIMG,_liveIMG);
     _preIMG.draw(0,00,100,100);
     _liveIMG.draw(100,0,100,100);
+    
+    _editPatroon->drawGui();
 }
 
 
@@ -478,7 +483,7 @@ void ArtnetControl::guiCOlorSelectPressed(bool &resetColors)
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
-    _test = _test%12;
+    _test = _test%14;
     cout << key.keycode << endl;
     
 }
@@ -500,6 +505,13 @@ void ArtnetControl::EditPatronPressed(int & iD)
     id[1] = _editPatroon->getColorIDs()[3];
     _GUI->getColorselectorB().setColorIDs(id);
     cout << "edit patron pressed " << iD << endl;
+    //toggle visibility
+    for (int i = 0; i < _patronen.size(); i++)
+    {
+        if(i == iD) _patronen[i].toggleVisibility(true);
+        else _patronen[i].toggleVisibility(false);
+    }
+    
 }
 
 void ArtnetControl::PlaySteppedPatronPressed(int & id)
