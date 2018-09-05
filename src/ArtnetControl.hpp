@@ -49,9 +49,6 @@ public:
     void drawGui();
     void fillAllBackgroundColor(ofColor & color);
     void specialFunction(int id);
-    void guiCurveAPressed(int &buttonid){_editPatroon->setCurve(0, buttonid);};
-    void guiCurveBPressed(int &buttonid){_editPatroon->setCurve(1, buttonid);};
-    void guiCOlorSelectPressed(bool &resetColors);
     //more listeners
     void PlayPatronPressed(int & id);
     void EditPatronPressed(int & id);

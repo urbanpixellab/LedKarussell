@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "ColorSelector.hpp"
 
 class Patroon
 {
@@ -35,9 +36,11 @@ public:
     void resetStep(){_step = 0;};
     int &getID(){return _id;};
     int *getCurve(int id){return &_curve[id];};
-    void toggleVisibility(bool mode);
+//    void toggleVisibility(bool mode);
     bool *getSeqStepA(int id){return _sequenceA[id];};
     bool *getSeqStepB(int id){return _sequenceB[id];};
+    void setVisible();
+    void setInvisible();
     
     float *getFreq(int id){return &_freq[id];};
     
@@ -56,6 +59,8 @@ public:
     
     //listener
     void mousePressed(ofMouseEventArgs & args);
+    ColorSelector &getColorselectorA(){return colorselectorA;};
+    ColorSelector &getColorselectorB(){return colorselectorB;};
 
 private:
     int             _id;
@@ -74,6 +79,10 @@ private:
     vector<Button>      _curveBButtons;
     
     vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie
+
+    ColorSelector colorselectorA;
+    ColorSelector colorselectorB;
+    
 
 };
 #endif /* Patroon_hpp */

@@ -91,32 +91,23 @@ void Patroon::drawGui()
         }
         ofDrawRectangle(_curveBButtons[i].area);
     }
+    colorselectorA.draw();
+    colorselectorB.draw();
+
 }
 
-void Patroon::toggleVisibility(bool mode)
+void Patroon::setVisible()
 {
     bool old = _visible;
-    _visible = mode;
-    if(_visible == false && old == false)
-    {
-        //do nothing
-    }
-    else if(_visible == true && old == false)
-    {
-        //add listener to the buttons
-        ofAddListener(ofEvents().mousePressed, this, &Patroon::mousePressed);
-    }
-    else if(_visible == true && old == true)
-    {
-        //do nothing
-    }
-    else if(_visible == false && old == true)
-    {
-        //remove listeners from the buttons
-        ofRemoveListener(ofEvents().mousePressed, this, &Patroon::mousePressed);
-    }
+    _visible = true;
+    if(old != _visible) ofAddListener(ofEvents().mousePressed, this, &Patroon::mousePressed);
+}
 
-
+void Patroon::setInvisible()
+{
+    bool old = _visible;
+    _visible = false;
+    if(old != _visible) ofRemoveListener(ofEvents().mousePressed, this, &Patroon::mousePressed);
 }
 
 void Patroon::mousePressed(ofMouseEventArgs & args)
@@ -127,7 +118,6 @@ void Patroon::mousePressed(ofMouseEventArgs & args)
     {
         if(_curveAButtons[i].area.inside(args.x, args.y))
         {
-            // reset all programm buttons and enable this one
             _curve[0] = i;
             return;
         }
@@ -137,8 +127,7 @@ void Patroon::mousePressed(ofMouseEventArgs & args)
     {
         if(_curveBButtons[i].area.inside(args.x, args.y))
         {
-            // reset all programm buttons and enable this one
-            _curve[0] = i;
+            _curve[1] = i;
             return;
         }
     }
@@ -187,7 +176,7 @@ void Patroon::createGui()
     //create curve buttons
     int w = 50;
     int h = 30;
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 7; i++)
     {
         Button butA;
         Button butB;
@@ -209,8 +198,8 @@ void Patroon::createGui()
     }
     
     // Create colorselectorS
-    //colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+100,200,200));
-    //colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+100,200,200));
+    colorselectorA.setup(ofRectangle(300,300+100,200,200));
+    colorselectorB.setup(ofRectangle(300+220,300+100,200,200));
     
     
     //set the initial things, like blackout

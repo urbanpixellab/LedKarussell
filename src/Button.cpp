@@ -11,7 +11,6 @@
 Button::Button()
 {
     activateListener();
-    fbo.allocate(10,10);
     drawArea = ofRectangle(10,10,10,10);
     name = "unknown";
     nonActive = ofColor(255);
@@ -30,49 +29,33 @@ void Button::setup(ofRectangle area, string n, bool toogle)
 
 void Button::setup(ofRectangle area, string n, bool toogle, ofVec2f offset)
 {
-    fbo.allocate(area.width, area.height);
     drawArea = area;
     name = n;
     isPressed = false;
     isToggle = toogle;
-    updateFbo(false);
     mouseOffset = offset;
-}
-
-void Button::updateFbo(bool isPressed)
-{
-    fbo.begin();
-    ofClear(0, 0, 0);
-    if (isPressed) ofSetColor(Active);
-    else ofSetColor(nonActive);
-    
-    ofFill();
-    ofDrawRectRounded(2,2,fbo.getWidth() - 4,fbo.getHeight() - 4, 4);
-    ofSetColor(textColor);
-    ofDrawBitmapString(name, 6, 14);
-    fbo.end();
 }
 
 void Button::setColors(ofColor nonactive, ofColor active, ofColor text){
     nonActive = nonactive;
     Active = active;
     textColor = text;
-    updateFbo(false);
 }
 
 void Button::draw()
 {
-    if (isPressed == true && ofGetElapsedTimef() > pressTimeout && isToggle == false){
-        isPressed = false;
-        updateFbo(isPressed);
-    }
-    fbo.draw(drawArea.x, drawArea.y);
+    if (isPressed) ofSetColor(Active);
+    else ofSetColor(nonActive);
+    
+    ofFill();
+    ofDrawRectRounded(2,2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
+    ofSetColor(textColor);
+    ofDrawBitmapString(name, 6, 14);
 }
 
 void Button::pressedControler()
 {
     isPressed = !isPressed;
-    updateFbo(isPressed);
     ofNotifyEvent(buttonPressed, name);
 }
 
@@ -85,11 +68,9 @@ void Button::mousePressed(ofMouseEventArgs &arg)
     }
     else
     {
-        
-        isPressed = true;
-        pressTimeout = ofGetElapsedTimef() + 0.05;
+        isPressed = false;
+        //pressTimeout = ofGetElapsedTimef() + 0.05;
     }
-    updateFbo(isPressed);
     ofNotifyEvent(buttonPressed, name);
 }
 

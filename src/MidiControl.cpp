@@ -14,7 +14,6 @@ MidiControl::MidiControl()
     {
         _data[i] = 0;
     }
-    _tapButton_old = ofRectangle(0,0,50,50);
     
     _tapButton.setup(ofRectangle(0,0,50,50), "BPM", false);
     ofAddListener(_tapButton.buttonPressed, this, &MidiControl::newTapEvent);

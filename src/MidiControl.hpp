@@ -52,8 +52,6 @@ private:
     int             _control[127];// control chenge values
     Clock           _clk;
     
-    ofRectangle     _tapButton_old;
-    
     Button          _tapButton;
     
 };

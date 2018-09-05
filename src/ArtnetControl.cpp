@@ -12,9 +12,6 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
     _GUI = new AnimatorGUI(ofRectangle(200,200,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
-    ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
-    ofAddListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
-//    ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::guiCurveBPressed);
 
     _preAnimator = new LedAnimator(_MC);
     _liveAnimator = new LedAnimator(_MC);
@@ -37,13 +34,12 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     cout <<"HIER "<<  colIDs[0] << " " << colIDs[1] << " "<< colIDs[2] << " "<< colIDs[3] << " "<< endl;
     int a[] = {colIDs[0],colIDs[1]};
     int b[] = {colIDs[2],colIDs[3]};
-    _GUI->colorselectorA.setColorIDs(a);
-    _GUI->colorselectorB.setColorIDs(b);
+    
+    _editPatroon->getColorselectorA().setColorIDs(a);
+    _editPatroon->getColorselectorB().setColorIDs(b);
     
     
     //Listeners
-    ofAddListener(_GUI->colorselectorA.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
-    ofAddListener(_GUI->colorselectorB.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
@@ -52,7 +48,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
     
     //set first patern to edit
-    _patronen[0].toggleVisibility(true);
+    _patronen[0].setVisible();
     
 }
 
@@ -61,8 +57,6 @@ ArtnetControl::~ArtnetControl()
     //save everything
     
     // blackout all
-    ofRemoveListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
-    ofRemoveListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     clearNodes();
     delete _preAnimator;
@@ -261,6 +255,7 @@ void ArtnetControl::loadPatroon()
         _patronen.push_back(p);
         sel.popTag();
     }
+    
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
 }
@@ -293,10 +288,10 @@ void ArtnetControl::update()
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
-    ofColor c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
-    ofColor c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
-    ofColor c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
-    ofColor c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    ofColor c1 = _editPatroon->getColorselectorA().getColorFromID(getColorIDs[0]);
+    ofColor c2 = _editPatroon->getColorselectorA().getColorFromID(getColorIDs[1]);
+    ofColor c3 = _editPatroon->getColorselectorB().getColorFromID(getColorIDs[2]);
+    ofColor c4 = _editPatroon->getColorselectorB().getColorFromID(getColorIDs[3]);
     
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
@@ -338,10 +333,10 @@ void ArtnetControl::update()
     // Get colors from editPatroon
     getColorIDs.clear();
     getColorIDs = _livePatroon->getColorIDs();
-    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
-    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
-    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
-    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    c1 = _livePatroon->getColorselectorA().getColorFromID(getColorIDs[0]);
+    c2 = _livePatroon->getColorselectorA().getColorFromID(getColorIDs[1]);
+    c3 = _livePatroon->getColorselectorB().getColorFromID(getColorIDs[2]);
+    c4 = _livePatroon->getColorselectorB().getColorFromID(getColorIDs[3]);
 
 //    c1 = _livePatroon->getColorIDs()[0];
 //    c2 = _livePatroon->getColorIDs()[1];
@@ -412,8 +407,8 @@ void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
     _GUI->draw(_preIMG,_liveIMG);
-    _preIMG.draw(0,00,100,100);
-    _liveIMG.draw(100,0,100,100);
+    //_preIMG.draw(0,00,100,100);
+    //_liveIMG.draw(100,0,100,100);
     
     _editPatroon->drawGui();
 }
@@ -468,18 +463,6 @@ void ArtnetControl::specialFunction(int id)
     }
 }
 
-void ArtnetControl::guiCOlorSelectPressed(bool &resetColors)
-{
-    //set all colors from gui to edit
-    int colors[4];
-    colors[0] = _GUI->getColorselectorA().getSelectedColorIDs()[0];
-    colors[1] = _GUI->getColorselectorA().getSelectedColorIDs()[1];
-    colors[2] = _GUI->getColorselectorB().getSelectedColorIDs()[0];
-    colors[3] = _GUI->getColorselectorB().getSelectedColorIDs()[1];
-    
-    _editPatroon->setColors(colors, 4);
-}
-
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
@@ -494,24 +477,17 @@ void ArtnetControl::PlayPatronPressed(int & id)
 }
 void ArtnetControl::EditPatronPressed(int & iD)
 {
-    //if this one is playing than fine edit him
-    _editPatroon = &_patronen[iD];
-    //also update the gui to this selection
-    int id[2];
-    id[0] = _editPatroon->getColorIDs()[0];
-    id[1] = _editPatroon->getColorIDs()[1];
-    _GUI->getColorselectorA().setColorIDs(id);
-    id[0] = _editPatroon->getColorIDs()[2];
-    id[1] = _editPatroon->getColorIDs()[3];
-    _GUI->getColorselectorB().setColorIDs(id);
-    cout << "edit patron pressed " << iD << endl;
-    //toggle visibility
+    //turn all of and only the right one on
     for (int i = 0; i < _patronen.size(); i++)
     {
-        if(i == iD) _patronen[i].toggleVisibility(true);
-        else _patronen[i].toggleVisibility(false);
+        _patronen[i].setInvisible();
     }
+    _patronen[iD].setVisible();
     
+    _editPatroon = &_patronen[iD];
+    //also update the gui to this selection
+    cout << "edit patron pressed " << iD << endl;
+    //toggle visibility
 }
 
 void ArtnetControl::PlaySteppedPatronPressed(int & id)

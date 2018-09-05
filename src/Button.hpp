@@ -34,10 +34,8 @@ public:
     ofRectangle &getArea(){return drawArea;};
     
 private:
-    void            updateFbo(bool isPressed);
     
     ofVec2f         mouseOffset;
-    ofFbo           fbo;
     ofRectangle     drawArea;
     string          name;
     bool            isToggle;
