@@ -62,6 +62,11 @@ public:
     Segment     *getPreSegment(int id){return _preSegments[id];};
     Segment     *getLiveSegment(int id){return _liveSegments[id];};
     
+    void curveAPressed(int & id){_editPatroon->setCurve(0, id);};
+    void curveBPressed(int & id){_editPatroon->setCurve(1, id);};
+    
+    void colorPressed(bool &pressed);
+    
 private:
 
     void sendToNodes();

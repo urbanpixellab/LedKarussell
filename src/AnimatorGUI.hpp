@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "ColorSelector.hpp"
 #include "Button.hpp"
 
 class AnimatorGUI
@@ -36,16 +37,31 @@ public:
     ofMesh &getMesh(){return _realStructure;}; //here we can work on the mesh
     
     void mousePressed(ofMouseEventArgs &args);
+    ofEvent<int>    curveAPressed;
+    ofEvent<int>    curveBPressed;
     ofEvent<int>    patronPLAY;
     ofEvent<int>    patronEDIT;
     ofEvent<int>    patronPLAYSTEPPED;
+    ofEvent<bool>   colorSelectPressed;
     
 //    void setColor(string &c);
     
+    ColorSelector colorselectorA;
+    ColorSelector colorselectorB;
+
+    ColorSelector &getColorselectorA(){return colorselectorA;};
+    ColorSelector &getColorselectorB(){return colorselectorB;};
+
+    void newACurve(int id);
+    void newBCurve(int id);
+    
+    void colorPressed(bool &pressed);
 
 private:
 
     ofRectangle         _drawArea;
+    vector<Button>      _curveAButtons;
+    vector<Button>      _curveBButtons;
     
     ofMesh              _realStructure;// the mesh to paint on
     vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie

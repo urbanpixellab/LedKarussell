@@ -16,10 +16,11 @@ Button::Button()
     nonActive = ofColor(255);
     Active = ofColor(255,0,0);
     textColor = ofColor(0);
+    isPressed = false;
 }
 Button::~Button()
 {
-    deactivateListener();
+//    deactivateListener();
 }
 
 void Button::setup(ofRectangle area, string n, bool toogle)
@@ -46,11 +47,10 @@ void Button::draw()
 {
     if (isPressed) ofSetColor(Active);
     else ofSetColor(nonActive);
-    
     ofFill();
-    ofDrawRectRounded(2,2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
+    ofDrawRectRounded(drawArea.x + 2,drawArea.y + 2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
     ofSetColor(textColor);
-    ofDrawBitmapString(name, 6, 14);
+    ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
 }
 
 void Button::pressedControler()

@@ -35,21 +35,18 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     int a[] = {colIDs[0],colIDs[1]};
     int b[] = {colIDs[2],colIDs[3]};
     
-    _editPatroon->getColorselectorA().setColorIDs(a);
-    _editPatroon->getColorselectorB().setColorIDs(b);
-    
     
     //Listeners
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
+    ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::curveAPressed);
+    ofAddListener(_GUI->curveBPressed, this, &ArtnetControl::curveBPressed);
+
     ofAddListener(_GUI->patronPLAY, this, &ArtnetControl::PlayPatronPressed);
     ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
-    
-    //set first patern to edit
-    _patronen[0].setVisible();
-    
+    ofAddListener(_GUI->colorSelectPressed, this,&ArtnetControl::colorPressed);
 }
 
 ArtnetControl::~ArtnetControl()
@@ -258,6 +255,7 @@ void ArtnetControl::loadPatroon()
     
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
+    
 }
 
 void ArtnetControl::savePatroon(){}
@@ -288,10 +286,10 @@ void ArtnetControl::update()
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
-    ofColor c1 = _editPatroon->getColorselectorA().getColorFromID(getColorIDs[0]);
-    ofColor c2 = _editPatroon->getColorselectorA().getColorFromID(getColorIDs[1]);
-    ofColor c3 = _editPatroon->getColorselectorB().getColorFromID(getColorIDs[2]);
-    ofColor c4 = _editPatroon->getColorselectorB().getColorFromID(getColorIDs[3]);
+    ofColor c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
+    ofColor c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
+    ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
+    ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
@@ -333,16 +331,11 @@ void ArtnetControl::update()
     // Get colors from editPatroon
     getColorIDs.clear();
     getColorIDs = _livePatroon->getColorIDs();
-    c1 = _livePatroon->getColorselectorA().getColorFromID(getColorIDs[0]);
-    c2 = _livePatroon->getColorselectorA().getColorFromID(getColorIDs[1]);
-    c3 = _livePatroon->getColorselectorB().getColorFromID(getColorIDs[2]);
-    c4 = _livePatroon->getColorselectorB().getColorFromID(getColorIDs[3]);
+    c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
+    c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
+    c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
+    c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
 
-//    c1 = _livePatroon->getColorIDs()[0];
-//    c2 = _livePatroon->getColorIDs()[1];
-//    c3 = _livePatroon->getColorIDs()[2];
-//    c4 = _livePatroon->getColorIDs()[3];
-    
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     if(solo)
     {
@@ -410,7 +403,6 @@ void ArtnetControl::drawGui()
     //_preIMG.draw(0,00,100,100);
     //_liveIMG.draw(100,0,100,100);
     
-    _editPatroon->drawGui();
 }
 
 
@@ -463,6 +455,19 @@ void ArtnetControl::specialFunction(int id)
     }
 }
 
+void ArtnetControl::colorPressed(bool &pressed)
+{
+    //we have a changed color, set them to the edit patroon
+    int colors[4];
+    colors[0] = _GUI->getColorselectorA().getSelectedColorIDs()[0];
+    colors[1] = _GUI->getColorselectorA().getSelectedColorIDs()[1];
+    colors[2] = _GUI->getColorselectorB().getSelectedColorIDs()[0];
+    colors[3] = _GUI->getColorselectorB().getSelectedColorIDs()[1];
+    _editPatroon->setColors(colors, 4);
+}
+
+
+
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
@@ -478,16 +483,11 @@ void ArtnetControl::PlayPatronPressed(int & id)
 void ArtnetControl::EditPatronPressed(int & iD)
 {
     //turn all of and only the right one on
-    for (int i = 0; i < _patronen.size(); i++)
-    {
-        _patronen[i].setInvisible();
-    }
-    _patronen[iD].setVisible();
-    
     _editPatroon = &_patronen[iD];
-    //also update the gui to this selection
+    _GUI->newACurve(*_editPatroon->getCurve(0));
+    _GUI->newBCurve(*_editPatroon->getCurve(1));
+    //update the GUI
     cout << "edit patron pressed " << iD << endl;
-    //toggle visibility
 }
 
 void ArtnetControl::PlaySteppedPatronPressed(int & id)

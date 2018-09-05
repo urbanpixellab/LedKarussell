@@ -34,9 +34,14 @@ public:
     // FIXME: would rather sent the color as color array or int arra but that is not possible?
     //ofEvent<string>   colorChosen;
     
+    void mousePressed(ofMouseEventArgs &args);
+    
     vector <ofColor> colors;
     ofEvent<bool> colorPressed;
     int *getSelectedColorIDs(){return _selectedColorIDs;};
+    void addListeners();
+    void removeListeners();
+    
     
 private:
     ofRectangle drawArea;
@@ -49,8 +54,6 @@ private:
     int numCollumns;
     int padding;
     
-    //ofColor colorA;
-    //ofColor colorB;
     ofColor         _selectedColors[2] = {ofColor(255),ofColor(255)};
     int             _selectedColorIDs[2] = {0,0};
     bool            _pressed;
