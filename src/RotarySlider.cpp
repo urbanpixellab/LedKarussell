@@ -17,8 +17,9 @@ RotarySlider::RotarySlider()
 //    font.load("verdana.ttf", 10);
     resolution = 128;
     comma = 0;
-    active = true;
+    active = false;
 }
+
 RotarySlider::~RotarySlider()
 {
     ofRemoveListener(ofEvents().mouseDragged, this, &RotarySlider::mouseDragged);
@@ -167,6 +168,7 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
 
     if (xStart > -1)
     {
+        cout << "dragged"  << endl;
         int dir = evt.x - xStart;
         if (dir > 0 && mouseValue < resolution)mouseValue++;
         else if (dir < 0 && mouseValue > 0 )mouseValue--;
@@ -182,9 +184,9 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
 }
 void RotarySlider::mousePressed(ofMouseEventArgs &evt)
 {
-    if (!active) return;
     if (drawArea.inside(evt.x, evt.y))
     {
+        cout << "pressed" << endl;
         // anstieg
         //ofVec2f rCenter = ofVec2f(drawArea.x + drawArea.width * 0.5,drawArea.y + drawArea.height * 0.5);
         //ofVec2f cM = ofVec2f(evt.x, evt.y) - rCenter;//centerMouse
@@ -192,12 +194,14 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
         //float angle = zero.angle(cM) + 180;
         //cout << angle << endl;
         xStart = evt.x;
+        active = true;
     }
 }
 void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
 {
     if (!active) return;
     xStart = -1;
+    active  = false;
 }
 
 void RotarySlider::reset()

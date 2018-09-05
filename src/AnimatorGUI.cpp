@@ -15,6 +15,14 @@ AnimatorGUI::AnimatorGUI(ofRectangle area):_drawArea(area)
 AnimatorGUI::~AnimatorGUI()
 {
     ofRemoveListener(ofEvents().mousePressed, this, &AnimatorGUI::mousePressed);
+    for (int i = 0; i < _slidersA.size(); i++)
+    {
+        delete _slidersA[i];
+    }
+    for (int i = 0; i < _slidersB.size(); i++)
+    {
+        delete _slidersB[i];
+    }
 }
 
 void AnimatorGUI::init()
@@ -47,10 +55,42 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         butB.isPressed = false;
         _curveBButtons.push_back(butB);
     }
+    // sliders
+    int x = _drawArea.getX();
+    int y = _drawArea.getY();
+    
+    RotarySlider *curveA = new RotarySlider();
+    curveA->setup(ofRectangle(x,y,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(curveA);
+    RotarySlider *timeA = new RotarySlider();
+    timeA->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(timeA);
+    RotarySlider *freqA = new RotarySlider();
+    freqA->setup(ofRectangle(x,y+80,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(freqA);
+    RotarySlider *dirA = new RotarySlider();
+    dirA->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(dirA);
+    
+    x = _drawArea.getX()+220;
+    RotarySlider *curveB = new RotarySlider();
+    curveB->setup(ofRectangle(x,y,60,60),ofVec2f(0,126),0,true);
+    _slidersB.push_back(curveB);
+    RotarySlider *timeB = new RotarySlider();
+    timeB->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,126),0,true);
+    _slidersB.push_back(timeB);
+    RotarySlider *freqB = new RotarySlider();
+    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(freqB);
+    RotarySlider *dirB = new RotarySlider();
+    dirB->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,126),0,true);
+    _slidersA.push_back(dirB);
+    
+    
     
     // Create colorselectorS
-    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+100,200,200));
-    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+100,200,200));
+    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
+    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+150,200,200));
     
     ofAddListener(colorselectorA.colorPressed, this, &AnimatorGUI::colorPressed);
     ofAddListener(colorselectorB.colorPressed, this, &AnimatorGUI::colorPressed);
@@ -67,7 +107,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         Button b;
         b.id = i;
         b.name = "patron" + ofToString(i);
-        int x = 600 + ((i%4)*w*1.1);
+        int x = 650 + ((i%4)*w*1.1);
         int y = 300 + ((i / 4) * h * 1.1);
         b.area = ofRectangle(x,y,w,h);
         b.toggle = true;
@@ -98,13 +138,12 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     }
     
     ofSetColor(255);
-    ofSetColor(255);
-    pre.draw(_drawArea.x, _drawArea.y + 200,170,100);
-    live.draw(_drawArea.x + 180, _drawArea.y + 200,170,100);
+    pre.draw(_drawArea.x, _drawArea.y + 220,200,100);
+    live.draw(_drawArea.x + 220, _drawArea.y + 220,200,100);
     
     //draw it under the preview windows
     ofPushMatrix();
-    ofTranslate(_drawArea.x,_drawArea.getBottom() -200);
+    ofTranslate(_drawArea.x,_drawArea.getBottom() -100);
     ofScale(ofGetWidth()/3, 100);
     pre.bind();
     _realStructure.draw();
@@ -112,12 +151,22 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(_drawArea.x + 350,_drawArea.getBottom() -200);
+    ofTranslate(_drawArea.x + 400,_drawArea.getBottom() -100);
     ofScale(ofGetWidth()/3, 100);
     live.bind();
     _realStructure.draw();
     live.unbind();
     ofPopMatrix();
+    //sliders
+    for (int i = 0; i < _slidersA.size(); i++)
+    {
+        _slidersA[i]->draw();
+    }
+    for (int i = 0; i < _slidersB.size(); i++)
+    {
+        _slidersB[i]->draw();
+    }
+    
     
     // Color Selector
     colorselectorA.draw();

@@ -11,7 +11,7 @@ void ofApp::setup()
    
     // TEMP
     int x = 650;
-    rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);
+    //rl.setup(ofRectangle(100,100,60,60),ofVec2f(0,126),0,true);
     
 }
 
@@ -30,7 +30,7 @@ void ofApp::draw()
     _AC->drawGui();
     
     // TEMP
-    rl.draw();
+    //rl.draw();
    
 }
 

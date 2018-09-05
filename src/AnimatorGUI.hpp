@@ -13,6 +13,7 @@
 #include "ofMain.h"
 #include "ColorSelector.hpp"
 #include "Button.hpp"
+#include "RotarySlider.hpp"
 
 class AnimatorGUI
 {
@@ -68,6 +69,9 @@ private:
     int                 _isPlay;
     int                 _isEdit;
     int                 _isPlayStepped;
+    
+    vector<RotarySlider*>_slidersA;
+    vector<RotarySlider*>_slidersB;
 };
 
 #endif /* AnimatorGUI_hpp */
