@@ -15,12 +15,15 @@ AnimatorGUI::AnimatorGUI(ofRectangle area):_drawArea(area)
 AnimatorGUI::~AnimatorGUI()
 {
     ofRemoveListener(ofEvents().mousePressed, this, &AnimatorGUI::mousePressed);
+
     for (int i = 0; i < _slidersA.size(); i++)
     {
+        ofRemoveListener(_slidersA[i]->newValue, this, &AnimatorGUI::newSliderValue);
         delete _slidersA[i];
     }
     for (int i = 0; i < _slidersB.size(); i++)
     {
+        ofRemoveListener(_slidersB[i]->newValue, this, &AnimatorGUI::newSliderValue);
         delete _slidersB[i];
     }
 }
@@ -60,32 +63,57 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     int y = _drawArea.getY();
     
     RotarySlider *curveA = new RotarySlider();
-    curveA->setup(ofRectangle(x,y,60,60),ofVec2f(0,126),0,true);
+    curveA->setup(ofRectangle(x,y,60,60),ofVec2f(0,animationCount-1),0,true);
+    curveA->setResolution(20);
+    curveA->setName("curve");
     _slidersA.push_back(curveA);
+    ofAddListener(curveA->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *timeA = new RotarySlider();
-    timeA->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,126),0,true);
+    timeA->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,4),0,true);
+    timeA->setResolution(20);
+    timeA->setName("multi");
     _slidersA.push_back(timeA);
+    ofAddListener(timeA->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *freqA = new RotarySlider();
-    freqA->setup(ofRectangle(x,y+80,60,60),ofVec2f(0,126),0,true);
+    freqA->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,50),0,true);
+    freqA->setResolution(100);
+    freqA->setName("freq");
     _slidersA.push_back(freqA);
+    ofAddListener(freqA->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *dirA = new RotarySlider();
-    dirA->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,126),0,true);
+    dirA->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,3),0,true);
+    dirA->setResolution(20);
+    dirA->setName("dir");
+
     _slidersA.push_back(dirA);
-    
+    ofAddListener(dirA->newValue,this,&AnimatorGUI::newSliderValue);
+
     x = _drawArea.getX()+220;
     RotarySlider *curveB = new RotarySlider();
-    curveB->setup(ofRectangle(x,y,60,60),ofVec2f(0,126),0,true);
+    curveB->setup(ofRectangle(x,y,60,60),ofVec2f(0,animationCount-1),0,true);
+    curveB->setResolution(20);
+    curveB->setName("curve");
     _slidersB.push_back(curveB);
+    ofAddListener(curveB->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *timeB = new RotarySlider();
-    timeB->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,126),0,true);
+    timeB->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,4),0,true);
+    timeB->setResolution(20);
+    timeB->setName("multi");
     _slidersB.push_back(timeB);
+    ofAddListener(timeB->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *freqB = new RotarySlider();
-    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0,126),0,true);
+    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,50),0,true);
+    freqB->setResolution(100);
+    freqB->setName("freq");
     _slidersA.push_back(freqB);
+    ofAddListener(freqB->newValue,this,&AnimatorGUI::newSliderValue);
     RotarySlider *dirB = new RotarySlider();
-    dirB->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,126),0,true);
+    dirB->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,3),0,true);
+    dirB->setResolution(20);
+    dirB->setName("dir");
     _slidersA.push_back(dirB);
-    
+    ofAddListener(dirB->newValue,this,&AnimatorGUI::newSliderValue);
+
     
     
     // Create colorselectorS
@@ -119,7 +147,6 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
 {
     ofSetColor(255);
-    ofDrawBitmapString("Curve Select", _drawArea.x, _drawArea.y);
     for (int i = 0; i < _curveAButtons.size(); i++)
     {
         ofSetColor(_curveAButtons[i].color);
@@ -218,6 +245,12 @@ void AnimatorGUI::setColor(string &s){
 void AnimatorGUI::colorPressed(bool &pressed)
 {
     ofNotifyEvent(colorSelectPressed, pressed);
+}
+
+void AnimatorGUI::newSliderValue(bool &value)
+{
+    //update the sliders in the patron
+//    ofNotifyEvent(sliderUpdated,value);
 }
 
 

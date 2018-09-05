@@ -26,9 +26,6 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     // Load aal the patterns from XML
     loadPatroon();
     
-    // set the eDit pattern
-    // FIXME: is this the right way to do it?
-    _editPatroon = &_patronen[0];
     // set colors from editPatroon to color selector
     vector<int> colIDs = _editPatroon->getColorIDs();
     cout <<"HIER "<<  colIDs[0] << " " << colIDs[1] << " "<< colIDs[2] << " "<< colIDs[3] << " "<< endl;
@@ -47,6 +44,8 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
     ofAddListener(_GUI->colorSelectPressed, this,&ArtnetControl::colorPressed);
+    
+    ofAddListener(_GUI->sliderUpdated, this, &ArtnetControl::sliderChanged);
 }
 
 ArtnetControl::~ArtnetControl()
@@ -54,7 +53,9 @@ ArtnetControl::~ArtnetControl()
     //save everything
     
     // blackout all
+    savePatroon();
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
+    ofRemoveListener(_GUI->sliderUpdated, this, &ArtnetControl::sliderChanged);
     clearNodes();
     delete _preAnimator;
     delete _liveAnimator;
@@ -242,7 +243,7 @@ void ArtnetControl::loadPatroon()
                 vector<string> result = ofSplitString(sel.getValue(steps[step], ""), ",");
                 for (int selection = 0; selection < result.size(); selection++)
                 {
-                    cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
+                    //cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
                     if(l == 0) p.setSeqA(step, ofToInt(result[selection]), true);
                     else if(l == 1) p.setSeqB(step, ofToInt(result[selection]), true);
                 }
@@ -252,26 +253,68 @@ void ArtnetControl::loadPatroon()
         _patronen.push_back(p);
         sel.popTag();
     }
-    
+
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
-    
 }
 
-void ArtnetControl::savePatroon(){}
+void ArtnetControl::savePatroon()
+{
+    ofxXmlSettings settings;
+    int maxSel = 13;
+    int maxStep = 8;
+    for (int p = 0; p < _patronen.size(); p++)//patron
+    {
+        settings.addTag("patroon");
+        settings.pushTag("patroon",p);
+        settings.addValue("id", _patronen[p].getID());
+        for (int l = 0; l < 2; l++) //layer
+        {
+            settings.addTag("layer");
+            settings.pushTag("layer",l);
+            settings.addValue("curve", *_patronen[p].getCurve(l));
+            settings.addValue("cFreq", *_patronen[p].getFreq(l));
+            settings.addValue("cDir", *_patronen[p].getDir(l));
+            settings.addValue("cTime", *_patronen[p].getTime(l));
+            settings.addValue("colorA", _patronen[p].getColorIDs()[(l*2) + 0]);
+            settings.addValue("colorB", _patronen[p].getColorIDs()[(l*2) + 1]);
+            
+            if(l == 0)
+            {
+                for (int s = 0; s < maxStep; s++)
+                {
+                    string step = "";
+                    for (int sel = 0; sel < maxSel; sel++)
+                    {
+                        if(_patronen[p].getSeqStepA(s)[sel] == true) step += ofToString(sel) + ",";
+                    }
+                    if(step.length() > 1)step.erase(step.length()-1);
+                    settings.addValue("step"+ofToString(s), step);
+                }
+            }
+            else if(l == 1)
+            {
+                for (int s = 0; s < maxStep; s++)
+                {
+                    string step = "";
+                    for (int sel = 0; sel < maxSel; sel++)
+                    {
+                        if(_patronen[p].getSeqStepB(s)[sel] == true) step += ofToString(sel) + ",";
+                    }
+                    if(step.length() > 1)step.erase(step.length()-1);
+                    settings.addValue("step"+ofToString(s), step);
+                }
+            }
+            settings.popTag();
+        }
+        settings.popTag();
+    }
+    settings.save("patroonen.xml");
+}
 
 
 void ArtnetControl::update()
 {
-    
-    // update artnet based on the selected sce or use the hottbutton function
-    // which is overriding the actual state
-    //fill all nodes by selection
-    //here ow the values from the selected patron for edit and live appart
-
-    //first maak the edit patroon then the live patroon
-    
-    
     
     float *freqA = _editPatroon->getFreq(0);
     float *freqB = _editPatroon->getFreq(1);
@@ -475,6 +518,16 @@ void ArtnetControl::keyPressed(ofKeyEventArgs &key)
     cout << key.keycode << endl;
     
 }
+
+void ArtnetControl::sliderChanged(bool & value)
+{
+    *_editPatroon->getCurve(0) = _GUI->getSlidersA(0);
+    *_editPatroon->getCurve(1) = _GUI->getSlidersB(0);
+
+    *_editPatroon->getFreq(0) = _GUI->getSlidersA(2);
+    *_editPatroon->getFreq(1) = _GUI->getSlidersB(2);
+}
+
 void ArtnetControl::PlayPatronPressed(int & id)
 {
     _livePatroon = &_patronen[id];

@@ -44,6 +44,7 @@ public:
     ofEvent<int>    patronEDIT;
     ofEvent<int>    patronPLAYSTEPPED;
     ofEvent<bool>   colorSelectPressed;
+    ofEvent<bool>   sliderUpdated;
     
 //    void setColor(string &c);
     
@@ -55,8 +56,11 @@ public:
 
     void newACurve(int id);
     void newBCurve(int id);
-    
+    void newSliderValue(bool &value);
     void colorPressed(bool &pressed);
+    
+    float getSlidersA(int id){return _slidersA[id]->getValueMapped();};
+    float getSlidersB(int id){return _slidersB[id]->getValueMapped();};
 
 private:
 

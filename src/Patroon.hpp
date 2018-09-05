@@ -29,6 +29,8 @@ public:
     bool *getSeqStepB(int id){return _sequenceB[id];};
     
     float *getFreq(int id){return &_freq[id];};
+    int *getDir(int id){return &_dir[id];};
+    int *getTime(int id){return &_time[id];};
     
     void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
     void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};

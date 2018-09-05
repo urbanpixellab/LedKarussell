@@ -66,6 +66,7 @@ public:
     void curveBPressed(int & id){_editPatroon->setCurve(1, id);};
     
     void colorPressed(bool &pressed);
+    void sliderChanged(bool & value);
     
 private:
 

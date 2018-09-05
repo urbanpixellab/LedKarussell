@@ -18,6 +18,9 @@ RotarySlider::RotarySlider()
     resolution = 128;
     comma = 0;
     active = false;
+    value = 1;
+    valueMapped = value;
+    name = "";
 }
 
 RotarySlider::~RotarySlider()
@@ -45,6 +48,9 @@ void RotarySlider::setup(ofRectangle area,ofVec2f minMax,float startValue,bool t
     fbo.end();
     circleCenter = ofVec2f(fbo.getWidth() / 2,fbo.getHeight() * 2 / 5);
     redraw = true;
+    valueMapped = ofMap(value,0,1,range.x,range.y);
+    name = "";
+
 }
 
 void RotarySlider::setup(ofRectangle area,ofVec2f minMax,float startValue,bool t,int commaSize,int res)
@@ -65,6 +71,8 @@ void RotarySlider::setup(ofRectangle area,ofVec2f minMax,float startValue,bool t
     fbo.end();
     circleCenter = ofVec2f(fbo.getWidth() / 2,fbo.getHeight() * 2 / 5);
     redraw = true;
+    valueMapped = ofMap(value,0,1,range.x,range.y);
+    name = "";
 }
 
 
@@ -150,6 +158,7 @@ void RotarySlider::updateSlider()
     string number = ofToString(range.x + ((range.y - range.x) * value),comma);
 //    float shift = font.getStringBoundingBox(number, 0, 0).width / 2.;
 //    font.drawString(number, circleCenter.x - shift, fbo.getHeight() - 2);
+    ofDrawBitmapString(name, 10, fbo.getHeight());
     fbo.end();
 
     
@@ -168,7 +177,6 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
 
     if (xStart > -1)
     {
-        cout << "dragged"  << endl;
         int dir = evt.x - xStart;
         if (dir > 0 && mouseValue < resolution)mouseValue++;
         else if (dir < 0 && mouseValue > 0 )mouseValue--;
@@ -176,17 +184,18 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
         value = ofMap(mouseValue, 0, resolution, 0, 1);
         cout << value << endl;
         value = ofClamp(value, 0, 1);
-        //ofNotifyEvent(newValue, value);
-        cout << "dragged" << value << endl;
+        valueMapped = ofMap(value,0,1,range.x,range.y);
         redraw = true;
         //xStart = evt.x;
+        cout << "mapped value" << valueMapped << endl;
+
+        ofNotifyEvent(newValue, active);
     }
 }
 void RotarySlider::mousePressed(ofMouseEventArgs &evt)
 {
     if (drawArea.inside(evt.x, evt.y))
     {
-        cout << "pressed" << endl;
         // anstieg
         //ofVec2f rCenter = ofVec2f(drawArea.x + drawArea.width * 0.5,drawArea.y + drawArea.height * 0.5);
         //ofVec2f cM = ofVec2f(evt.x, evt.y) - rCenter;//centerMouse
@@ -195,6 +204,9 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
         //cout << angle << endl;
         xStart = evt.x;
         active = true;
+        valueMapped = ofMap(value,0,1,range.x,range.y);
+        ofNotifyEvent(newValue, active);
+        cout << "mapped value" << valueMapped << endl;
     }
 }
 void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
@@ -207,6 +219,9 @@ void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
 void RotarySlider::reset()
 {
     value = resetValue;
+    valueMapped = ofMap(value,0,1,range.x,range.y);
     mouseValue = resetValue * resolution;
     redraw = true;
+    ofNotifyEvent(newValue, active);
+
 }
