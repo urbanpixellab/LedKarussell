@@ -17,7 +17,6 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     _liveAnimator = new LedAnimator(_MC);
     
     //init the gui
-    _GUI->init();
     _test = false;
     
     // Load all the nodes form XML
@@ -45,7 +44,17 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
     ofAddListener(_GUI->colorSelectPressed, this,&ArtnetControl::colorPressed);
     
-    ofAddListener(_GUI->sliderUpdated, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getCurveSlidersA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getCurveSlidersB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getTimeSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getTimeSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getFreqSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getFreqSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getDirSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getDirSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::colorPressed);
+    ofAddListener(_GUI->getColorselectorB().colorPressed, this, &ArtnetControl::colorPressed);
+    
 }
 
 ArtnetControl::~ArtnetControl()
@@ -55,7 +64,6 @@ ArtnetControl::~ArtnetControl()
     // blackout all
     savePatroon();
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
-    ofRemoveListener(_GUI->sliderUpdated, this, &ArtnetControl::sliderChanged);
     clearNodes();
     delete _preAnimator;
     delete _liveAnimator;
@@ -339,13 +347,10 @@ void ArtnetControl::update()
     if(solo)
     {
         int s = _selections[selectionA].items.size();
-        
-        
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            
-            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -353,8 +358,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            
-            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*_editPatroon->getTime(1),*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -387,7 +391,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -395,7 +399,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -443,9 +447,6 @@ void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
     _GUI->draw(_preIMG,_liveIMG);
-    //_preIMG.draw(0,00,100,100);
-    //_liveIMG.draw(100,0,100,100);
-    
 }
 
 
@@ -521,11 +522,17 @@ void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 
 void ArtnetControl::sliderChanged(bool & value)
 {
-    *_editPatroon->getCurve(0) = _GUI->getSlidersA(0);
-    *_editPatroon->getCurve(1) = _GUI->getSlidersB(0);
+    *_editPatroon->getCurve(0) = int(_GUI->getSlidersAMapped(0));
+    *_editPatroon->getCurve(1) = int(_GUI->getSlidersBMapped(0));
+    
+    *_editPatroon->getFreq(0) = _GUI->getSlidersAMapped(2);
+    *_editPatroon->getFreq(1) = _GUI->getSlidersBMapped(2);
 
-    *_editPatroon->getFreq(0) = _GUI->getSlidersA(2);
-    *_editPatroon->getFreq(1) = _GUI->getSlidersB(2);
+    *_editPatroon->getTime(0) = _GUI->getSlidersAMapped(1);
+    *_editPatroon->getTime(1) = _GUI->getSlidersBMapped(1);
+
+    *_editPatroon->getDir(0) = _GUI->getSlidersAMapped(3);
+    *_editPatroon->getDir(1) = _GUI->getSlidersBMapped(3);
 }
 
 void ArtnetControl::PlayPatronPressed(int & id)
@@ -537,9 +544,19 @@ void ArtnetControl::EditPatronPressed(int & iD)
 {
     //turn all of and only the right one on
     _editPatroon = &_patronen[iD];
-    _GUI->newACurve(*_editPatroon->getCurve(0));
-    _GUI->newBCurve(*_editPatroon->getCurve(1));
     //update the GUI
+    _GUI->getCurveSlidersA()->setValueMapped(float(*_editPatroon->getCurve(0)));
+    _GUI->getCurveSlidersB()->setValueMapped(float(*_editPatroon->getCurve(1)));
+    _GUI->getFreqSliderA()->setValueMapped(float(*_editPatroon->getFreq(0)));
+    _GUI->getFreqSliderB()->setValueMapped(float(*_editPatroon->getFreq(1)));
+    _GUI->getTimeSliderA()->setValueMapped(float(*_editPatroon->getTime(0)));
+    _GUI->getTimeSliderB()->setValueMapped(float(*_editPatroon->getTime(1)));
+    _GUI->getDirSliderA()->setValueMapped(float(*_editPatroon->getDir(0)));
+    _GUI->getDirSliderB()->setValueMapped(float(*_editPatroon->getDir(1)));
+    
+    
+    
+    
     cout << "edit patron pressed " << iD << endl;
 }
 

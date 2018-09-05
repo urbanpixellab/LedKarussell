@@ -13,7 +13,6 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "MidiControl.hpp"
-#include "Colorizer.hpp"
 #include "ofxXmlSettings.h"
 
 
@@ -47,8 +46,8 @@ public:
     LedAnimator(MidiControl *mc);
     ~LedAnimator();
 
-    void drawToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
-    void addToArray(int drawFunction,int drawMode,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
+    void drawToArray(int drawFunction,int drawMode,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
+    void addToArray(int drawFunction,int drawMode,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
     // plus later 3 offset and frequency parameter
 //    int getSelectionMax(){return _selections.size();};
     
@@ -56,7 +55,6 @@ private:
     
     int                 _aniSelect;
     MidiControl         *_MC;
-    Colorizer           _col;
     //niew selector
 };
 

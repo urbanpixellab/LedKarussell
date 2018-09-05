@@ -15,6 +15,8 @@
 #include "Button.hpp"
 #include "RotarySlider.hpp"
 
+#define SLIDERS 4
+
 class AnimatorGUI
 {
 public:
@@ -44,7 +46,6 @@ public:
     ofEvent<int>    patronEDIT;
     ofEvent<int>    patronPLAYSTEPPED;
     ofEvent<bool>   colorSelectPressed;
-    ofEvent<bool>   sliderUpdated;
     
 //    void setColor(string &c);
     
@@ -54,28 +55,29 @@ public:
     ColorSelector &getColorselectorA(){return colorselectorA;};
     ColorSelector &getColorselectorB(){return colorselectorB;};
 
-    void newACurve(int id);
-    void newBCurve(int id);
-    void newSliderValue(bool &value);
-    void colorPressed(bool &pressed);
-    
-    float getSlidersA(int id){return _slidersA[id]->getValueMapped();};
-    float getSlidersB(int id){return _slidersB[id]->getValueMapped();};
+    float getSlidersAMapped(int id){return _slidersA[id]->getValueMapped();};
+    float getSlidersBMapped(int id){return _slidersB[id]->getValueMapped();};
 
+    RotarySlider *getCurveSlidersA(){return _slidersA[0];};
+    RotarySlider *getCurveSlidersB(){return _slidersB[0];};
+    RotarySlider *getTimeSliderA(){return _slidersA[1];}
+    RotarySlider *getTimeSliderB(){return _slidersB[1];}
+    RotarySlider *getFreqSliderA(){return _slidersA[2];}
+    RotarySlider *getFreqSliderB(){return _slidersB[2];}
+    RotarySlider *getDirSliderA(){return _slidersA[3];}
+    RotarySlider *getDirSliderB(){return _slidersB[3];}
+    
 private:
 
     ofRectangle         _drawArea;
-    vector<Button>      _curveAButtons;
-    vector<Button>      _curveBButtons;
-    
     ofMesh              _realStructure;// the mesh to paint on
     vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie
     int                 _isPlay;
     int                 _isEdit;
     int                 _isPlayStepped;
     
-    vector<RotarySlider*>_slidersA;
-    vector<RotarySlider*>_slidersB;
+    RotarySlider*   _slidersA[SLIDERS];
+    RotarySlider*   _slidersB[SLIDERS];
 };
 
 #endif /* AnimatorGUI_hpp */

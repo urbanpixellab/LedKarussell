@@ -37,6 +37,7 @@ public:
     ofEvent<bool>  newValue;
     void setName(string n){name = n;};
     float getValueMapped(){return valueMapped;}
+    void setValueMapped(float value);
   
 private:
     bool            active;

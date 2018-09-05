@@ -36,7 +36,7 @@ void Patroon::clear()
 {
     for (int step = 0; step < 8; step++)
     {
-        for (int row = 0; row < 13; row++)
+        for (int row = 0; row < 14; row++)
         {
             _sequenceA[step][row] = false;
             _sequenceB[step][row] = false;

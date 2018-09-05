@@ -187,7 +187,6 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
         valueMapped = ofMap(value,0,1,range.x,range.y);
         redraw = true;
         //xStart = evt.x;
-        cout << "mapped value" << valueMapped << endl;
 
         ofNotifyEvent(newValue, active);
     }
@@ -206,7 +205,6 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
         active = true;
         valueMapped = ofMap(value,0,1,range.x,range.y);
         ofNotifyEvent(newValue, active);
-        cout << "mapped value" << valueMapped << endl;
     }
 }
 void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
@@ -224,4 +222,12 @@ void RotarySlider::reset()
     redraw = true;
     ofNotifyEvent(newValue, active);
 
+}
+
+void RotarySlider::setValueMapped(float val)
+{
+    //remap it to value
+    valueMapped = val;
+    value = ofMap(val, range.x, range.y, 0., 1.);
+    updateSlider();
 }

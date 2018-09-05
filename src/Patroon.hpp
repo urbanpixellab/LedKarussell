@@ -49,8 +49,8 @@ private:
     int             _dir[2] = {0,0};
     int             _time[2] = {0,0};
     int             _color[4] = {0,0,0,0};
-    bool            _sequenceA[8][13];
-    bool            _sequenceB[8][13];
+    bool            _sequenceA[8][14];
+    bool            _sequenceB[8][14];
     int             _step;
     
 

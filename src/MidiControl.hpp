@@ -27,6 +27,7 @@ public:
     int &getControlValue(int id);
     float &getDt(){return _clk.getDeltaTime();}; // get the delta time
     bool &getBeat(){return _clk.getBeat();};
+    float &getDtMulti(int multi){return _clk.getDeltaMulti(multi);}; // get the delta time
     
     void tapControler();
     void newTapEvent(string &name); //tap bpm

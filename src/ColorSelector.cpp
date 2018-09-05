@@ -76,8 +76,6 @@ void ColorSelector::loadColors(){
         int ya = drawArea.getY() + tilesize + ((i/numCollumns) * tilesize);
     
         buttonA = new Button();
-        cout << xa << endl;
-        cout << ya << endl;
         buttonA->setup(ofRectangle(xa,ya,tilesize,tilesize),ofToString(i),false);
         buttonA->setColors(c,c,ofColor(0));
         //ofAddListener(buttonA->buttonPressed, this, &ColorSelector::setColorA);
