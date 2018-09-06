@@ -38,7 +38,7 @@ void ColorSelector::setup(ofRectangle area)
     // setup colorswap button
     int x = drawArea.getX()+(numCollumns-2)*tilesize;
     int y = drawArea.getY();
-    colorSwapButton.setup(ofRectangle(x,y,tilesize*2,tilesize),"color_swap",false);
+    colorSwapButton.setup(ofRectangle(x,y,tilesize*2,tilesize),"swap",false);
     addListeners();
 }
 
@@ -61,7 +61,7 @@ void ColorSelector::loadColors(){
         int green   = ofToInt( XMLcolors.getValue("green","255"));
         int blue    = ofToInt( XMLcolors.getValue("blue","255"));
         
-        cout << "i " << i << "red " << red << " green " << green << " blue " << blue << endl;
+        cout << "i " << i << " red " << red << " green " << green << " blue " << blue << endl;
         
         // add color to color vector
         ofColor c(red,green,blue);
@@ -89,7 +89,7 @@ void ColorSelector::loadColors(){
         buttonB->setup(ofRectangle(xb,yb,tilesize,tilesize),ofToString(i),false);
         buttonB->setColors(c,c,ofColor(0));
         //ofAddListener(buttonB->buttonPressed, this, &ColorSelector::setColorB);
-        buttonsA.push_back(*buttonB);
+        buttonsB.push_back(*buttonB);
         
         XMLcolors.popTag();
     }
