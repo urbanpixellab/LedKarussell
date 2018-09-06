@@ -79,9 +79,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _slidersB[3] = dirB;
     
     //Create SegmentSelector
-    segmenselector.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+430,200,200));
+    segmenselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+430,200,200));
+    segmenselectorB.setup(ofRectangle(_drawArea.getX()+280,_drawArea.getY()+430,200,200));
 
-    
     
     // Create colorselectorS
     colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
@@ -138,7 +138,8 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     colorselectorB.draw();
     
     // SegmentSelector
-    segmenselector.draw();
+    segmenselectorA.draw();
+    segmenselectorB.draw();
     
     // the patron selector
     for (int i = 0; i < _patSelButtons.size(); i++)
