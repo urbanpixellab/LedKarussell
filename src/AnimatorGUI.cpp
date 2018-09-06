@@ -24,6 +24,11 @@ AnimatorGUI::~AnimatorGUI()
     {
         delete _slidersB[i];
     }
+    for (int i = 0; i < _patEditButtons.size(); i++)
+    {
+        delete _patEditButtons[i];
+        delete _patLiveButtons[i];
+    }
 }
 
 void AnimatorGUI::createAnimationGUI(int animationCount)
@@ -87,21 +92,24 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
     colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+150,200,200));
     
-    //create patern select buttons;
+    //create patern select buttons for edit and live with double edit size
     w = 70;
     h = 20;
     for (int i = 0; i < 16; i++)
     {
-        Button b;
-        b.id = i;
-        b.name = "patron" + ofToString(i);
-        int x = 650 + ((i%4)*w*1.1);
-        int y = 300 + ((i / 4) * h * 1.1);
-        b.area = ofRectangle(x,y,w,h);
-        b.toggle = true;
-        _patSelButtons.push_back(b);
+        string name = "Edit_" + ofToString(i);
+        x = 750 + ((i%4)*w*1.1);
+        y = 100 + ((i / 4) * h * 1.1);
+        Button *e = new Button(i,ofRectangle(x,y,w,h),name,true);
+        ofAddListener(e->buttonIDPressed, this, &AnimatorGUI::editButtonPressed);
+        _patEditButtons.push_back(e);
+        name = "Pattern_" + ofToString(i);
+        x = 750 + ((i%4)*w*1.5);
+        y = 300 + ((i / 4) * h * 1.1);
+        Button *l = new Button(i,ofRectangle(x,y,w*1.4,h),name,true);
+        ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
+        _patLiveButtons.push_back(l);
     }
-
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
@@ -142,73 +150,35 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     segmenselectorB.draw();
     
     // the patron selector
-    for (int i = 0; i < _patSelButtons.size(); i++)
+    for (int i = 0; i < _patEditButtons.size(); i++)
     {
         //set the color based on the mode
-        if(_isPlay == i) ofSetColor(255,0,0);
-        if (_isEdit == i) ofSetColor(0,0,255);
-        if (_isPlayStepped == i) ofSetColor(255,0,0);
-        ofDrawRectangle(_patSelButtons[i].area);
-        ofSetColor(255);
-        ofDrawBitmapString("Pl Ed Ps", _patSelButtons[i].area.x, _patSelButtons[i].area.getBottom());
-        // the button is 1/3 for play direct 1/3 for edit and 1/3 for play the next beat like in ableton
+        _patEditButtons[i]->draw();
+        _patLiveButtons[i]->draw();
     }
 }
-
-/*
-void AnimatorGUI::setColor(string &s){
-    
-    vector<string> arguments = ofSplitString(s, ",");
-   
-    cout << " Got an event" << ofToString(arguments[0]) << " " << ofToString(arguments[1]) << endl;
-}
-*/
-
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
-
-    //if (!_drawArea.inside(args.x, args.y)) return;
-    
-    //check patron select buttons
-    //FIXME: check states, not proper working
-    for (int i = 0; i < _patSelButtons.size(); i++)
-    {
-        if(_patSelButtons[i].area.inside(args.x, args.y))
-        {
-            // reset all programm buttons and enable this one
-            //first third
-            ofRectangle r = _patSelButtons[i].area;
-            float value = ofMap(args.x,r.x,r.x+r.width,0.,1.);
-            if (value < 0.33)
-            {
-                _isPlay = i;
-                // reset all other players
-                for (int j = 0; j < _patSelButtons.size(); j++)
-                {
-                    if(j == i) continue;
-                    _patSelButtons[j].isPressed = false;
-                }
-                ofNotifyEvent(patronPLAY,i);
-            }
-            else if (value > 0.33 && value < 0.66)
-            {
-                _isEdit = i;
-                ofNotifyEvent(patronEDIT,i);
-            }
-            else if (value > 0.66 )
-            {
-                _isPlayStepped = i;
-                for (int j = 0; j < _patSelButtons.size(); j++)
-                {
-                    if(j == i) continue;
-                    _patSelButtons[j].isPressed = false;
-                }
-                ofNotifyEvent(patronPLAYSTEPPED,i);
-            }
-            
-            return;
-        }
-    }
-    
 }
+void AnimatorGUI::editButtonPressed(int &id)
+{
+    for (int i=0; i < _patEditButtons.size(); i++)
+    {
+        if(i == id) continue;
+        _patEditButtons[i]->getState() = false;
+    }
+    ofNotifyEvent(patronEDIT,id);
+}
+
+void AnimatorGUI::liveButtonPressed(int &id)
+{
+    for (int i=0; i < _patLiveButtons.size(); i++)
+    {
+        if(i == id) continue;
+        _patLiveButtons[i]->getState() = false;
+    }
+    ofNotifyEvent(patronPLAY,id);
+}
+
+//}

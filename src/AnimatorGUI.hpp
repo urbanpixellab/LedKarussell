@@ -21,6 +21,7 @@
 class AnimatorGUI
 {
 public:
+    /*
     struct Button
     {
         int id;
@@ -30,7 +31,7 @@ public:
         bool toggle;
         bool isPressed;
     };
-    
+    */
     AnimatorGUI(ofRectangle area);
     ~AnimatorGUI();
     
@@ -71,11 +72,15 @@ public:
     segmentSelector segmenselectorA;
     segmentSelector segmenselectorB;
     
+    void editButtonPressed(int &id);
+    void liveButtonPressed(int &id);
+    
 private:
 
     ofRectangle         _drawArea;
     ofMesh              _realStructure;// the mesh to paint on
-    vector<Button>      _patSelButtons;//the buttons to select a patron for playing or edit selectie
+    vector<Button*>     _patLiveButtons;//the buttons to select a patron for playing or edit selectie
+    vector<Button*>     _patEditButtons;//the buttons to select a patron for playing or edit selectie
     int                 _isPlay;
     int                 _isEdit;
     int                 _isPlayStepped;

@@ -16,11 +16,13 @@ class Button
 {
 public:
     Button();
+    Button(int id,ofRectangle area, string name, bool toogle);
     ~Button();
     
     void setup(ofRectangle area, string name, bool toogle);
     void setup(ofRectangle area, string name, bool toogle, ofVec2f offset);
     void draw();
+    void drawRedPulsing(float &dt);
     
     void mousePressed(ofMouseEventArgs &arg);
     bool &getState(){return isPressed;};
@@ -30,11 +32,12 @@ public:
     void setColors(ofColor _nonActive, ofColor _active, ofColor text);
     
     ofEvent<string>   buttonPressed;
+    ofEvent<int>      buttonIDPressed;
     void pressedControler();
     ofRectangle &getArea(){return drawArea;};
     
 private:
-    
+    int             id;
     ofVec2f         mouseOffset;
     ofRectangle     drawArea;
     string          name;
