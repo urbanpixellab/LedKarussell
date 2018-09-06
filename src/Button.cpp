@@ -19,6 +19,16 @@ Button::Button()
     textColor = ofColor(0);
     isPressed = false;
 }
+
+Button::Button(int id,ofRectangle area, string name, bool toogle):id(id), drawArea(area),name(name),isToggle(toogle)
+{
+    activateListener();
+    nonActive = ofColor(255);
+    Active = ofColor(255,0,0);
+    textColor = ofColor(0);
+    isPressed = false;
+}
+
 Button::~Button()
 {
 //    deactivateListener();
@@ -54,6 +64,16 @@ void Button::draw()
     ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
 }
 
+void Button::drawRedPulsing(float &dt)
+{
+    ofSetColor(Active.r * (1-dt),Active.g * (1-dt),Active.b * (1-dt));
+    ofFill();
+    ofDrawRectRounded(drawArea.x + 2,drawArea.y + 2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
+    ofSetColor(textColor);
+    ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
+}
+
+
 void Button::pressedControler()
 {
     isPressed = !isPressed;
@@ -73,6 +93,7 @@ void Button::mousePressed(ofMouseEventArgs &arg)
         //pressTimeout = ofGetElapsedTimef() + 0.05;
     }
     ofNotifyEvent(buttonPressed, name);
+    ofNotifyEvent(buttonIDPressed, id);
 }
 
 void Button::activateListener()
