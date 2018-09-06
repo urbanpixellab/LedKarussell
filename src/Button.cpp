@@ -19,6 +19,16 @@ Button::Button()
     textColor = ofColor(0);
     isPressed = false;
 }
+
+Button::Button(int id,ofRectangle area, string name, bool toogle):id(id), drawArea(area),name(name),isToggle(toogle)
+{
+    activateListener();
+    nonActive = ofColor(255);
+    Active = ofColor(255,0,0);
+    textColor = ofColor(0);
+    isPressed = false;
+}
+
 Button::~Button()
 {
 //    deactivateListener();
@@ -83,6 +93,7 @@ void Button::mousePressed(ofMouseEventArgs &arg)
         //pressTimeout = ofGetElapsedTimef() + 0.05;
     }
     ofNotifyEvent(buttonPressed, name);
+    ofNotifyEvent(buttonIDPressed, id);
 }
 
 void Button::activateListener()

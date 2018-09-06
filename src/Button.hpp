@@ -16,6 +16,7 @@ class Button
 {
 public:
     Button();
+    Button(int id,ofRectangle area, string name, bool toogle);
     ~Button();
     
     void setup(ofRectangle area, string name, bool toogle);
@@ -31,11 +32,12 @@ public:
     void setColors(ofColor _nonActive, ofColor _active, ofColor text);
     
     ofEvent<string>   buttonPressed;
+    ofEvent<int>      buttonIDPressed;
     void pressedControler();
     ofRectangle &getArea(){return drawArea;};
     
 private:
-    
+    int             id;
     ofVec2f         mouseOffset;
     ofRectangle     drawArea;
     string          name;
