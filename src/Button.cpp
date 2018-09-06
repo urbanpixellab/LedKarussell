@@ -6,6 +6,7 @@
 //
 //
 
+// FIXME: use a loaded font instead of drawbitmapstring for more coontrol
 #include "Button.hpp"
 
 Button::Button()
