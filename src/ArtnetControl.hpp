@@ -49,9 +49,6 @@ public:
     void drawGui();
     void fillAllBackgroundColor(ofColor & color);
     void specialFunction(int id);
-    void guiCurveAPressed(int &buttonid){_editPatroon->setCurve(0, buttonid);};
-    void guiCurveBPressed(int &buttonid){_editPatroon->setCurve(1, buttonid);};
-    void guiCOlorSelectPressed(bool &resetColors);
     //more listeners
     void PlayPatronPressed(int & id);
     void EditPatronPressed(int & id);
@@ -64,6 +61,12 @@ public:
     Node        *getNode(int id){return _nodes[id];};
     Segment     *getPreSegment(int id){return _preSegments[id];};
     Segment     *getLiveSegment(int id){return _liveSegments[id];};
+    
+    void curveAPressed(int & id){_editPatroon->setCurve(0, id);};
+    void curveBPressed(int & id){_editPatroon->setCurve(1, id);};
+    
+    void colorPressed(bool &pressed);
+    void sliderChanged(bool & value);
     
 private:
 

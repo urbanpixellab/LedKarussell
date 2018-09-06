@@ -22,6 +22,7 @@ public:
     void setup(ofRectangle area,ofVec2f minMax,float startValue,bool type,int commaSize,int resolution);
     void setup(ofRectangle area,ofVec2f minMax,float startValue,bool type,int commaSize);
     void updateSlider();// the mapped range
+    void setResolution(int res){resolution = res;};
     void draw();
     void reset();
     void mouseDragged(ofMouseEventArgs &evt);
@@ -33,15 +34,20 @@ public:
     bool &getActive(){return active;};
     void activate(){active = true;};
     void deactivate(){active = false;};
-    ofEvent<float>  newValue;
+    ofEvent<bool>  newValue;
+    void setName(string n){name = n;};
+    float getValueMapped(){return valueMapped;}
+    void setValueMapped(float value);
   
 private:
     bool            active;
+    string          name;
     ofRectangle     drawArea;
     ofFbo           fbo;
     float           radius;
     float           mouseValue;
     float           value;// 0...1
+    float           valueMapped;// 0...1
     float           resetValue;
     ofVec2f         circleCenter;
     ofVec2f         range;

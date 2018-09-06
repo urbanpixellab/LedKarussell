@@ -61,6 +61,7 @@ void Clock::update()
     
     // the other delta times
     //dT = (now - lastBeatTime) / beatDuration; old version
+    calculateDeltaTimeMultiplyed();
 
     if (_stepCounter >= 16) _stepCounter = 0;
     //we use _dt as basement and the stepcounter
@@ -69,17 +70,15 @@ void Clock::update()
     if(now >= _lastTapTime) _tapCount = 0; // if no tap after 10 seconds reset the counter
 }
 
-float Clock::getDeltaTimeMultiplyed(int id)
+void Clock::calculateDeltaTimeMultiplyed()
 {
-    float result = _dT;
-    
-    if(id == 0) result = fmod(_dT,0.25) * 4; //0.25
-    else if(id == 1)result = fmod(_dT,0.5) * 2; //0.5
-    else if(id == 3)result = (fmod(_stepCounter,2) * 0.5) +_dT*0.5; //2
-    else if(id == 4)result = (fmod(_stepCounter,4) * 0.25) +_dT*0.25; //4
-    else if(id == 5)result = (fmod(_stepCounter,8) * 0.125) +_dT*0.125; //8
-    else result = (fmod(_stepCounter,16) * 0.0625) +_dT*0.0625; //16
-    return result;
+    _multi[0] = fmod(_dT,0.25) * 4; //0.25
+    _multi[1] = fmod(_dT,0.5) * 2; //0.5
+    _multi[2] = _dT;
+    _multi[3] = (fmod(_stepCounter,2) * 0.5) +_dT*0.5; //2
+    _multi[4] = (fmod(_stepCounter,4) * 0.25) +_dT*0.25; //4
+    _multi[5] = (fmod(_stepCounter,8) * 0.125) +_dT*0.125; //8
+    _multi[6] = (fmod(_stepCounter,16) * 0.0625) +_dT*0.0625; //16
 }
 
 void Clock::tap()

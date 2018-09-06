@@ -25,10 +25,10 @@ public:
     
     float &getValue(){return _actValue;};
     float &getDeltaTime(){return _dT;}; // 0...1
-    float getDeltaTimeMultiplyed(int id = 2);
+    void calculateDeltaTimeMultiplyed();
     bool &getBeat(){return _isBeat;};
     string &getBPM(){return _bpm;};
-
+    float &getDeltaMulti(int id){return _multi[id];};
     ofEvent<bool>    newStep;
     
 private:
@@ -44,6 +44,7 @@ private:
     int         _tapCount;
     u_int64_t   _lastTapTime;
     u_int64_t   _timer[2];
+    float       _multi[7];
     
 };
 

@@ -36,7 +36,7 @@ void Patroon::clear()
 {
     for (int step = 0; step < 8; step++)
     {
-        for (int row = 0; row < 13; row++)
+        for (int row = 0; row < 14; row++)
         {
             _sequenceA[step][row] = false;
             _sequenceB[step][row] = false;
@@ -68,29 +68,13 @@ void Patroon::setSeqSel(int layer,int step,int *selection,int length)
     }
 }
 
-void Patroon::setSeqAColor(string &s){
-    
-    vector<string> a = ofSplitString(s, ",");
-    _color[0] = ofToInt(a[0]);
-    _color[1] = ofToInt(a[1]);
-     cout << " Patroon Got an event " << a.size() << " " << ofToString(a[0]) << " " << ofToString(a[1]) << endl;
-}
-
-void Patroon::setSeqBColor(string &s){
-    
-    vector<string> a = ofSplitString(s, ",");
-    _color[2] = ofToInt(a[0]);
-    _color[3] = ofToInt(a[1]);
-
-    cout << " Patroon Got an event" << ofToString(a[0]) << " " << ofToString(a[1]) << endl;
-}
-
 void Patroon::setColors(int * array,int length)
 {
     _color[0]= array[0];
     _color[1]= array[1];
     _color[2]= array[2];
     _color[3]= array[3];
+    cout << "set color on id " << _id << endl;
 }
 
 vector<int> Patroon::getColorIDs(){
@@ -103,5 +87,3 @@ vector<int> Patroon::getColorIDs(){
     }
     return c;
 }
-
-

@@ -12,15 +12,11 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
     _GUI = new AnimatorGUI(ofRectangle(200,200,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
-    ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
-    ofAddListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
-//    ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::guiCurveBPressed);
 
     _preAnimator = new LedAnimator(_MC);
     _liveAnimator = new LedAnimator(_MC);
     
     //init the gui
-    _GUI->init();
     _test = false;
     
     // Load all the nodes form XML
@@ -29,27 +25,35 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     // Load aal the patterns from XML
     loadPatroon();
     
-    // set the eDit pattern
-    // FIXME: is this the right way to do it?
-    _editPatroon = &_patronen[0];
     // set colors from editPatroon to color selector
     vector<int> colIDs = _editPatroon->getColorIDs();
     cout <<"HIER "<<  colIDs[0] << " " << colIDs[1] << " "<< colIDs[2] << " "<< colIDs[3] << " "<< endl;
     int a[] = {colIDs[0],colIDs[1]};
     int b[] = {colIDs[2],colIDs[3]};
-    _GUI->colorselectorA.setColorIDs(a);
-    _GUI->colorselectorB.setColorIDs(b);
     
     
     //Listeners
-    ofAddListener(_GUI->colorselectorA.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
-    ofAddListener(_GUI->colorselectorB.colorPressed, this, &ArtnetControl::guiCOlorSelectPressed);
     
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
+    ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::curveAPressed);
+    ofAddListener(_GUI->curveBPressed, this, &ArtnetControl::curveBPressed);
+
     ofAddListener(_GUI->patronPLAY, this, &ArtnetControl::PlayPatronPressed);
     ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
+    ofAddListener(_GUI->colorSelectPressed, this,&ArtnetControl::colorPressed);
+    
+    ofAddListener(_GUI->getCurveSlidersA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getCurveSlidersB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getTimeSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getTimeSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getFreqSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getFreqSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getDirSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getDirSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::colorPressed);
+    ofAddListener(_GUI->getColorselectorB().colorPressed, this, &ArtnetControl::colorPressed);
     
 }
 
@@ -58,8 +62,7 @@ ArtnetControl::~ArtnetControl()
     //save everything
     
     // blackout all
-    ofRemoveListener(_GUI->curveAPressed, this, &ArtnetControl::guiCurveAPressed);
-    ofRemoveListener(_GUI->curveBPressed, this, &ArtnetControl::guiCurveBPressed);
+    savePatroon();
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     clearNodes();
     delete _preAnimator;
@@ -248,7 +251,7 @@ void ArtnetControl::loadPatroon()
                 vector<string> result = ofSplitString(sel.getValue(steps[step], ""), ",");
                 for (int selection = 0; selection < result.size(); selection++)
                 {
-                    cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
+                    //cout << l << "selected indices " <<ofToInt(result[selection]) << endl;
                     if(l == 0) p.setSeqA(step, ofToInt(result[selection]), true);
                     else if(l == 1) p.setSeqB(step, ofToInt(result[selection]), true);
                 }
@@ -258,24 +261,68 @@ void ArtnetControl::loadPatroon()
         _patronen.push_back(p);
         sel.popTag();
     }
+
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
 }
 
-void ArtnetControl::savePatroon(){}
+void ArtnetControl::savePatroon()
+{
+    ofxXmlSettings settings;
+    int maxSel = 13;
+    int maxStep = 8;
+    for (int p = 0; p < _patronen.size(); p++)//patron
+    {
+        settings.addTag("patroon");
+        settings.pushTag("patroon",p);
+        settings.addValue("id", _patronen[p].getID());
+        for (int l = 0; l < 2; l++) //layer
+        {
+            settings.addTag("layer");
+            settings.pushTag("layer",l);
+            settings.addValue("curve", *_patronen[p].getCurve(l));
+            settings.addValue("cFreq", *_patronen[p].getFreq(l));
+            settings.addValue("cDir", *_patronen[p].getDir(l));
+            settings.addValue("cTime", *_patronen[p].getTime(l));
+            settings.addValue("colorA", _patronen[p].getColorIDs()[(l*2) + 0]);
+            settings.addValue("colorB", _patronen[p].getColorIDs()[(l*2) + 1]);
+            
+            if(l == 0)
+            {
+                for (int s = 0; s < maxStep; s++)
+                {
+                    string step = "";
+                    for (int sel = 0; sel < maxSel; sel++)
+                    {
+                        if(_patronen[p].getSeqStepA(s)[sel] == true) step += ofToString(sel) + ",";
+                    }
+                    if(step.length() > 1)step.erase(step.length()-1);
+                    settings.addValue("step"+ofToString(s), step);
+                }
+            }
+            else if(l == 1)
+            {
+                for (int s = 0; s < maxStep; s++)
+                {
+                    string step = "";
+                    for (int sel = 0; sel < maxSel; sel++)
+                    {
+                        if(_patronen[p].getSeqStepB(s)[sel] == true) step += ofToString(sel) + ",";
+                    }
+                    if(step.length() > 1)step.erase(step.length()-1);
+                    settings.addValue("step"+ofToString(s), step);
+                }
+            }
+            settings.popTag();
+        }
+        settings.popTag();
+    }
+    settings.save("patroonen.xml");
+}
 
 
 void ArtnetControl::update()
 {
-    
-    // update artnet based on the selected sce or use the hottbutton function
-    // which is overriding the actual state
-    //fill all nodes by selection
-    //here ow the values from the selected patron for edit and live appart
-
-    //first maak the edit patroon then the live patroon
-    
-    
     
     float *freqA = _editPatroon->getFreq(0);
     float *freqB = _editPatroon->getFreq(1);
@@ -290,23 +337,20 @@ void ArtnetControl::update()
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
-    ofColor c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
-    ofColor c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
-    ofColor c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
-    ofColor c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    ofColor c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
+    ofColor c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
+    ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
+    ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
     if(solo)
     {
         int s = _selections[selectionA].items.size();
-        
-        
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            
-            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -314,8 +358,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            
-            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*_editPatroon->getTime(1),*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -335,16 +378,11 @@ void ArtnetControl::update()
     // Get colors from editPatroon
     getColorIDs.clear();
     getColorIDs = _livePatroon->getColorIDs();
-    c1 = _GUI->colorselectorA.getColorFromID(getColorIDs[0]);
-    c2 = _GUI->colorselectorA.getColorFromID(getColorIDs[1]);
-    c3 = _GUI->colorselectorB.getColorFromID(getColorIDs[2]);
-    c4 = _GUI->colorselectorB.getColorFromID(getColorIDs[3]);
+    c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
+    c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
+    c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
+    c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
 
-//    c1 = _livePatroon->getColorIDs()[0];
-//    c2 = _livePatroon->getColorIDs()[1];
-//    c3 = _livePatroon->getColorIDs()[2];
-//    c4 = _livePatroon->getColorIDs()[3];
-    
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     if(solo)
     {
@@ -353,7 +391,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -361,7 +399,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -409,8 +447,6 @@ void ArtnetControl::drawGui()
 {
     // draw som buttons from a controler gui class
     _GUI->draw(_preIMG,_liveIMG);
-    _preIMG.draw(0,00,100,100);
-    _liveIMG.draw(100,0,100,100);
 }
 
 
@@ -463,25 +499,42 @@ void ArtnetControl::specialFunction(int id)
     }
 }
 
-void ArtnetControl::guiCOlorSelectPressed(bool &resetColors)
+void ArtnetControl::colorPressed(bool &pressed)
 {
-    //set all colors from gui to edit
+    //we have a changed color, set them to the edit patroon
     int colors[4];
     colors[0] = _GUI->getColorselectorA().getSelectedColorIDs()[0];
     colors[1] = _GUI->getColorselectorA().getSelectedColorIDs()[1];
     colors[2] = _GUI->getColorselectorB().getSelectedColorIDs()[0];
     colors[3] = _GUI->getColorselectorB().getSelectedColorIDs()[1];
-    
     _editPatroon->setColors(colors, 4);
 }
+
+
 
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
-    _test = _test%12;
+    _test = _test%14;
     cout << key.keycode << endl;
     
 }
+
+void ArtnetControl::sliderChanged(bool & value)
+{
+    *_editPatroon->getCurve(0) = int(_GUI->getSlidersAMapped(0));
+    *_editPatroon->getCurve(1) = int(_GUI->getSlidersBMapped(0));
+    
+    *_editPatroon->getFreq(0) = _GUI->getSlidersAMapped(2);
+    *_editPatroon->getFreq(1) = _GUI->getSlidersBMapped(2);
+
+    *_editPatroon->getTime(0) = _GUI->getSlidersAMapped(1);
+    *_editPatroon->getTime(1) = _GUI->getSlidersBMapped(1);
+
+    *_editPatroon->getDir(0) = _GUI->getSlidersAMapped(3);
+    *_editPatroon->getDir(1) = _GUI->getSlidersBMapped(3);
+}
+
 void ArtnetControl::PlayPatronPressed(int & id)
 {
     _livePatroon = &_patronen[id];
@@ -489,16 +542,21 @@ void ArtnetControl::PlayPatronPressed(int & id)
 }
 void ArtnetControl::EditPatronPressed(int & iD)
 {
-    //if this one is playing than fine edit him
+    //turn all of and only the right one on
     _editPatroon = &_patronen[iD];
-    //also update the gui to this selection
-    int id[2];
-    id[0] = _editPatroon->getColorIDs()[0];
-    id[1] = _editPatroon->getColorIDs()[1];
-    _GUI->getColorselectorA().setColorIDs(id);
-    id[0] = _editPatroon->getColorIDs()[2];
-    id[1] = _editPatroon->getColorIDs()[3];
-    _GUI->getColorselectorB().setColorIDs(id);
+    //update the GUI
+    _GUI->getCurveSlidersA()->setValueMapped(float(*_editPatroon->getCurve(0)));
+    _GUI->getCurveSlidersB()->setValueMapped(float(*_editPatroon->getCurve(1)));
+    _GUI->getFreqSliderA()->setValueMapped(float(*_editPatroon->getFreq(0)));
+    _GUI->getFreqSliderB()->setValueMapped(float(*_editPatroon->getFreq(1)));
+    _GUI->getTimeSliderA()->setValueMapped(float(*_editPatroon->getTime(0)));
+    _GUI->getTimeSliderB()->setValueMapped(float(*_editPatroon->getTime(1)));
+    _GUI->getDirSliderA()->setValueMapped(float(*_editPatroon->getDir(0)));
+    _GUI->getDirSliderB()->setValueMapped(float(*_editPatroon->getDir(1)));
+    
+    
+    
+    
     cout << "edit patron pressed " << iD << endl;
 }
 

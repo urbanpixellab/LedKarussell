@@ -27,6 +27,7 @@ public:
     int &getControlValue(int id);
     float &getDt(){return _clk.getDeltaTime();}; // get the delta time
     bool &getBeat(){return _clk.getBeat();};
+    float &getDtMulti(int multi){return _clk.getDeltaMulti(multi);}; // get the delta time
     
     void tapControler();
     void newTapEvent(string &name); //tap bpm
@@ -51,8 +52,6 @@ private:
     int             _data[127];// every midi note is one array position
     int             _control[127];// control chenge values
     Clock           _clk;
-    
-    ofRectangle     _tapButton_old;
     
     Button          _tapButton;
     

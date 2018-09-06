@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "Button.hpp"
 
 class Patroon
 {
@@ -19,22 +20,20 @@ public:
     ~Patroon();
     
     void clear();
-    
     void nextStep();
     void resetStep(){_step = 0;};
-    
+    int &getID(){return _id;};
     int *getCurve(int id){return &_curve[id];};
-    
+    void toggleVisibility(bool mode);
     bool *getSeqStepA(int id){return _sequenceA[id];};
     bool *getSeqStepB(int id){return _sequenceB[id];};
     
     float *getFreq(int id){return &_freq[id];};
+    int *getDir(int id){return &_dir[id];};
+    int *getTime(int id){return &_time[id];};
     
     void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
     void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};
-    
-    void setSeqAColor(string &c);
-    void setSeqBColor(string &c);
     
     void setCurve(int id,int value){_curve[id] = value;};
     
@@ -50,9 +49,10 @@ private:
     int             _dir[2] = {0,0};
     int             _time[2] = {0,0};
     int             _color[4] = {0,0,0,0};
-    bool            _sequenceA[8][13];
-    bool            _sequenceB[8][13];
-    
+    bool            _sequenceA[8][14];
+    bool            _sequenceB[8][14];
     int             _step;
+    
+
 };
 #endif /* Patroon_hpp */

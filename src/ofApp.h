@@ -25,17 +25,9 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    RotarySlider rl;
-    
     void exit();
 private:
     MidiControl     _MC;// the midi control including clock
-    
     ArtnetControl   *_AC;// the artnetcontrol
 };
 
-
-/*
- only the prepare scenes can be loaded by preset
- 
- */

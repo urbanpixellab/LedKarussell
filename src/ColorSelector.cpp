@@ -22,7 +22,10 @@ ColorSelector::ColorSelector()
 }
 
 
-ColorSelector::~ColorSelector(){}
+ColorSelector::~ColorSelector()
+{
+    removeListeners();
+}
 
 
 void ColorSelector::setup(ofRectangle area)
@@ -36,7 +39,7 @@ void ColorSelector::setup(ofRectangle area)
     int x = drawArea.getX()+(numCollumns-2)*tilesize;
     int y = drawArea.getY();
     colorSwapButton.setup(ofRectangle(x,y,tilesize*2,tilesize),"color_swap",false);
-    //ofAddListener(colorSwapButton.buttonPressed, this, &ColorSelector::colorSwap);
+    addListeners();
 }
 
 void ColorSelector::loadColors(){
@@ -75,7 +78,7 @@ void ColorSelector::loadColors(){
         buttonA = new Button();
         buttonA->setup(ofRectangle(xa,ya,tilesize,tilesize),ofToString(i),false);
         buttonA->setColors(c,c,ofColor(0));
-        ofAddListener(buttonA->buttonPressed, this, &ColorSelector::setColorA);
+        //ofAddListener(buttonA->buttonPressed, this, &ColorSelector::setColorA);
         buttonsA.push_back(*buttonA);
         
         // Calculate position for button
@@ -85,7 +88,7 @@ void ColorSelector::loadColors(){
         buttonB = new Button();
         buttonB->setup(ofRectangle(xb,yb,tilesize,tilesize),ofToString(i),false);
         buttonB->setColors(c,c,ofColor(0));
-        ofAddListener(buttonB->buttonPressed, this, &ColorSelector::setColorB);
+        //ofAddListener(buttonB->buttonPressed, this, &ColorSelector::setColorB);
         buttonsA.push_back(*buttonB);
         
         XMLcolors.popTag();
@@ -96,15 +99,15 @@ void ColorSelector::loadColors(){
 void ColorSelector::setColorIDs(int ids[]){
     for(int i=0;i<2;i++){
         _selectedColorIDs[i] = ids[i];
-        _selectedColors[i]      = colors[ids[i]];
+        _selectedColors[i] = colors[ids[i]];
     }
 }
 
 
 void ColorSelector::setColorA(string &s)
 {    
-    _selectedColorIDs[0]   = ofToInt(s);
-    _selectedColors[0]      = colors[_selectedColorIDs[0]];
+//    _selectedColorIDs[0]   = ofToInt(s);
+//    _selectedColors[0]      = colors[_selectedColorIDs[0]];
 
 //    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
 //    ofNotifyEvent(colorChosen, t);
@@ -115,8 +118,8 @@ void ColorSelector::setColorA(string &s)
 
 void ColorSelector::setColorB(string &s)
 {
-    _selectedColorIDs[1]   = ofToInt(s);
-    _selectedColors[1]      = colors[_selectedColorIDs[1]];
+//    _selectedColorIDs[1]   = ofToInt(s);
+//    _selectedColors[1]      = colors[_selectedColorIDs[1]];
     
 //    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
 //    ofNotifyEvent(colorChosen, t);
@@ -158,7 +161,43 @@ void ColorSelector::draw(){
     for ( auto b : buttonsB ) {
         b.draw();
     }
-    
+}
+
+void ColorSelector::mousePressed(ofMouseEventArgs &args)
+{
+    //now check all color buttons
+    for (int i = 0; i < buttonsA.size(); i++)
+    {
+        if(buttonsA[i].getArea().inside(args.x,args.y))
+        {
+            _selectedColorIDs[0] = i;
+            _selectedColors[0] = colors[_selectedColorIDs[0]];
+            ofNotifyEvent(colorPressed, _pressed);
+            return;
+        }
+    }
+    for (int i = 0; i < buttonsB.size(); i++)
+    {
+        if(buttonsB[i].getArea().inside(args.x,args.y))
+        {
+            _selectedColorIDs[1] = i;
+            _selectedColors[1] = colors[_selectedColorIDs[1]];
+            ofNotifyEvent(colorPressed, _pressed);
+            return;
+        }
+    }
+}
+
+void ColorSelector::addListeners()
+{
+    // add the listeners also for the color buttons
+    ofAddListener(colorSwapButton.buttonPressed, this, &ColorSelector::colorSwap);
+    ofAddListener(ofEvents().mousePressed, this, &ColorSelector::mousePressed);
+}
+void ColorSelector::removeListeners()
+{
+    ofRemoveListener(colorSwapButton.buttonPressed, this, &ColorSelector::colorSwap);
+    ofRemoveListener(ofEvents().mousePressed, this, &ColorSelector::mousePressed);
 }
 
 

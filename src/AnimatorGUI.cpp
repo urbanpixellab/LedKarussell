@@ -15,47 +15,75 @@ AnimatorGUI::AnimatorGUI(ofRectangle area):_drawArea(area)
 AnimatorGUI::~AnimatorGUI()
 {
     ofRemoveListener(ofEvents().mousePressed, this, &AnimatorGUI::mousePressed);
-}
 
-void AnimatorGUI::init()
-{
+    for (int i = 0; i < SLIDERS; i++)
+    {
+        delete _slidersA[i];
+    }
+    for (int i = 0; i < SLIDERS; i++)
+    {
+        delete _slidersB[i];
+    }
 }
-
 
 void AnimatorGUI::createAnimationGUI(int animationCount)
 {
-    //create animation buttons
+    //create curve buttons
     int w = 50;
     int h = 30;
-    for (int i = 0; i < animationCount; i++)
-    {
-        Button butA;
-        Button butB;
-        butA.id = i;
-        butA.name = "test";
-        butA.area = ofRectangle(_drawArea.x + (i * (w + 5)),_drawArea.y,w,h);
-        butA.color = ofColor(188,188,190);
-        butA.toggle = true;
-        butA.isPressed = false;
-        _curveAButtons.push_back(butA);
+    // sliders
+    int x = _drawArea.getX();
+    int y = _drawArea.getY();
+    
+    RotarySlider *curveA = new RotarySlider();
+    curveA->setup(ofRectangle(x,y,60,60),ofVec2f(0,animationCount-1),0,true);
+    curveA->setResolution(20);
+    curveA->setName("curve");
+    _slidersA[0] = curveA;
+    RotarySlider *timeA = new RotarySlider();
+    timeA->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,4),0,true);
+    timeA->setResolution(20);
+    timeA->setName("multi");
+    _slidersA[1] = timeA;
+    RotarySlider *freqA = new RotarySlider();
+    freqA->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,25),0,true);
+    freqA->setResolution(100);
+    freqA->setName("freq");
+    _slidersA[2] = freqA;
+    RotarySlider *dirA = new RotarySlider();
+    dirA->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,3),0,true);
+    dirA->setResolution(20);
+    dirA->setName("dir");
+    _slidersA[3] = dirA;
 
-        butB.id = i;
-        butB.name = "test";
-        butB.area = ofRectangle(_drawArea.x + (i * (w + 5)),_drawArea.y + h*1.5,w,h);
-        butB.color = ofColor(188,188,190);
-        butB.toggle = true;
-        butB.isPressed = false;
-        _curveBButtons.push_back(butB);
-    }
+    x = _drawArea.getX()+220;
+    RotarySlider *curveB = new RotarySlider();
+    curveB->setup(ofRectangle(x,y,60,60),ofVec2f(0,animationCount-1),0,true);
+    curveB->setResolution(20);
+    curveB->setName("curve");
+    _slidersB[0] = curveB;
+    RotarySlider *timeB = new RotarySlider();
+    timeB->setup(ofRectangle(x+80,y,60,60),ofVec2f(0,4),0,true);
+    timeB->setResolution(20);
+    timeB->setName("multi");
+    _slidersB[1] = timeB;
+    RotarySlider *freqB = new RotarySlider();
+    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,25),0,true);
+    freqB->setResolution(100);
+    freqB->setName("freq");
+    _slidersB[2] = freqB;
+    RotarySlider *dirB = new RotarySlider();
+    dirB->setup(ofRectangle(x+80,y+80,60,60),ofVec2f(0,3),0,true);
+    dirB->setResolution(20);
+    dirB->setName("dir");
+    _slidersB[3] = dirB;
+
+    
     
     // Create colorselectorS
-    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+100,200,200));
-    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+100,200,200));
-
+    colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
+    colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+150,200,200));
     
-    //set the initial things, like blackout
-    newACurve(0);
-    newBCurve(0);
     //create patern select buttons;
     w = 70;
     h = 20;
@@ -64,7 +92,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         Button b;
         b.id = i;
         b.name = "patron" + ofToString(i);
-        int x = 600 + ((i%4)*w*1.1);
+        int x = 650 + ((i%4)*w*1.1);
         int y = 300 + ((i / 4) * h * 1.1);
         b.area = ofRectangle(x,y,w,h);
         b.toggle = true;
@@ -76,32 +104,12 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
 {
     ofSetColor(255);
-    ofDrawBitmapString("Curve Select", _drawArea.x, _drawArea.y);
-    for (int i = 0; i < _curveAButtons.size(); i++)
-    {
-        ofSetColor(_curveAButtons[i].color);
-        if (_curveAButtons[i].isPressed)
-        {
-            ofSetColor(255,0,0);
-        }
-        ofDrawRectangle(_curveAButtons[i].area);
-
-        ofSetColor(_curveBButtons[i].color);
-        if (_curveBButtons[i].isPressed)
-        {
-            ofSetColor(255,0,0);
-        }
-        ofDrawRectangle(_curveBButtons[i].area);
-    }
-    
-    ofSetColor(255);
-    ofSetColor(255);
-    pre.draw(_drawArea.x, _drawArea.y + 200,170,100);
-    live.draw(_drawArea.x + 180, _drawArea.y + 200,170,100);
+    pre.draw(_drawArea.x, _drawArea.y + 220,200,100);
+    live.draw(_drawArea.x + 220, _drawArea.y + 220,200,100);
     
     //draw it under the preview windows
     ofPushMatrix();
-    ofTranslate(_drawArea.x,_drawArea.getBottom() -200);
+    ofTranslate(_drawArea.x,_drawArea.getBottom() -100);
     ofScale(ofGetWidth()/3, 100);
     pre.bind();
     _realStructure.draw();
@@ -109,12 +117,18 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(_drawArea.x + 350,_drawArea.getBottom() -200);
+    ofTranslate(_drawArea.x + 400,_drawArea.getBottom() -100);
     ofScale(ofGetWidth()/3, 100);
     live.bind();
     _realStructure.draw();
     live.unbind();
     ofPopMatrix();
+    //sliders
+    for (int i = 0; i < SLIDERS; i++)
+    {
+        _slidersA[i]->draw();
+        _slidersB[i]->draw();
+    }
     
     // Color Selector
     colorselectorA.draw();
@@ -134,26 +148,6 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     }
 }
 
-void AnimatorGUI::newACurve(int id)
-{
-    for (int i = 0; i < _curveAButtons.size(); i++)
-    {
-        _curveAButtons[i].isPressed = false;
-    }
-    _curveAButtons[id].isPressed = true;
-    ofNotifyEvent(curveAPressed, id);
-}
-
-void AnimatorGUI::newBCurve(int id)
-{
-    for (int i = 0; i < _curveBButtons.size(); i++)
-    {
-        _curveBButtons[i].isPressed = false;
-    }
-    _curveBButtons[id].isPressed = true;
-    ofNotifyEvent(curveBPressed, id);
-}
-
 /*
 void AnimatorGUI::setColor(string &s){
     
@@ -163,31 +157,11 @@ void AnimatorGUI::setColor(string &s){
 }
 */
 
+
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
-    //if (!_drawArea.inside(args.x, args.y)) return;
-    //check animations
-    for (int i = 0; i < _curveAButtons.size(); i++)
-    {
-        if(_curveAButtons[i].area.inside(args.x, args.y))
-        {
-            // reset all programm buttons and enable this one
-            newACurve(i);
-            return;
-        }
-    }
 
-    for (int i = 0; i < _curveBButtons.size(); i++)
-    {
-        if(_curveBButtons[i].area.inside(args.x, args.y))
-        {
-            // reset all programm buttons and enable this one
-            newBCurve(i);
-            return;
-        }
-    }
-    
-    
+    //if (!_drawArea.inside(args.x, args.y)) return;
     
     //check patron select buttons
     //tofix check states, not proper working
@@ -201,19 +175,29 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
             float value = ofMap(args.x,r.x,r.x+r.width,0.,1.);
             if (value < 0.33)
             {
-                ofNotifyEvent(patronPLAY,i);
                 _isPlay = i;
-                //a
+                // reset all other players
+                for (int j = 0; j < _patSelButtons.size(); j++)
+                {
+                    if(j == i) continue;
+                    _patSelButtons[j].isPressed = false;
+                }
+                ofNotifyEvent(patronPLAY,i);
             }
             else if (value < 0.66)
             {
-                ofNotifyEvent(patronEDIT,i);
                 _isEdit = i;
+                ofNotifyEvent(patronEDIT,i);
             }
             else
             {
-                ofNotifyEvent(patronPLAYSTEPPED,i);
                 _isPlayStepped = i;
+                for (int j = 0; j < _patSelButtons.size(); j++)
+                {
+                    if(j == i) continue;
+                    _patSelButtons[j].isPressed = false;
+                }
+                ofNotifyEvent(patronPLAYSTEPPED,i);
             }
             
             return;
