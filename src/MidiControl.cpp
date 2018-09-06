@@ -53,9 +53,8 @@ void MidiControl::drawGUI()
 {
     // Draws the BPM Button
     //tap button and bpm or step counter must been implemented
-    ofSetColor(255*_clk.getDeltaTime(),0,0);
-    //ofDrawRectangle(_tapButton);
-    _tapButton.draw();
+    //ofSetColor(255*_clk.getDeltaTime(),0,0);
+    _tapButton.drawRedPulsing(_clk.getDeltaTime());
     ofDrawBitmapString(_clk.getBPM() + " BPM", 20,70);
 }
 

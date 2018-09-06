@@ -21,6 +21,7 @@ public:
     void setup(ofRectangle area, string name, bool toogle);
     void setup(ofRectangle area, string name, bool toogle, ofVec2f offset);
     void draw();
+    void drawRedPulsing(float &dt);
     
     void mousePressed(ofMouseEventArgs &arg);
     bool &getState(){return isPressed;};

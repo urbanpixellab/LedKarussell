@@ -54,6 +54,16 @@ void Button::draw()
     ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
 }
 
+void Button::drawRedPulsing(float &dt)
+{
+    ofSetColor(Active.r * (1-dt),Active.g * (1-dt),Active.b * (1-dt));
+    ofFill();
+    ofDrawRectRounded(drawArea.x + 2,drawArea.y + 2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
+    ofSetColor(textColor);
+    ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
+}
+
+
 void Button::pressedControler()
 {
     isPressed = !isPressed;
