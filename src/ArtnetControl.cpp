@@ -31,8 +31,17 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     int a[] = {colIDs[0],colIDs[1]};
     int b[] = {colIDs[2],colIDs[3]};
     
+    // FIXME: probably not the best way to do it.
+    // SET SEGMENT SELECTOR FORM EDIT PATROON
+    for(int i=0;i<8;i++)
+    {
+        _GUI->segmenselectorA.setSequence(i,_editPatroon->getSeqStepA(i));
+        _GUI->segmenselectorB.setSequence(i,_editPatroon->getSeqStepB(i));
+    }
+    
     
     //Listeners
+    
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
     ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::curveAPressed);
@@ -53,7 +62,9 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->getDirSliderB()->newValue, this, &ArtnetControl::sliderChanged);
     ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::colorPressed);
     ofAddListener(_GUI->getColorselectorB().colorPressed, this, &ArtnetControl::colorPressed);
-    
+    ofAddListener(_GUI->getSegmenselectorA().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
+    ofAddListener(_GUI->getSegmenselectorA().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
+
 }
 
 ArtnetControl::~ArtnetControl()
@@ -507,6 +518,14 @@ void ArtnetControl::colorPressed(bool &pressed)
     colors[2] = _GUI->getColorselectorB().getSelectedColorIDs()[0];
     colors[3] = _GUI->getColorselectorB().getSelectedColorIDs()[1];
     _editPatroon->setColors(colors, 4);
+}
+
+void ArtnetControl::segmentSelectPressed(bool &pressed)
+{
+    //we have selected a segment in a seguence sent to edit patroon
+    cout << " we need to set the editpatroon " << endl;
+    //_GUI->segmenselectorA().getSequence(1);
+    //_editPatroon->setSeqA(step, row);
 }
 
 

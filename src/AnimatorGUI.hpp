@@ -72,6 +72,10 @@ public:
     segmentSelector segmenselectorA;
     segmentSelector segmenselectorB;
     
+    segmentSelector &getSegmenselectorA(){return segmenselectorA;};
+    segmentSelector &getSegmenselectorB(){return segmenselectorA;};
+    
+    
     void editButtonPressed(int &id);
     void liveButtonPressed(int &id);
     

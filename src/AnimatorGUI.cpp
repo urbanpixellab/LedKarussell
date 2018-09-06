@@ -87,7 +87,6 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     segmenselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+430,200,200));
     segmenselectorB.setup(ofRectangle(_drawArea.getX()+280,_drawArea.getY()+430,200,200));
 
-    
     // Create colorselectorS
     colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
     colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+150,200,200));
