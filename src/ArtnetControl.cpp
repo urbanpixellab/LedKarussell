@@ -10,7 +10,7 @@
 
 ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
-    _GUI = new AnimatorGUI(ofRectangle(200,200,500,500));
+    _GUI = new AnimatorGUI(ofRectangle(200,50,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
 
     _preAnimator = new LedAnimator(_MC);
@@ -33,7 +33,6 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     
     
     //Listeners
-    
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
     ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::curveAPressed);
