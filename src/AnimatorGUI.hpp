@@ -14,6 +14,7 @@
 #include "ColorSelector.hpp"
 #include "Button.hpp"
 #include "RotarySlider.hpp"
+#include "segmentSelector.hpp"
 
 #define SLIDERS 4
 
@@ -66,6 +67,8 @@ public:
     RotarySlider *getFreqSliderB(){return _slidersB[2];}
     RotarySlider *getDirSliderA(){return _slidersA[3];}
     RotarySlider *getDirSliderB(){return _slidersB[3];}
+    
+    segmentSelector segmenselector;
     
 private:
 

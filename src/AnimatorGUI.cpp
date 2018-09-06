@@ -77,6 +77,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     dirB->setResolution(20);
     dirB->setName("dir");
     _slidersB[3] = dirB;
+    
+    //Create SegmentSelector
+    segmenselector.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+430,200,200));
 
     
     
@@ -134,6 +137,9 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     colorselectorA.draw();
     colorselectorB.draw();
     
+    // SegmentSelector
+    segmenselector.draw();
+    
     // the patron selector
     for (int i = 0; i < _patSelButtons.size(); i++)
     {
@@ -164,7 +170,7 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
     //if (!_drawArea.inside(args.x, args.y)) return;
     
     //check patron select buttons
-    //tofix check states, not proper working
+    //FIXME: check states, not proper working
     for (int i = 0; i < _patSelButtons.size(); i++)
     {
         if(_patSelButtons[i].area.inside(args.x, args.y))
@@ -184,12 +190,12 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
                 }
                 ofNotifyEvent(patronPLAY,i);
             }
-            else if (value < 0.66)
+            else if (value > 0.33 && value < 0.66)
             {
                 _isEdit = i;
                 ofNotifyEvent(patronEDIT,i);
             }
-            else
+            else if (value > 0.66 )
             {
                 _isPlayStepped = i;
                 for (int j = 0; j < _patSelButtons.size(); j++)
