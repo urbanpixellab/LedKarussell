@@ -27,16 +27,15 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
     int blendMode = 0;// direct
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
+    float values[int(len)];
+    
     //implement the color function
     switch (drawFunction) {
         case CURVE::BLACKOUT:
         {
             //sinewave on array with freq = 3 on length of input array
             //
-            for (int i = 0; i < length; i++)
-            {
-                selectionArrays[i] = 0;
-            }
+            for (int i = 0; i < len; i++) values[i] = 0;
             
             break;
         }
@@ -45,10 +44,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
             
         //sinewave on array with freq = 3 on length of input array
             //
-            for (int i = 0; i < length; i++)
-            {
-                selectionArrays[i] = 255;
-            }
+            for (int i = 0; i < len; i++) values[i] = 1;
             
             break;
         }
@@ -59,11 +55,8 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
                 float delta = len/freq;
                 float value = 0;
                 float shift = _MC->getDtMulti(time)*delta;
-                //float shift = _MC->getDt()*delta;
                 if(fmod(i+delta+shift,delta) > delta/2) value = 1;
-                selectionArrays[(i * 3) + 0] = a.r * value + b.r * (1-value);
-                selectionArrays[(i * 3) + 1] = a.g * value + b.r * (1-value);
-                selectionArrays[(i * 3) + 2] = a.b * value + b.r * (1-value);
+                values[i] = value;
             }
             
             break;
@@ -72,10 +65,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
-                selectionArrays[(i * 3) + 0] = a.r * value;
-                selectionArrays[(i * 3) + 1] = a.g * value;
-                selectionArrays[(i * 3) + 2] = a.b * value;
+                values[i] = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
             }
             
             break;
@@ -84,10 +74,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                float value = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
-                selectionArrays[(i * 3) + 0] = a.r * value;
-                selectionArrays[(i * 3) + 1] = a.g * value;
-                selectionArrays[(i * 3) + 2] = a.b * value;
+                values[i] = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
             }
             
             break;
@@ -99,9 +86,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
                 //have some glitch in the middle
                 float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
                 if(value > 1.0) value = 1.0-value;
-                selectionArrays[(i * 3) + 0] = a.r * value;
-                selectionArrays[(i * 3) + 1] = a.g * value;
-                selectionArrays[(i * 3) + 2] = a.b * value;
+                values[i] = value;
             }
             
             break;
@@ -110,11 +95,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                float value = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
-                
-                selectionArrays[(i * 3) + 0] = a.r * value;
-                selectionArrays[(i * 3) + 1] = a.g * value;
-                selectionArrays[(i * 3) + 2] = a.b * value;
+                values[i] = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
             }
             
             break;
@@ -123,38 +104,33 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         default:
             break;
     }
+    //now writ to array
+    for (int i = 0; i < len; i++) //reduce to pixel
+    {
+        selectionArrays[(i * 3) + 0] = a.r * values[i];
+        selectionArrays[(i * 3) + 1] = a.g * values[i];
+        selectionArrays[(i * 3) + 2] = a.b * values[i];
+    }
+    
 }
 
 void LedAnimator::addToArray(int drawFunction,int drawMode,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
 {
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
+    float values[int(len)];
+    
+    
     //implement the color function
     switch (drawFunction) {
         case CURVE::BLACKOUT:
         {
-            //sinewave on array with freq = 3 on length of input array
-            //
-            for (int i = 0; i < length; i++)
-            {
-                selectionArrays[i] = 0;
-            }
-            
+            for (int i = 0; i < len; i++) values[i] = 0;
             break;
         }
         case CURVE::WHITEOUT:
         {
-            
-            //sinewave on array with freq = 3 on length of input array
-            //
-            for (int i = 0; i < len; i++) //reduce to pixel
-            {
-                selectionArrays[(i * 3) + 0] += 255;
-                selectionArrays[(i * 3) + 1] += 255;
-                selectionArrays[(i * 3) + 2] += 255;
-            }
-            
-            
+            for (int i = 0; i < len; i++) values[i] = 1;
             break;
         }
         case CURVE::RECT://add frequency in repetition
@@ -165,34 +141,20 @@ void LedAnimator::addToArray(int drawFunction,int drawMode,int time,float freq,u
                 float value = 0;
                 float shift = _MC->getDtMulti(time)*delta;
                 if(fmod(i+delta+shift,delta) > delta/2) value = 1;
-                selectionArrays[(i * 3) + 0] += (a.r * value);// + (b.r * (1-value));
-                selectionArrays[(i * 3) + 1] += (a.g * value);// + (b.g * (1-value));
-                selectionArrays[(i * 3) + 2] += (a.b * value);// + (b.b * (1-value));
+                values[i] = value;
             }
             
             break;
         }
         case CURVE::RAMP:
         {
-            for (int i = 0; i < len; i++) //reduce to pixel
-            {
-                float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
-                selectionArrays[(i * 3) + 0] += (a.r * value);// + (b.r * (1-value));
-                selectionArrays[(i * 3) + 1] += (a.g * value);// + (b.g * (1-value));
-                selectionArrays[(i * 3) + 2] += (a.b * value);// + (b.b * (1-value));
-            }
+            for (int i = 0; i < len; i++) values[i] = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
             
             break;
         }
         case CURVE::SAW:
         {
-            for (int i = 0; i < len; i++) //reduce to pixel
-            {
-                float value = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
-                selectionArrays[(i * 3) + 0] += (a.r * value);// + (b.r * (1-value));
-                selectionArrays[(i * 3) + 1] += (a.g * value);// + (b.g * (1-value));
-                selectionArrays[(i * 3) + 2] += (a.b * value);// + (b.b * (1-value));
-            }
+            for (int i = 0; i < len; i++) values[i] = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
             
             break;
         }
@@ -203,28 +165,25 @@ void LedAnimator::addToArray(int drawFunction,int drawMode,int time,float freq,u
                 //have some glitch in the middle
                 float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
                 if(value > 1.0) value = 1.0-value;
-                selectionArrays[(i * 3) + 0] += (a.r * value);// + (b.r * (1-value));
-                selectionArrays[(i * 3) + 1] += (a.g * value);// + (b.g * (1-value));
-                selectionArrays[(i * 3) + 2] += (a.b * value);// + (b.b * (1-value));
+                values[i] = value;
             }
             
             break;
         }
         case CURVE::SINE:
         {
-            for (int i = 0; i < len; i++) //reduce to pixel
-            {
-                float value = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
-                
-                selectionArrays[(i * 3) + 0] += (a.r * value);// + (b.r * (1-value));
-                selectionArrays[(i * 3) + 1] += (a.g * value);// + (b.g * (1-value));
-                selectionArrays[(i * 3) + 2] += (a.b * value);// + (b.b * (1-value));
-            }
-            
+            for (int i = 0; i < len; i++) values[i] = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
             break;
         }
             
         default:
             break;
+    }
+    //now writ to array
+    for (int i = 0; i < len; i++) //reduce to pixel
+    {
+        selectionArrays[(i * 3) + 0] += a.r * values[i];
+        selectionArrays[(i * 3) + 1] += a.g * values[i];
+        selectionArrays[(i * 3) + 2] += a.b * values[i];
     }
 }

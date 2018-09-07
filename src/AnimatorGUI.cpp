@@ -98,14 +98,14 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     {
         string name = "Edit_" + ofToString(i);
         x = 750 + ((i%4)*w*1.1);
-        y = 100 + ((i / 4) * h * 1.1);
+        y = 500 + ((i / 4) * h * 1.1);
         Button *e = new Button(i,ofRectangle(x,y,w,h),name,true);
         ofAddListener(e->buttonIDPressed, this, &AnimatorGUI::editButtonPressed);
         _patEditButtons.push_back(e);
         name = "Pattern_" + ofToString(i);
-        x = 750 + ((i%4)*w*1.5);
-        y = 300 + ((i / 4) * h * 1.1);
-        Button *l = new Button(i,ofRectangle(x,y,w*1.4,h),name,true);
+        x = 800 + ((i%4)*w*2.8);
+        y = 150 + ((i / 4) * h * 1.1);
+        Button *l = new Button(i,ofRectangle(x,y,w*2.6,h),name,true);
         ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
         _patLiveButtons.push_back(l);
     }
@@ -127,8 +127,8 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(_drawArea.x + 400,_drawArea.getBottom() -100);
-    ofScale(ofGetWidth()/3, 100);
+    ofTranslate(800,300);
+    ofScale(800, 200);
     live.bind();
     _realStructure.draw();
     live.unbind();
