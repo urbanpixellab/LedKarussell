@@ -343,14 +343,14 @@ void ArtnetControl::update()
     
     //first fill all with background color
     ofColor black(0,0,0);
+
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
     ofColor c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
     ofColor c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
-    ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
-    ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
-    
+    ofColor c3 = _GUI->getColorselectorA().getColorFromID(getColorIDs[2]);
+    ofColor c4 = _GUI->getColorselectorA().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillAllBackgroundColor(black);
     if(solo)
@@ -587,7 +587,10 @@ void ArtnetControl::EditPatronPressed(int & iD)
     _GUI->getTimeSliderB()->setValueMapped(float(*_editPatroon->getTime(1)));
     _GUI->getDirSliderA()->setValueMapped(float(*_editPatroon->getDir(0)));
     _GUI->getDirSliderB()->setValueMapped(float(*_editPatroon->getDir(1)));
-    
+
+    //set the colors from edit
+    _GUI->colorselectorA.setColorFromIDs(_editPatroon->getColorID(0),_editPatroon->getColorID(1));
+    _GUI->colorselectorB.setColorFromIDs(_editPatroon->getColorID(2),_editPatroon->getColorID(3));
     // Looop through the sequence steps and set sequence form pattern
     _GUI->getSegmenselectorA().clearStepsOfSegments();
     _GUI->getSegmenselectorB().clearStepsOfSegments();
