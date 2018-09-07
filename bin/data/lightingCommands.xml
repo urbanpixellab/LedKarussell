@@ -1,0 +1,61 @@
+
+<command>
+	<label>Blackout</label>
+	<toggle>true</toggle>
+	<channels>
+		<channel>10</channel>
+	</channels>
+	<values>
+		<value>1</value>
+	</values>
+</command>
+<command>
+	<label>Fog</label>
+	<toggle>true</toggle>
+	<channels>
+		<channel>11</channel>
+	</channels>
+	<values>
+		<value>255</value>
+	</values>
+</command>
+<command>
+	<label>Patroon 1</label>
+	<toggle>false</toggle>
+	<channels>
+		<channel>14</channel>
+	</channels>
+	<values>
+		<value>60</value>
+	</values>
+</command>
+<command>
+	<label>Patroon 2</label>
+	<toggle>false</toggle>
+	<channels>
+		<channel>14</channel>
+	</channels>
+	<values>
+		<value>120</value>
+	</values>
+</command>
+<command>
+	<label>Patroon 3</label>
+	<toggle>false</toggle>
+	<channels>
+		<channel>14</channel>
+	</channels>
+	<values>
+		<value>180</value>
+	</values>
+</command>
+<command>
+	<label>Patroon 4</label>
+	<toggle>false</toggle>
+	<channels>
+		<channel>14</channel>
+	</channels>
+	<values>
+		<value>255</value>
+	</values>
+</command>
