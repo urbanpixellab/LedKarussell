@@ -31,14 +31,16 @@ void segmentSelector::setup(ofRectangle area){
     numSelections = sel.getNumTags("select");
     
     int button_size = 20;
+    int textLength = 100;
+    int numSelections = sel.getNumTags("select");
 
-    for (int i = 0; i < sel.getNumTags("select"); i++)
+    for (int i = 0; i < numSelections; i++)
     {
         sel.pushTag("select",i);
         Selection *s = new Selection();
         s->name = sel.getValue("name", "untitled");
         
-        int x = drawArea.x + 100;
+        int x = drawArea.x + textLength;
         int y = drawArea.y + i * button_size;
         
         for(int j=0;j<SEQUENCESTEPS;j++)
@@ -51,10 +53,19 @@ void segmentSelector::setup(ofRectangle area){
         cout << "select " << s->name << endl;
         sel.popTag();
     }
+    
+    // button to clear sequence
+    clearButton = new Button();
+    int x = drawArea.x + textLength + (SEQUENCESTEPS-2)*button_size;
+    int y = drawArea.y + button_size/3+(numSelections-1) * button_size;
+    clearButton->setup(ofRectangle(x,y,button_size*2.5,button_size*1.5),"clear",false);
 
 }
 
-
+void segmentSelector::clearSequence(int &id)
+{
+    clearStepsOfSegments();
+}
 
 void segmentSelector::draw(){
     
@@ -72,6 +83,7 @@ void segmentSelector::draw(){
         }
 
     }
+    clearButton->draw();
     ofPopStyle();
 
 }
@@ -117,6 +129,11 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
             }
             
         }
+    }
+    
+    if(clearButton->getArea().inside(args.x, args.y))
+    {
+        clearStepsOfSegments();
     }
     
     _pressed = true;

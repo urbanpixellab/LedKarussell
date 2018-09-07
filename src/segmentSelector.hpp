@@ -41,6 +41,7 @@ public:
     bool *getSequence(int segmentID){ return selections[segmentID]->sequence; };
     ofEvent<bool> segmentPressed;
     void clearStepsOfSegments();
+    void clearSequence(int &id);
     
 
 private:
@@ -49,6 +50,7 @@ private:
     int fontSize;
     
     ofRectangle drawArea;
+    Button*  clearButton;
     vector<Selection*> selections;
     ofTrueTypeFont	verdana14;
     bool            _pressed;
