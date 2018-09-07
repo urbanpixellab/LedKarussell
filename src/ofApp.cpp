@@ -8,9 +8,6 @@ void ofApp::setup()
     ofTrueTypeFont::setGlobalDpi(72);
     _AC = new ArtnetControl(&_MC);
     
-   
-    // TEMP
-    int x = 650;
 }
 
 //--------------------------------------------------------------

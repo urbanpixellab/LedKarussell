@@ -78,11 +78,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     timeB->setName("multi");
     _slidersB[1] = timeB;
     RotarySlider *freqB = new RotarySlider();
-<<<<<<< HEAD
     freqB->setup(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true);
-=======
-    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,15),0,true);
->>>>>>> upstream/master
     freqB->setResolution(100);
     freqB->setName("freq");
     _slidersB[2] = freqB;
@@ -106,7 +102,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
    
     
     // Create LightControl
-    lightcontrol.setup(ofRectangle(_drawArea.getX()+600,_drawArea.getY()+650,200,200));
+    lightcontrol.setup(ofRectangle(COLLUMNLIVE,RowsLive[4],200,200));
     
     //create patern select buttons for edit and live with double edit size
     w = 65;
@@ -121,9 +117,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         ofAddListener(e->buttonIDPressed, this, &AnimatorGUI::editButtonPressed);
         _patEditButtons.push_back(e);
         name = "Pattern_" + ofToString(i);
-        x = COLLUMNLIVE + ((i%4)*w*2.8);
+        x = COLLUMNLIVE + ((i%4)*w*2.2);
         y = RowsEdit[0] + ((i / 4) * h * 1.1);
-        Button *l = new Button(i,ofRectangle(x,y,w*2.6,h),name,true);
+        Button *l = new Button(i,ofRectangle(x,y,w*2,h),name,true);
         ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
         _patLiveButtons.push_back(l);
     }
@@ -137,7 +133,9 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // Left
     ofDrawRectRounded(CollumnEdit1-Padding,RowsEdit[0]-2*Padding,Collumnwidth*2+Padding*2,800,4);
     // Right
-    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsEdit[0]-2*Padding,Collumnwidth*2+Padding*2,800,4);
+    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[0]-2*Padding,Collumnwidth*2.8+Padding*2,600,4);
+    // botom right
+    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[4]-2*Padding,Collumnwidth*2.8+Padding*2,200,4);
     
     
     // Draw text
@@ -145,12 +143,12 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // Left
     _verdana.drawString("Edit pattern", CollumnEdit1, RowsEdit[0]-Padding);
     // Right
-    _verdana.drawString("Live", COLLUMNLIVE, RowsEdit[0]-Padding);
+    _verdana.drawString("Live", COLLUMNLIVE, RowsLive[0]-Padding);
     
     
     ofSetColor(255);
     pre.draw(CollumnEdit1, RowsEdit[3],Collumnwidth,100);
-    live.draw(COLLUMNLIVE, _drawArea.y + 220,200,100);
+    live.draw(COLLUMNLIVE, RowsLive[1],200,100);
     
     //draw it under the preview windows
     ofPushMatrix();
@@ -162,7 +160,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(800,300);
+    ofTranslate(COLLUMNLIVE,RowsLive[2]);
     ofScale(800, 200);
     live.bind();
     _realStructure.draw();

@@ -39,6 +39,12 @@ public:
     ofEvent<int>    noteOFF;
     ofEvent<int>    controlChange;
     
+    // Position Gui
+    int position[2] = {20,50};
+    int collumnSize[2] = {45,800};
+    int Padding;
+    
+    
 
 private:
     stringstream text;//should been removed

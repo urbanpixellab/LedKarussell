@@ -93,6 +93,7 @@ public:
     int Collumnwidth;
     int Padding;
     int RowsEdit[5] = {50,200,280,380,520};
+    int RowsLive[5] = {50,150,280,380,520};
     
 private:
 
