@@ -341,38 +341,56 @@ void ArtnetControl::savePatroon()
 
 void ArtnetControl::update()
 {
-    
-    float *freqA = _editPatroon->getFreq(0);
-    float *freqB = _editPatroon->getFreq(1);
-    
-    bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     if(_MC->getBeat())
     {
         _step++;
         if(_step >= 8) _step = 0;
     }
+    doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
+    doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
+
+    //dont forget the fade out function to the beat and the blink function
+    // use the postarray of the segments for this functions
+    
+    
+    
+    
+
+    // now updaste the arrays to the visualizer
+    writeSegmentsToImage(_preSegments, _preIMG);
+    writeSegmentsToImage(_liveSegments, _liveIMG);
+    
+    sendToNodes();
+}
+
+void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vector<Segment*> segments,int &step)
+{
+    float *freqA = pattern->getFreq(0);
+    float *freqB = pattern->getFreq(1);
+    
+    bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     //first fill all with background color
     ofColor black(0,0,0);
     
     // Get colors from editPatroon
-    vector<int> getColorIDs = _editPatroon->getColorIDs();
+    vector<int> getColorIDs = pattern->getColorIDs();
     ofColor c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
     ofColor c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
     ofColor c3 = _GUI->getColorselectorA().getColorFromID(getColorIDs[2]);
     ofColor c4 = _GUI->getColorselectorA().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
-    fillAllBackgroundColor(black);
+    fillWithBackgroundColor(black,segments);
     if(solo)
     {
         for (int stepElement = 0; stepElement < 14; stepElement++)
         {
-            if(_editPatroon->getSeqStepA(_step)[stepElement] ==  true)
+            if(pattern->getSeqStepA(_step)[stepElement] ==  true)
             {
                 int s = _selections[stepElement].items.size();
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    _preAnimator->drawToArray(*_editPatroon->getCurve(0),*_editPatroon->getDir(0),*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2);
                 }
             }
         }
@@ -385,76 +403,19 @@ void ArtnetControl::update()
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    _preAnimator->drawToArray(*_editPatroon->getCurve(1),*_editPatroon->getDir(1),*_editPatroon->getTime(1),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c2,c3);
+                    animator->drawToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3);
                 }
             }
         }
     }
-    
-    // do the live led animator
-    //read everything from live
-    freqA = _livePatroon->getFreq(0);
-    freqB = _livePatroon->getFreq(1);
-    
-    solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    //first fill all with background color
-    //ofColor black(0,0,0);
-    
-    // Get colors from editPatroon
-    getColorIDs.clear();
-    getColorIDs = _livePatroon->getColorIDs();
-    c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
-    c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
-    c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
-    c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
-
-    // to do add index shift function to phaseshift the curve from index by a curve and freq
-    if(solo)
-    {
-        for (int stepElement = 0; stepElement < 14; stepElement++)
-        {
-            if(_livePatroon->getSeqStepA(_step)[stepElement] ==  true)
-            {
-                int s = _selections[stepElement].items.size();
-                for (int i = 0; i < s; i++)
-                {
-                    int seg = _selections[stepElement].items[i];
-                    _liveAnimator->drawToArray(*_livePatroon->getCurve(0),*_livePatroon->getDir(0),*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
-                }
-            }
-        }
-        //add now the second color
-        for (int stepElement = 0; stepElement < 14; stepElement++)
-        {
-            if(_livePatroon->getSeqStepB(_step)[stepElement] ==  true)
-            {
-                int s = _selections[stepElement].items.size();
-                for (int i = 0; i < s; i++)
-                {
-                    int seg = _selections[stepElement].items[i];
-                    _liveAnimator->addToArray(*_livePatroon->getCurve(1),*_livePatroon->getDir(1),*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
-                }
-            }
-        }
-    }
-    
-    
-
-    //dont forget the fade out function to the beat and the blink function
-
-    // now updaste the arrays to the visualizer
-    writeSegmentsToImage(_preSegments, _preIMG);
-    writeSegmentsToImage(_liveSegments, _liveIMG);
-    
-    sendToNodes();
 }
 
-void ArtnetControl::fillAllBackgroundColor(ofColor & color)
+
+void ArtnetControl::fillWithBackgroundColor(ofColor & color,vector<Segment*> segments)
 {
-    for (int i = 0; i < _preSegments.size(); i++)
+    for (int i = 0; i < segments.size(); i++)
     {
-        _preSegments[i]->setAllPixel(color);
-        _liveSegments[i]->setAllPixel(color);
+        segments[i]->setAllPixel(color);
     }
 }
 
