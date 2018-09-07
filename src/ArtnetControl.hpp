@@ -99,6 +99,8 @@ private:
     vector<Patroon>         _patronen;
     Patroon                 *_editPatroon;//this is directly writing to the patroon
     Patroon                 *_livePatroon;//this is directly writing to the patroon
+    
+    int                     _step;
 };
 
 #endif /* ArtnetControl_hpp */

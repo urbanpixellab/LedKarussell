@@ -78,7 +78,11 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     timeB->setName("multi");
     _slidersB[1] = timeB;
     RotarySlider *freqB = new RotarySlider();
+<<<<<<< HEAD
     freqB->setup(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true);
+=======
+    freqB->setup(ofRectangle(x,y+80,60,60),ofVec2f(0.1,15),0,true);
+>>>>>>> upstream/master
     freqB->setResolution(100);
     freqB->setName("freq");
     _slidersB[2] = freqB;

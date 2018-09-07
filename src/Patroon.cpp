@@ -74,7 +74,6 @@ void Patroon::setColors(int * array,int length)
     _color[1]= array[1];
     _color[2]= array[2];
     _color[3]= array[3];
-    cout << "set color on id " << _id << endl;
 }
 
 vector<int> Patroon::getColorIDs(){

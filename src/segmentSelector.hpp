@@ -14,6 +14,7 @@
 #include "ofxXmlSettings.h"
 #include "Button.hpp"
 #include "Patroon.hpp"
+#include "MidiControl.hpp"
 
 #define SEQUENCESTEPS 8
 #define NUMBERSELECTIONS 14
