@@ -15,6 +15,8 @@
 #include "Button.hpp"
 #include "RotarySlider.hpp"
 #include "segmentSelector.hpp"
+#include "LightControl.hpp"
+
 
 #define SLIDERS 4
 
@@ -74,6 +76,8 @@ public:
     
     segmentSelector &getSegmenselectorA(){return segmenselectorA;};
     segmentSelector &getSegmenselectorB(){return segmenselectorA;};
+    
+    LightControl lightcontrol;
     
     
     void editButtonPressed(int &id);

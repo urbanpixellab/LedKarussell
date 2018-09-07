@@ -91,6 +91,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     colorselectorA.setup(ofRectangle(_drawArea.getX(),_drawArea.getY()+150,200,200));
     colorselectorB.setup(ofRectangle(_drawArea.getX()+220,_drawArea.getY()+150,200,200));
     
+    // Create LightControl
+    lightcontrol.setup(ofRectangle(_drawArea.getX()+600,_drawArea.getY()+650,200,200));
+    
     //create patern select buttons for edit and live with double edit size
     w = 70;
     h = 20;
@@ -147,6 +150,9 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // SegmentSelector
     segmenselectorA.draw();
     segmenselectorB.draw();
+    
+    //LightController
+    lightcontrol.draw();
     
     // the patron selector
     for (int i = 0; i < _patEditButtons.size(); i++)
