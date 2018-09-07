@@ -73,6 +73,13 @@ ArtnetControl::~ArtnetControl()
     //save everything
     
     // blackout all
+    ofColor black(0);
+    for (int i = 0; i < _liveSegments.size(); i++)
+    {
+        _liveSegments[i]->setAllPixel(black);
+    }
+    sendToNodes();
+    
     savePatroon();
     ofRemoveListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     clearNodes();
@@ -339,9 +346,6 @@ void ArtnetControl::update()
     float *freqB = _editPatroon->getFreq(1);
     
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    int selectionA = _test; // take selection a from patroon
-    int selectionB = 10; // take selection b from patroon
-    
     if(_MC->getBeat())
     {
         _step++;
@@ -393,9 +397,6 @@ void ArtnetControl::update()
     freqB = _livePatroon->getFreq(1);
     
     solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
-    selectionA = _test; // take selection a from patroon
-    selectionB = 10; // take selection b from patroon
-    
     //first fill all with background color
     //ofColor black(0,0,0);
     
@@ -435,23 +436,6 @@ void ArtnetControl::update()
                 }
             }
         }
-        ////old
-        /*
-        int s = _selections[selectionA].items.size();
-        
-        for (int i = 0; i < s; i++)
-        {
-            int seg = _selections[selectionA].items[i];
-            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),*_livePatroon->getDir(0),*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
-        }
-        
-        //add now the second color
-        s = _selections[selectionB].items.size();
-        for (int i = 0; i < s; i++)
-        {
-            int seg = _selections[selectionB].items[i];
-            _liveAnimator->addToArray(*_livePatroon->getCurve(1),*_livePatroon->getDir(1),*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
-        }*/
     }
     
     
@@ -642,13 +626,10 @@ void ArtnetControl::EditPatronPressed(int & iD)
         _GUI->getSegmenselectorA().setSequence(i, _editPatroon->getSeqStepA(i));
         _GUI->getSegmenselectorB().setSequence(i, _editPatroon->getSeqStepB(i));
     }
-    
-    cout << "edit patron pressed " << iD << endl;
 }
 
 void ArtnetControl::PlaySteppedPatronPressed(int & id)
 {
     //todo make it stepped
     _livePatroon = &_patronen[id];
-    cout << "play stepped patron pressed " << id << endl;
 }

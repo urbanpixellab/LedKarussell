@@ -65,4 +65,3 @@ void Segment::setPixel(int id,ofColor color)
     _values[(id*3) + 1] = color.g;
     _values[(id*3) + 2] = color.b;
 }
-
