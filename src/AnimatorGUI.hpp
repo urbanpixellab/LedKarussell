@@ -20,6 +20,10 @@
 
 #define SLIDERS 4
 
+//#define COLLUMNEDIT1 0
+//#define COLLUMNEDIT2 300
+#define COLLUMNLIVE 700
+
 class AnimatorGUI
 {
 public:
@@ -83,6 +87,14 @@ public:
     void editButtonPressed(int &id);
     void liveButtonPressed(int &id);
     
+    //Positioning GUI
+    int CollumnEdit1;
+    int CollumnEdit2;
+    int Collumnwidth;
+    int Padding;
+    int RowsEdit[5] = {50,200,280,380,520};
+    int RowsLive[5] = {50,150,280,380,520};
+    
 private:
 
     ofRectangle         _drawArea;
@@ -92,6 +104,7 @@ private:
     int                 _isPlay;
     int                 _isEdit;
     int                 _isPlayStepped;
+    ofTrueTypeFont      _verdana;
     
     RotarySlider*   _slidersA[SLIDERS];
     RotarySlider*   _slidersB[SLIDERS];

@@ -15,7 +15,9 @@ MidiControl::MidiControl()
         _data[i] = 0;
     }
     
-    _tapButton.setup(ofRectangle(0,0,50,50), "BPM", false);
+    Padding = 10;
+    
+    _tapButton.setup(ofRectangle(position[0],position[1],collumnSize[0],collumnSize[0]), "", false);
     ofAddListener(_tapButton.buttonPressed, this, &MidiControl::newTapEvent);
     
     //link every controler to a differenet port
@@ -52,10 +54,19 @@ MidiControl::~MidiControl()
 void MidiControl::drawGUI()
 {
     // Draws the BPM Button
+    
+    ofSetColor(70);
+    ofFill();
+    ofDrawRectRounded(position[0]-Padding,position[1]-2*Padding,collumnSize[0]+Padding*2,collumnSize[1],4);
+   
+   
+    
+    
     //tap button and bpm or step counter must been implemented
     //ofSetColor(255*_clk.getDeltaTime(),0,0);
     _tapButton.drawRedPulsing(_clk.getDeltaTime());
-    ofDrawBitmapString(_clk.getBPM() + " BPM", 20,70);
+    ofSetColor(255);
+    ofDrawBitmapString(_clk.getBPM() + " BPM", position[0]-10,120);
 }
 
 void MidiControl::update()
