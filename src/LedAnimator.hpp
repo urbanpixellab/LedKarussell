@@ -52,7 +52,10 @@ public:
 //    int getSelectionMax(){return _selections.size();};
     
 private:
+    
     void reverseArray(float *array, int length);
+    void BinnenBuitenArray(float *array, int length);
+    void BuitenBinnenArray(float *array, int length);
     
     
     int                 _aniSelect;

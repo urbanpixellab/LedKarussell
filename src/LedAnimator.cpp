@@ -36,7 +36,6 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < len; i++) values[i] = 0;
-            
             break;
         }
         case CURVE::WHITEOUT:
@@ -45,7 +44,6 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < len; i++) values[i] = 1;
-            
             break;
         }
         case CURVE::RECT://add frequency in repetition
@@ -107,9 +105,18 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
     // now we can work on the directions with the array bevore writing to outputs
     switch (dir) {
         case 1:
-            //reverse
             reverseArray(values, int(len));
             break;
+            
+        case 2:
+            BinnenBuitenArray(values, int(len));
+            break;
+            
+            
+        case 3:
+            BuitenBinnenArray(values, int(len));
+            break;
+            
             
         default:
             break;
@@ -193,9 +200,18 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
     // now we can work on the directions with the array
     switch (dir) {
         case 1:
-            //reverse
             reverseArray(values, int(len));
             break;
+            
+        case 2:
+            BinnenBuitenArray(values, int(len));
+            break;
+            
+            
+        case 3:
+            BuitenBinnenArray(values, int(len));
+            break;
+            
             
         default:
             break;
@@ -220,5 +236,38 @@ void LedAnimator::reverseArray(float *array, int length)
     for (int i = 0; i < length; i++)
     {
         array[i] = tmp[i];
+    }
+}
+
+void LedAnimator::BinnenBuitenArray(float *array, int length)
+{
+    float tmp[length*2];
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i] = array[i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i+length] = array[length-1-i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = tmp[i*2];
+    }
+}
+void LedAnimator::BuitenBinnenArray(float *array, int length)
+{
+    float tmp[length*2];
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i] = array[length-1-i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i+length] = array[i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = tmp[i*2];
     }
 }
