@@ -32,9 +32,8 @@ void Clock::update()
 //        _lastBeat = _nextBeat;
         _nextBeat = now + _beatLength;
         ofSetBackgroundColor(ofRandom(255), ofRandom(255), ofRandom(255));
-        _dT = 1;
+        _dT = (now - _lastBeat) / _beatLength;
         _actValue = _dT; /// gets later manipulated by the time and the beat scale faktor
-        //cout << "beat" << endl;
         _nextBeat = now;
         _isBeat = true;
         ofNotifyEvent(newStep, _isBeat);

@@ -61,7 +61,7 @@ void ColorSelector::loadColors(){
         int green   = ofToInt( XMLcolors.getValue("green","255"));
         int blue    = ofToInt( XMLcolors.getValue("blue","255"));
         
-        cout << "i " << i << " red " << red << " green " << green << " blue " << blue << endl;
+        //cout << "i " << i << " red " << red << " green " << green << " blue " << blue << endl;
         
         // add color to color vector
         ofColor c(red,green,blue);
