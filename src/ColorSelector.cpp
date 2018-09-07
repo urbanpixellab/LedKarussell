@@ -96,21 +96,24 @@ void ColorSelector::loadColors(){
 }
 
 
-void ColorSelector::setColorIDs(int ids[]){
+void ColorSelector::setColorIDs(int *ids){
     for(int i=0;i<2;i++){
         _selectedColorIDs[i] = ids[i];
         _selectedColors[i] = colors[ids[i]];
     }
 }
 
+void ColorSelector::setColorFromIDs(int idA,int idB)
+{
+    _selectedColorIDs[0] = idA;
+    _selectedColors[0] = colors[_selectedColorIDs[0]];
+    _selectedColorIDs[1] = idB;
+    _selectedColors[1] = colors[_selectedColorIDs[1]];
+}
+
 
 void ColorSelector::setColorA(string &s)
 {    
-//    _selectedColorIDs[0]   = ofToInt(s);
-//    _selectedColors[0]      = colors[_selectedColorIDs[0]];
-
-//    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
-//    ofNotifyEvent(colorChosen, t);
     _pressed = true;
     ofNotifyEvent(colorPressed,_pressed);
 
@@ -118,11 +121,6 @@ void ColorSelector::setColorA(string &s)
 
 void ColorSelector::setColorB(string &s)
 {
-//    _selectedColorIDs[1]   = ofToInt(s);
-//    _selectedColors[1]      = colors[_selectedColorIDs[1]];
-    
-//    string t = ofToString(_selectedColorIDs[0])+","+ofToString(_selectedColorIDs[1]);
-//    ofNotifyEvent(colorChosen, t);
     _pressed = true;
     ofNotifyEvent(colorPressed,_pressed);
     
@@ -134,6 +132,10 @@ void ColorSelector::colorSwap(string &s){
     
     _selectedColors[0] = b;
     _selectedColors[1] = a;
+    
+    int tmp = _selectedColorIDs[0];
+    _selectedColorIDs[0] = _selectedColorIDs[1];
+    _selectedColorIDs[1] = tmp;
     _pressed = true;
     ofNotifyEvent(colorPressed,_pressed);
 }

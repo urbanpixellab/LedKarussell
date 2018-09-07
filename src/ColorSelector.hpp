@@ -28,9 +28,10 @@ public:
     void setColorFromIDs(int colorIDa,int colorIDb);
     void setColorA(string &s);
     void setColorB(string &s);
-    void setColorIDs(int ids[]);
+    void setColorIDs(int *ids);
     void colorSwap(string &s);
-    ofColor &getColorFromID(int id){return _selectedColors[id];};
+//    ofColor &getColorFromID(int id){return _selectedColors[id];};
+    ofColor &getColorFromID(int id){return colors[id];};
 
     // FIXME: would rather sent the color as color array or int arra but that is not possible?
     //ofEvent<string>   colorChosen;

@@ -38,6 +38,7 @@ public:
     void setCurve(int id,int value){_curve[id] = value;};
     
     vector<int> getColorIDs();
+    int &getColorID(int id){return _color[id];};
     
     void setColors(int * array,int length);
     void setSeqSel(int layer,int step,int *selection,int length);
