@@ -14,7 +14,8 @@ RotarySlider::RotarySlider()
     ofAddListener(ofEvents().mousePressed, this, &RotarySlider::mousePressed);
     ofAddListener(ofEvents().mouseReleased, this, &RotarySlider::mouseReleased);
     xStart = -1;
-    font.load("verdana.ttf", 10);
+    font[0].load("verdana.ttf", 8);
+    font[1].load("verdana.ttf", 12);
     resolution = 128;
     comma = 0;
     active = false;
@@ -30,7 +31,8 @@ RotarySlider::RotarySlider(ofRectangle area,ofVec2f minMax,float startValue,bool
     ofAddListener(ofEvents().mousePressed, this, &RotarySlider::mousePressed);
     ofAddListener(ofEvents().mouseReleased, this, &RotarySlider::mouseReleased);
     xStart = startValue;
-    font.load("verdana.ttf", 10);
+    font[0].load("verdana.ttf", 8);
+    font[1].load("verdana.ttf", 12);
     comma = 0;
     active = false;
     value = 1;
@@ -125,7 +127,7 @@ void RotarySlider::updateSlider()
             float x2 = circleCenter.x + (1.3 * radius * cos(angle));
             float y2 = circleCenter.y + (1.3 * radius * sin(angle));
             ofDrawLine(x1, y1, x2, y2);
-            //font.drawString(ofToString(i * (range.y - range.x) / float(count),0),x2,y2 );
+            if(i < _bezeichner.size()) font[0].drawString(_bezeichner[i],x2,y2 );
         }
         ofNoFill();
         ofDrawCircle(circleCenter, radius * 0.8);
@@ -179,8 +181,8 @@ void RotarySlider::updateSlider()
         m.draw();
          */
     }
-    float shift = font.getStringBoundingBox(name, 0, 0).width / 2.;
-    font.drawString(name, circleCenter.x - shift, fbo.getHeight() - 2);
+    float shift = font[1].getStringBoundingBox(name, 0, 0).width / 2.;
+    font[1].drawString(name, circleCenter.x - shift, fbo.getHeight() - 2);
     //ofDrawBitmapString(name, 10, fbo.getHeight());
     fbo.end();
 
@@ -240,9 +242,12 @@ void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
     active  = false;
 }
 
-void RotarySlider::addBezeichner(string * bez)
+void RotarySlider::addBezeichner(string * bez,int len)
 {
-    
+    for (int i = 0; i < len; i++)
+    {
+        _bezeichner.push_back(bez[i]);
+    }
 }
 
 

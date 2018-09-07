@@ -47,9 +47,11 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     // COLLUMNEDIT1
     RotarySlider *curveA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"curve");
     _slidersA[0] = curveA;
-    RotarySlider *timeA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true,true,20,"multi");
+    RotarySlider *timeA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0],60,60),ofVec2f(0,6),0,true,true,20,"multi");
+    string b[7] = {"1/4","1/2","1","2","4","8","16"};
+    timeA->addBezeichner(b, 7);
     _slidersA[1] = timeA;
-    RotarySlider *freqA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true,true,20,"freq");
+    RotarySlider *freqA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0]+80,60,60),ofVec2f(0,15),0,true,true,20,"freq");
     _slidersA[2] = freqA;
     RotarySlider *dirA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersA[3] = dirA;
@@ -57,9 +59,10 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     // COLLUMNEDIT2
     RotarySlider *curveB = new RotarySlider(ofRectangle(CollumnEdit2,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"curve");
     _slidersB[0] = curveB;
-    RotarySlider *timeB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true,true,20,"multi");
+    RotarySlider *timeB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0],60,60),ofVec2f(0,6),0,true,true,20,"multi");
+    timeB->addBezeichner(b, 7);
     _slidersB[1] = timeB;
-    RotarySlider *freqB = new RotarySlider(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true,true,20,"freq");
+    RotarySlider *freqB = new RotarySlider(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0,15),0,true,true,20,"freq");
     _slidersB[2] = freqB;
     RotarySlider *dirB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersB[3] = dirB;

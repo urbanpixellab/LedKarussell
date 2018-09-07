@@ -40,7 +40,7 @@ public:
     float getValueMapped(){return valueMapped;}
     int getValueInt(){return valueMapped;};
     void setValueMapped(float value);
-    void addBezeichner(string * bez);
+    void addBezeichner(string * bez,int leng);
   
 private:
     bool            active;
@@ -58,7 +58,7 @@ private:
     bool            redraw;
     bool            type;//line drawing or mesh
     bool            _isInt;//int slider with steps or float
-    ofTrueTypeFont  font;
+    ofTrueTypeFont  font[2];
     int             resolution;// resolution for mouse movement
     int             comma;
     ofPolyline      _lineGraphics;//if we want to add some line graphics_

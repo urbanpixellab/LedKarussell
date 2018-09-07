@@ -28,7 +28,7 @@ public:
     bool *getSeqStepA(int id){return _sequenceA[id];};
     bool *getSeqStepB(int id){return _sequenceB[id];};
     
-    float *getFreq(int id){return &_freq[id];};
+    int *getFreq(int id){return &_freq[id];};
     int *getDir(int id){return &_dir[id];};
     int *getTime(int id){return &_time[id];};
     
@@ -47,7 +47,7 @@ public:
 private:
     int             _id;
     int             _curve[2] = {0,0};
-    float           _freq[2] = {1,1};
+    int             _freq[2] = {1,1};
     int             _dir[2] = {0,0};
     int             _time[2] = {0,0};
     int             _color[4] = {0,0,0,0};

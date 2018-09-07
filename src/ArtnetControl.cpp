@@ -365,8 +365,11 @@ void ArtnetControl::update()
 
 void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vector<Segment*> segments,int &step)
 {
-    float *freqA = pattern->getFreq(0);
-    float *freqB = pattern->getFreq(1);
+    int select = *pattern->getFreq(0);
+    float *freqA = &_freqences[select];
+    
+    select = *pattern->getFreq(1);
+    float *freqB = &_freqences[select];
     
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     //first fill all with background color
