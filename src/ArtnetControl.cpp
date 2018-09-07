@@ -10,7 +10,7 @@
 
 ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
-    _GUI = new AnimatorGUI(ofRectangle(200,50,500,500));
+    _GUI = new AnimatorGUI(ofRectangle(100,50,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
 
     _preAnimator = new LedAnimator(_MC);
