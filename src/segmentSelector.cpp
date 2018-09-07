@@ -92,7 +92,16 @@ void segmentSelector::setSequence(int i,bool sequence[]){
     cout << endl;
 }
 
-
+void segmentSelector::clearStepsOfSegments(){
+    for (int i = 0; i < selections.size(); i++)
+    {
+        for (int j = 0; j < SEQUENCESTEPS; j++){
+            
+            selections[i]->sequence[j] = false;
+            selections[i]->stepbuttons[j]->setState(false);
+        }
+    }
+}
 
 void segmentSelector::mousePressed(ofMouseEventArgs &args)
 {
@@ -115,6 +124,7 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
     
     
     // Debug
+    /*
    for (int i = 0; i < selections.size(); i++)
    {
         cout << selections[i]->name << " ";
@@ -123,6 +133,7 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
         }
         cout << endl;
     }
+     */
     
     
     
