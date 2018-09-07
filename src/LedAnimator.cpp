@@ -22,7 +22,7 @@ LedAnimator::~LedAnimator()
 
 //////////////////////niew
 
-void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
+void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
 {
     int blendMode = 0;// direct
     // frequency moet op en draaiknop !!!
@@ -36,7 +36,6 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
             //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < len; i++) values[i] = 0;
-            
             break;
         }
         case CURVE::WHITEOUT:
@@ -45,7 +44,6 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         //sinewave on array with freq = 3 on length of input array
             //
             for (int i = 0; i < len; i++) values[i] = 1;
-            
             break;
         }
         case CURVE::RECT://add frequency in repetition
@@ -104,7 +102,27 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
         default:
             break;
     }
-    //now writ to array
+    // now we can work on the directions with the array bevore writing to outputs
+    switch (dir) {
+        case 1:
+            reverseArray(values, int(len));
+            break;
+            
+        case 2:
+            BinnenBuitenArray(values, int(len));
+            break;
+            
+            
+        case 3:
+            BuitenBinnenArray(values, int(len));
+            break;
+            
+            
+        default:
+            break;
+    }
+    
+    
     for (int i = 0; i < len; i++) //reduce to pixel
     {
         selectionArrays[(i * 3) + 0] = a.r * values[i];
@@ -114,7 +132,7 @@ void LedAnimator::drawToArray(int drawFunction,int drawMode,int time,float freq,
     
 }
 
-void LedAnimator::addToArray(int drawFunction,int drawMode,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
+void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
 {
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
@@ -179,11 +197,77 @@ void LedAnimator::addToArray(int drawFunction,int drawMode,int time,float freq,u
         default:
             break;
     }
-    //now writ to array
+    // now we can work on the directions with the array
+    switch (dir) {
+        case 1:
+            reverseArray(values, int(len));
+            break;
+            
+        case 2:
+            BinnenBuitenArray(values, int(len));
+            break;
+            
+            
+        case 3:
+            BuitenBinnenArray(values, int(len));
+            break;
+            
+            
+        default:
+            break;
+    }
+    
+    //now write to array
     for (int i = 0; i < len; i++) //reduce to pixel
     {
         selectionArrays[(i * 3) + 0] += a.r * values[i];
         selectionArrays[(i * 3) + 1] += a.g * values[i];
         selectionArrays[(i * 3) + 2] += a.b * values[i];
+    }
+}
+
+void LedAnimator::reverseArray(float *array, int length)
+{
+    float tmp[length];
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i] = array[length-1-i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = tmp[i];
+    }
+}
+
+void LedAnimator::BinnenBuitenArray(float *array, int length)
+{
+    float tmp[length*2];
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i] = array[i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i+length] = array[length-1-i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = tmp[i*2];
+    }
+}
+void LedAnimator::BuitenBinnenArray(float *array, int length)
+{
+    float tmp[length*2];
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i] = array[length-1-i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        tmp[i+length] = array[i];
+    }
+    for (int i = 0; i < length; i++)
+    {
+        array[i] = tmp[i*2];
     }
 }

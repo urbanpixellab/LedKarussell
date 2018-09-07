@@ -337,7 +337,6 @@ void ArtnetControl::update()
     float *freqA = _editPatroon->getFreq(0);
     float *freqB = _editPatroon->getFreq(1);
     
-    int direction = LedAnimator::FORWARD;
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     int selectionA = _test; // take selection a from patroon
     int selectionB = 10; // take selection b from patroon
@@ -360,7 +359,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            _preAnimator->drawToArray(*_editPatroon->getCurve(0),direction,*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            _preAnimator->drawToArray(*_editPatroon->getCurve(0),*_editPatroon->getDir(0),*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -368,7 +367,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            _preAnimator->addToArray(*_editPatroon->getCurve(1),direction,*_editPatroon->getTime(1),*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            _preAnimator->addToArray(*_editPatroon->getCurve(1),*_editPatroon->getDir(1),*_editPatroon->getTime(1),*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
         }
     }
     
@@ -377,7 +376,6 @@ void ArtnetControl::update()
     freqA = _livePatroon->getFreq(0);
     freqB = _livePatroon->getFreq(1);
     
-    direction = LedAnimator::FORWARD;
     solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     selectionA = _test; // take selection a from patroon
     selectionB = 10; // take selection b from patroon
@@ -401,7 +399,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionA].items[i];
-            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),direction,*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+            _liveAnimator->drawToArray(*_livePatroon->getCurve(0),*_livePatroon->getDir(0),*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
         }
         
         //add now the second color
@@ -409,7 +407,7 @@ void ArtnetControl::update()
         for (int i = 0; i < s; i++)
         {
             int seg = _selections[selectionB].items[i];
-            _liveAnimator->addToArray(*_livePatroon->getCurve(1),direction,*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+            _liveAnimator->addToArray(*_livePatroon->getCurve(1),*_livePatroon->getDir(1),*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
         }
     }
     
