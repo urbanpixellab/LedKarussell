@@ -18,6 +18,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     
     //init the gui
     _test = false;
+    _step = 0;
     
     // Load all the nodes form XML
     loadNodes();
@@ -341,10 +342,13 @@ void ArtnetControl::update()
     int selectionA = _test; // take selection a from patroon
     int selectionB = 10; // take selection b from patroon
     
+    if(_MC->getBeat())
+    {
+        _step++;
+        if(_step >= 8) _step = 0;
+    }
     //first fill all with background color
     ofColor black(0,0,0);
-    
-    _GUI->getSegmenselectorA().getSequence(0);
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
@@ -356,19 +360,30 @@ void ArtnetControl::update()
     fillAllBackgroundColor(black);
     if(solo)
     {
-        int s = _selections[selectionA].items.size();
-        for (int i = 0; i < s; i++)
+        for (int stepElement = 0; stepElement < 14; stepElement++)
         {
-            int seg = _selections[selectionA].items[i];
-            _preAnimator->drawToArray(*_editPatroon->getCurve(0),*_editPatroon->getDir(0),*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+            if(_editPatroon->getSeqStepA(_step)[stepElement] ==  true)
+            {
+                int s = _selections[stepElement].items.size();
+                for (int i = 0; i < s; i++)
+                {
+                    int seg = _selections[stepElement].items[i];
+                    _preAnimator->drawToArray(*_editPatroon->getCurve(0),*_editPatroon->getDir(0),*_editPatroon->getTime(0),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c1,c2);
+                }
+            }
         }
-        
         //add now the second color
-        s = _selections[selectionB].items.size();
-        for (int i = 0; i < s; i++)
+        for (int stepElement = 0; stepElement < 14; stepElement++)
         {
-            int seg = _selections[selectionB].items[i];
-            _preAnimator->addToArray(*_editPatroon->getCurve(1),*_editPatroon->getDir(1),*_editPatroon->getTime(1),*freqB, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c3,c4);
+            if(_editPatroon->getSeqStepB(_step)[stepElement] ==  true)
+            {
+                int s = _selections[stepElement].items.size();
+                for (int i = 0; i < s; i++)
+                {
+                    int seg = _selections[stepElement].items[i];
+                    _preAnimator->drawToArray(*_editPatroon->getCurve(1),*_editPatroon->getDir(1),*_editPatroon->getTime(1),*freqA, _preSegments[seg]->getArray(), _preSegments[seg]->getLength(),c2,c3);
+                }
+            }
         }
     }
     
@@ -395,6 +410,33 @@ void ArtnetControl::update()
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     if(solo)
     {
+        for (int stepElement = 0; stepElement < 14; stepElement++)
+        {
+            if(_livePatroon->getSeqStepA(_step)[stepElement] ==  true)
+            {
+                int s = _selections[stepElement].items.size();
+                for (int i = 0; i < s; i++)
+                {
+                    int seg = _selections[stepElement].items[i];
+                    _liveAnimator->drawToArray(*_livePatroon->getCurve(0),*_livePatroon->getDir(0),*_livePatroon->getTime(0),*freqA, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c1,c2);
+                }
+            }
+        }
+        //add now the second color
+        for (int stepElement = 0; stepElement < 14; stepElement++)
+        {
+            if(_livePatroon->getSeqStepB(_step)[stepElement] ==  true)
+            {
+                int s = _selections[stepElement].items.size();
+                for (int i = 0; i < s; i++)
+                {
+                    int seg = _selections[stepElement].items[i];
+                    _liveAnimator->addToArray(*_livePatroon->getCurve(1),*_livePatroon->getDir(1),*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
+                }
+            }
+        }
+        ////old
+        /*
         int s = _selections[selectionA].items.size();
         
         for (int i = 0; i < s; i++)
@@ -409,7 +451,7 @@ void ArtnetControl::update()
         {
             int seg = _selections[selectionB].items[i];
             _liveAnimator->addToArray(*_livePatroon->getCurve(1),*_livePatroon->getDir(1),*_livePatroon->getTime(1),*freqB, _liveSegments[seg]->getArray(), _liveSegments[seg]->getLength(),c3,c4);
-        }
+        }*/
     }
     
     

@@ -75,7 +75,7 @@ public:
     segmentSelector segmenselectorB;
     
     segmentSelector &getSegmenselectorA(){return segmenselectorA;};
-    segmentSelector &getSegmenselectorB(){return segmenselectorA;};
+    segmentSelector &getSegmenselectorB(){return segmenselectorB;};
     
     LightControl lightcontrol;
     
