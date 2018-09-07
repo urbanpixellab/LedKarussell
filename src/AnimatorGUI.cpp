@@ -133,9 +133,9 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // Left
     ofDrawRectRounded(CollumnEdit1-Padding,RowsEdit[0]-2*Padding,Collumnwidth*2+Padding*2,800,4);
     // Right
-    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[0]-2*Padding,Collumnwidth*2.8+Padding*2,600,4);
+    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[0]-2*Padding,Collumnwidth*2.8+Padding*2,560,4);
     // botom right
-    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[4]-2*Padding,Collumnwidth*2.8+Padding*2,200,4);
+    ofDrawRectRounded(COLLUMNLIVE-Padding,RowsLive[3]-2*Padding,Collumnwidth*2.8+Padding*2,230,4);
     
     
     // Draw text
@@ -144,6 +144,8 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     _verdana.drawString("Edit pattern", CollumnEdit1, RowsEdit[0]-Padding);
     // Right
     _verdana.drawString("Live", COLLUMNLIVE, RowsLive[0]-Padding);
+    // Right
+    _verdana.drawString("Light Commands", COLLUMNLIVE, RowsLive[3]-Padding);
     
     
     ofSetColor(255);
