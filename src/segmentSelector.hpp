@@ -13,8 +13,10 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 #include "Button.hpp"
+#include "Patroon.hpp"
 
 #define SEQUENCESTEPS 8
+#define NUMBERSELECTIONS 14
 
 class segmentSelector{
     
@@ -26,13 +28,18 @@ public:
     struct Selection
     {
         string name;//the name for selection
-        int beats [8] = { 0,0,0,0,0,0,0,0 };
+        bool sequence [SEQUENCESTEPS] = { false,false,false,false,false,false,false,false };
         Button*  stepbuttons[SEQUENCESTEPS];
     };
 
     
     void setup(ofRectangle area);
     void draw();
+    void mousePressed(ofMouseEventArgs &args);
+    void setSequence(int i,bool sequence[]);
+    bool *getSequence(int segmentID){ return selections[segmentID]->sequence; };
+    ofEvent<bool> segmentPressed;
+    
 
 private:
     int numSelections;
@@ -40,9 +47,9 @@ private:
     int fontSize;
     
     ofRectangle drawArea;
-    vector<vector<Button> > sequenceButtons;
-    vector<Selection> selections;
+    vector<Selection*> selections;
     ofTrueTypeFont	verdana14;
+    bool            _pressed;
 };
 
 #endif /* segmentSelector_hpp */
