@@ -90,7 +90,7 @@ void Button::mousePressed(ofMouseEventArgs &arg)
     else
     {
         isPressed = false;
-        //pressTimeout = ofGetElapsedTimef() + 0.05;
+        pressTimeout = ofGetElapsedTimef() + 0.05;
     }
     ofNotifyEvent(buttonPressed, name);
     ofNotifyEvent(buttonIDPressed, id);
