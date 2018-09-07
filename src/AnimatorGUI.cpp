@@ -45,47 +45,23 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     int y = _drawArea.getY();
     
     // COLLUMNEDIT1
-    RotarySlider *curveA = new RotarySlider();
-    curveA->setup(ofRectangle(CollumnEdit1,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true);
-    curveA->setResolution(20);
-    curveA->setName("curve");
+    RotarySlider *curveA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"curve");
     _slidersA[0] = curveA;
-    RotarySlider *timeA = new RotarySlider();
-    timeA->setup(ofRectangle(CollumnEdit1+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true);
-    timeA->setResolution(20);
-    timeA->setName("multi");
+    RotarySlider *timeA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true,true,20,"multi");
     _slidersA[1] = timeA;
-    RotarySlider *freqA = new RotarySlider();
-    freqA->setup(ofRectangle(CollumnEdit1,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true);
-    freqA->setResolution(100);
-    freqA->setName("freq");
+    RotarySlider *freqA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true,true,20,"freq");
     _slidersA[2] = freqA;
-    RotarySlider *dirA = new RotarySlider();
-    dirA->setup(ofRectangle(CollumnEdit1+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true);
-    dirA->setResolution(20);
-    dirA->setName("dir");
+    RotarySlider *dirA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersA[3] = dirA;
 
     // COLLUMNEDIT2
-    RotarySlider *curveB = new RotarySlider();
-    curveB->setup(ofRectangle(CollumnEdit2,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true);
-    curveB->setResolution(20);
-    curveB->setName("curve");
+    RotarySlider *curveB = new RotarySlider(ofRectangle(CollumnEdit2,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"curve");
     _slidersB[0] = curveB;
-    RotarySlider *timeB = new RotarySlider();
-    timeB->setup(ofRectangle(CollumnEdit2+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true);
-    timeB->setResolution(20);
-    timeB->setName("multi");
+    RotarySlider *timeB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0],60,60),ofVec2f(0,4),0,true,true,20,"multi");
     _slidersB[1] = timeB;
-    RotarySlider *freqB = new RotarySlider();
-    freqB->setup(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true);
-    freqB->setResolution(100);
-    freqB->setName("freq");
+    RotarySlider *freqB = new RotarySlider(ofRectangle(CollumnEdit2,RowsEdit[0]+80,60,60),ofVec2f(0.1,25),0,true,true,20,"freq");
     _slidersB[2] = freqB;
-    RotarySlider *dirB = new RotarySlider();
-    dirB->setup(ofRectangle(CollumnEdit2+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true);
-    dirB->setResolution(20);
-    dirB->setName("dir");
+    RotarySlider *dirB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersB[3] = dirB;
     
     // Create colorselectorS
