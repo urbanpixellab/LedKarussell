@@ -22,6 +22,7 @@ public:
     ~Segment();
     
     u_int8_t *getArray(){return _values;};
+    u_int8_t *getPostArray(){return _postValues;};
     u_int8_t *getPixel(int id);
     void setPixel(int id, int r, int g, int b);
     void setPixel(int id, ofColor color);
@@ -44,6 +45,7 @@ private:
     int             _length; // the used array length
     int             _funcSelect;
     u_int8_t        _values[512];//max size
+    u_int8_t        _postValues[512];//used for the post effects
     u_int8_t        *_pixel[3];
     u_int8_t        _pixLength;
     int             _nodeID;

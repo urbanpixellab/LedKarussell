@@ -437,10 +437,9 @@ void ArtnetControl::update()
             }
         }
     }
-    
-    
-
     //dont forget the fade out function to the beat and the blink function
+    // use the postarray of the segments for this functions
+    
 
     // now updaste the arrays to the visualizer
     writeSegmentsToImage(_preSegments, _preIMG);

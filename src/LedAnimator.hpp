@@ -48,8 +48,8 @@ public:
 
     void drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
     void addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
-    // plus later 3 offset and frequency parameter
-//    int getSelectionMax(){return _selections.size();};
+    
+    
     
 private:
     
