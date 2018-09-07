@@ -343,7 +343,8 @@ void ArtnetControl::update()
     
     //first fill all with background color
     ofColor black(0,0,0);
-
+    
+    _GUI->getSegmenselectorA().getSequence(0);
     
     // Get colors from editPatroon
     vector<int> getColorIDs = _editPatroon->getColorIDs();
@@ -474,8 +475,8 @@ void ArtnetControl::sendToNodes()
         {
             //get the array where to write which function
             //and write it to the nodes
-            u_int64_t data = _preSegments[i]->getArray()[first+cell];
-//            u_int64_t data = _liveSegments[i]->getArray()[first+cell];
+//            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+            u_int64_t data = _liveSegments[i]->getArray()[first+cell];
             // mach was damit
             _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
         }

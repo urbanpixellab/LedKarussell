@@ -42,6 +42,7 @@ public:
     
     void setColors(int * array,int length);
     void setSeqSel(int layer,int step,int *selection,int length);
+    
 
 private:
     int             _id;
