@@ -524,8 +524,26 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
 {
     //we have selected a segment in a seguence sent to edit patroon
     cout << " we need to set the editpatroon " << endl;
-    //_GUI->segmenselectorA().getSequence(1);
-    //_editPatroon->setSeqA(step, row);
+    
+    // FIXME: Why do we need the getSegmenselectorA for the call?
+    // FIXME: do we need a function in patroon to set the whole sequence in one go?
+    // Loop through segment selection
+    for(int s=0; s < 14; s++)
+    {
+        // loop through sequence step
+        for(int i=0;i< 8;i++){
+            // get the sequence step i for segemnt s
+            bool valueA = _GUI->getSegmenselectorA().getSequence(s)[i];
+            bool valueB = _GUI->getSegmenselectorB().getSequence(s)[i];
+            _editPatroon->setSeqA(i, s, valueA);
+            _editPatroon->setSeqB(i, s, valueB);
+        }
+    }
+    
+    // First _editpatroon to the patronen
+    _patronen[_editPatroon->getID()] = *_editPatroon;
+    
+    
 }
 
 
@@ -572,8 +590,14 @@ void ArtnetControl::EditPatronPressed(int & iD)
     _GUI->getDirSliderA()->setValueMapped(float(*_editPatroon->getDir(0)));
     _GUI->getDirSliderB()->setValueMapped(float(*_editPatroon->getDir(1)));
     
-    
-    
+    // Looop through the sequence steps and set sequence form pattern
+    _GUI->getSegmenselectorA().clearStepsOfSegments();
+    _GUI->getSegmenselectorB().clearStepsOfSegments();
+    for(int i=0;i< 8;i++)
+    {
+        _GUI->getSegmenselectorA().setSequence(i, _editPatroon->getSeqStepA(i));
+        _GUI->getSegmenselectorB().setSequence(i, _editPatroon->getSeqStepB(i));
+    }
     
     cout << "edit patron pressed " << iD << endl;
 }

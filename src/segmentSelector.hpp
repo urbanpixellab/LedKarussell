@@ -39,6 +39,7 @@ public:
     void setSequence(int i,bool sequence[]);
     bool *getSequence(int segmentID){ return selections[segmentID]->sequence; };
     ofEvent<bool> segmentPressed;
+    void clearStepsOfSegments();
     
 
 private:
