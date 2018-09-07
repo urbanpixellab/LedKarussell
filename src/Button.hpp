@@ -26,6 +26,7 @@ public:
     
     void mousePressed(ofMouseEventArgs &arg);
     bool &getState(){return isPressed;};
+    bool &getIstoggle(){return isToggle;};
     void setState(bool state){ isPressed = state; };
 
     void activateListener();
