@@ -16,7 +16,10 @@
 class Patroon
 {
 public:
-    Patroon(int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD);
+    
+    //Patroon(int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD);
+    
+    Patroon(int id,int curveA,int curveB,float freqA,float freqB,float dirA, float dirB,int timeA, int timeB,int colorA, int colorB,int colorC, int colorD, int curvePhaseA, int curvePhaseB, float freqPhaseA, float freqPhaseB);
     ~Patroon();
     
     void clear();
@@ -44,6 +47,10 @@ public:
     
     void setColors(int * array,int length);
     void setSeqSel(int layer,int step,int *selection,int length);
+    
+    // DEBUG
+    void printPatroon();
+    void printMatrix();
     
 
 private:

@@ -72,6 +72,8 @@ public:
     void segmentSelectPressed(bool &pressed);
     void sliderChanged(bool & value);
     int getNumStepsSequence(){ return _numStepsInSequnce; }
+    int getNumPatterns(){ return int(_patronen.size());}
+    int getNumSelections(){ return int(_selections.size());}
     
 private:
 

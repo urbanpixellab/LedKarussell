@@ -141,14 +141,14 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
     
     
     // Debug
-    /*
+    
    for (int i = 0; i < selections.size(); i++)
    {
-        cout << selections[i]->name << " ";
+        cout << selections[i]->name << " i: " << i << " ";
         for (int j = 0; j < SEQUENCESTEPS; j++){
                 cout << ofToString(selections[i]->sequence[j]) << " ";
         }
         cout << endl;
     }
-     */
+     
 }
