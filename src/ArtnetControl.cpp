@@ -31,7 +31,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     
     // FIXME: probably not the best way to do it.
     // SET SEGMENT SELECTOR FORM EDIT PATROON
-    for(int i=0;i<8;i++)
+    for(int i=0;i<getNumStepsSequence();i++)
     {
         _GUI->segmenselectorA.setSequence(i,_editPatroon->getSeqStepA(i));
         _GUI->segmenselectorB.setSequence(i,_editPatroon->getSeqStepB(i));
@@ -269,7 +269,7 @@ void ArtnetControl::loadPatroon()
         for (int l = 0; l < sel.getNumTags("layer"); l++)
         {
             sel.pushTag("layer",l);
-            for (int step = 0; step < 8; step++)
+            for (int step = 0; step < getNumStepsSequence(); step++)
             {
                 vector<string> result = ofSplitString(sel.getValue(steps[step], ""), ",");
                 for (int selection = 0; selection < result.size(); selection++)
@@ -294,7 +294,7 @@ void ArtnetControl::savePatroon()
 {
     ofxXmlSettings settings;
     int maxSel = 13;
-    int maxStep = 8;
+    int maxStep = getNumStepsSequence();
     for (int p = 0; p < _patronen.size(); p++)//patron
     {
         settings.addTag("patroon");
@@ -350,7 +350,7 @@ void ArtnetControl::update()
     if(_MC->getBeat())
     {
         _step++;
-        if(_step >= 8) _step = 0;
+        if(_step >= getNumStepsSequence()) _step = 0;
     }
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
@@ -526,7 +526,7 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
     for(int s=0; s < 14; s++)
     {
         // loop through sequence step
-        for(int i=0;i< 8;i++){
+        for(int i=0;i< getNumStepsSequence();i++){
             // get the sequence step i for segemnt s
             bool valueA = _GUI->getSegmenselectorA().getSequence(s)[i];
             bool valueB = _GUI->getSegmenselectorB().getSequence(s)[i];
@@ -591,7 +591,7 @@ void ArtnetControl::EditPatronPressed(int & iD)
     // Looop through the sequence steps and set sequence form pattern
     _GUI->getSegmenselectorA().clearStepsOfSegments();
     _GUI->getSegmenselectorB().clearStepsOfSegments();
-    for(int i=0;i< 8;i++)
+    for(int i=0;i< getNumStepsSequence();i++)
     {
         _GUI->getSegmenselectorA().setSequence(i, _editPatroon->getSeqStepA(i));
         _GUI->getSegmenselectorB().setSequence(i, _editPatroon->getSeqStepB(i));
