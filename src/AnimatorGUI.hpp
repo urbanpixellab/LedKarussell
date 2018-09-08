@@ -87,9 +87,12 @@ public:
     
     LightControl lightcontrol;
     
-    
     void editButtonPressed(int &id);
     void liveButtonPressed(int &id);
+    
+    // needed for set initial state of buttons
+    void setEditButtonState(int &id, bool state);
+    void setLiveButtonState(int &id, bool state);
     
     //Positioning GUI
     int CollumnEdit1;

@@ -10,6 +10,9 @@
 
 ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
+    // set number of steps in the segment sequence
+    _numStepsInSequnce = 8;
+    
     _GUI = new AnimatorGUI(ofRectangle(100,50,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
 
@@ -23,14 +26,8 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     // Load all the nodes form XML
     loadNodes();
     
-    // Load aal the patterns from XML
+    // Load all the patterns from XML
     loadPatroon();
-    
-    // set colors from editPatroon to color selector
-    vector<int> colIDs = _editPatroon->getColorIDs();
-    cout <<"HIER "<<  colIDs[0] << " " << colIDs[1] << " "<< colIDs[2] << " "<< colIDs[3] << " "<< endl;
-    int a[] = {colIDs[0],colIDs[1]};
-    int b[] = {colIDs[2],colIDs[3]};
     
     // FIXME: probably not the best way to do it.
     // SET SEGMENT SELECTOR FORM EDIT PATROON
@@ -40,9 +37,17 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
         _GUI->segmenselectorB.setSequence(i,_editPatroon->getSeqStepB(i));
     }
     
+    // To initialize the program we set the dit pattern and live patten to 0
+    int id = 0;
+    // Simulate a button press for edit and live buttons
+    EditPatronPressed(id);
+    PlayPatronPressed(id);
+    // Set states of edit buttons and live buttons
+    _GUI->setEditButtonState(id,true);
+    _GUI->setLiveButtonState(id,true);
+    
     
     //Listeners
-    
     ofAddListener(ofEvents().keyPressed, this, &ArtnetControl::keyPressed);
     //ad listeners to the patroon select buttons for different functions
     ofAddListener(_GUI->curveAPressed, this, &ArtnetControl::curveAPressed);
@@ -296,6 +301,7 @@ void ArtnetControl::loadPatroon()
 
     _editPatroon = &_patronen[0];
     _livePatroon = &_patronen[0];
+    
 }
 
 void ArtnetControl::savePatroon()
@@ -590,7 +596,7 @@ void ArtnetControl::sliderChanged(bool & value)
 void ArtnetControl::PlayPatronPressed(int & id)
 {
     _livePatroon = &_patronen[id];
-    cout << "play patron pressed " << id << endl;
+    //cout << "play patron pressed " << id << endl;
 }
 void ArtnetControl::EditPatronPressed(int & iD)
 {

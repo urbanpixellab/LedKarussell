@@ -71,6 +71,7 @@ public:
     void colorPressed(bool &pressed);
     void segmentSelectPressed(bool &pressed);
     void sliderChanged(bool & value);
+    int getNumStepsSequence(){ return _numStepsInSequnce; }
     
 private:
 
@@ -102,6 +103,7 @@ private:
     Patroon                 *_livePatroon;//this is directly writing to the patroon
     
     int                     _step;
+    int                     _numStepsInSequnce;
     float                   _freqences[16] = {0,125.25,.5,.75,1,2,3,4,5,6,7,8,12,16,20,24}; //length goes to gui
 };
 
