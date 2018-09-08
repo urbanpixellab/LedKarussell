@@ -266,6 +266,5 @@ void RotarySlider::setValueMapped(float val)
     valueMapped = val;
     // value is the internal value for the slider which is always between 0-1
     value = ofMap(val, range.x, range.y, 0., 1.);
-    cout << val << " " << value << " " << " " << range.x << " " << range.y << endl;
     updateSlider();
 }
