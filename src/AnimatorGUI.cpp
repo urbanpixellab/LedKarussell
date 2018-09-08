@@ -30,6 +30,10 @@ AnimatorGUI::~AnimatorGUI()
         delete _patEditButtons[i];
         delete _patLiveButtons[i];
     }
+    for (int i = 0; i < _postEffectsButtons.size(); i++)
+    {
+        delete _postEffectsButtons[i];
+    }
 }
 
 void AnimatorGUI::createAnimationGUI(int animationCount)
@@ -57,7 +61,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _slidersA[3] = dirA;
     RotarySlider *phaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"phaseC");
     _slidersA[4] = phaseA;
-    RotarySlider *freqPhaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0]+80,60,60),ofVec2f(0,5),0,true,false,20,"freqP");
+    RotarySlider *freqPhaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0]+80,60,60),ofVec2f(0,10),0,true,false,20,"freqP");
     _slidersA[5] = freqPhaseA;
 
     // COLLUMNEDIT2
@@ -72,7 +76,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _slidersB[3] = dirB;
     RotarySlider *phaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"phaseC");
     _slidersB[4] = phaseB;
-    RotarySlider *freqPhaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0]+80,60,60),ofVec2f(0,5),0,true,false,20,"freqP");
+    RotarySlider *freqPhaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0]+80,60,60),ofVec2f(0,10),0,true,false,20,"freqP");
     _slidersB[5] = freqPhaseB;
     
     // Create colorselectorS
@@ -110,6 +114,17 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
         _patLiveButtons.push_back(l);
     }
+    //adding post effects
+    
+    int x = COLLUMNLIVE + (w*2.2);
+    y = RowsEdit[0] + (h * 1.1);
+    Button *pFlash = new Button();
+    pFlash->setup(ofRectangle(780,550,w,h), "Flash", true);
+    _postEffectsButtons.push_back(pFlash);
+
+    Button *pInvert = new Button();
+    pInvert->setup(ofRectangle(780+w*1.1,550,w,h), "Invert", true);
+    _postEffectsButtons.push_back(pInvert);
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
@@ -180,6 +195,11 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
         _patEditButtons[i]->draw();
         _patLiveButtons[i]->draw();
     }
+    // post effect sliders
+    for (int i = 0; i < _postEffectsButtons.size(); i++)
+    {
+        _postEffectsButtons[i]->draw();
+    }
 }
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
@@ -209,6 +229,7 @@ void AnimatorGUI::liveButtonPressed(int &id)
     }
     ofNotifyEvent(patronPLAY,id);
 }
+
 
 void AnimatorGUI::setEditButtonState(int &id, bool state)
 {
