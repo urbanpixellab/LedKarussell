@@ -45,7 +45,6 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     int y = _drawArea.getY();
     
     // COLLUMNEDIT1
-    // FIXME: animationCount-1 -> animationCount
     RotarySlider *curveA = new RotarySlider(ofRectangle(CollumnEdit1,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"curve");
     _slidersA[0] = curveA;
     RotarySlider *timeA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0],60,60),ofVec2f(0,6),0,true,true,20,"multi");

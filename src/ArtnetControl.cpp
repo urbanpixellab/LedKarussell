@@ -598,11 +598,8 @@ void ArtnetControl::sliderChanged(bool & value)
     *_editPatroon->getPhase(0) = _GUI->getSlidersAMapped(4);
     *_editPatroon->getPhase(1) = _GUI->getSlidersBMapped(4);
 
-    // FIXME: which one?
     *_editPatroon->getPhaseFreq(0) = _GUI->getSlidersAMapped(5);
     *_editPatroon->getPhaseFreq(1) = _GUI->getSlidersBMapped(5);
-    //*_editPatroon->getPhaseFreq(0) = _GUI->getPhaseFreqSliderA()->getValue();
-    //*_editPatroon->getPhaseFreq(1) = _GUI->getPhaseFreqSliderB()->getValue();
     
     //_editPatroon->printPatroon();
 }
