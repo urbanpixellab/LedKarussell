@@ -30,6 +30,7 @@ public:
         TRI,
         RECT,
         SINE,
+        NOISE,
         CURVE_COUNT
     };
     

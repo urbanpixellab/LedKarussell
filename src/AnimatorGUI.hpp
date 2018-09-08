@@ -18,7 +18,7 @@
 #include "LightControl.hpp"
 
 
-#define SLIDERS 4
+#define SLIDERS 6
 
 //#define COLLUMNEDIT1 0
 //#define COLLUMNEDIT2 300

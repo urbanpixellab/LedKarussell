@@ -99,6 +99,16 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             break;
         }
             
+        case CURVE::NOISE:
+        {
+            for (int i = 0; i < len; i++) //reduce to pixel
+            {
+                values[i] = ofNoise(ofGetElapsedTimef())*(0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);;
+            }
+            
+            break;
+        }
+            
         default:
             break;
     }
