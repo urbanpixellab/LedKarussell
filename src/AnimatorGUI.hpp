@@ -18,7 +18,7 @@
 #include "LightControl.hpp"
 
 
-#define SLIDERS 4
+#define SLIDERS 6
 
 //#define COLLUMNEDIT1 0
 //#define COLLUMNEDIT2 300
@@ -74,6 +74,10 @@ public:
     RotarySlider *getFreqSliderB(){return _slidersB[2];}
     RotarySlider *getDirSliderA(){return _slidersA[3];}
     RotarySlider *getDirSliderB(){return _slidersB[3];}
+    RotarySlider *getPhaseCurveSliderA(){return _slidersA[4];}
+    RotarySlider *getPhaseCurveSliderB(){return _slidersB[4];}
+    RotarySlider *getPhaseFreqSliderA(){return _slidersA[5];}
+    RotarySlider *getPhaseFreqSliderB(){return _slidersB[5];}
     
     segmentSelector segmenselectorA;
     segmentSelector segmenselectorB;

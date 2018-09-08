@@ -1,105 +1,117 @@
 <patroon>
     <id>0</id>
     <layer>
-        <curve>2</curve>
-        <cFreq>0.000000000</cFreq>
+        <curve>6</curve>
+        <cFreq>0</cFreq>
         <cDir>0</cDir>
         <cTime>0</cTime>
-        <colorA>28</colorA>
+        <colorA>0</colorA>
         <colorB>0</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>1,5</step0>
+        <step1>0,4</step1>
+        <step2>3,7</step2>
+        <step3>2,6</step3>
+        <step4>1,5</step4>
+        <step5>0,4</step5>
+        <step6>3,7</step6>
+        <step7>2,6</step7>
     </layer>
     <layer>
-        <curve>2</curve>
-        <cFreq>0.000000000</cFreq>
+        <curve>0</curve>
+        <cFreq>0</cFreq>
         <cDir>0</cDir>
         <cTime>0</cTime>
-        <colorA>15</colorA>
-        <colorB>0</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <colorA>1</colorA>
+        <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>10</step0>
+        <step1>9</step1>
+        <step2>8,10</step2>
+        <step3>0</step3>
+        <step4>9</step4>
+        <step5>8,10</step5>
+        <step6>9</step6>
+        <step7>8,10</step7>
     </layer>
 </patroon>
 <patroon>
     <id>1</id>
     <layer>
         <curve>6</curve>
-        <cFreq>4.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>4</cDir>
-        <cTime>0</cTime>
-        <colorA>0</colorA>
-        <colorB>0</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <cTime>3</cTime>
+        <colorA>1</colorA>
+        <colorB>14</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>3,10</step0>
+        <step1>3,10</step1>
+        <step2>3,10</step2>
+        <step3>3,10</step3>
+        <step4>3,10</step4>
+        <step5>3,10</step5>
+        <step6>3,10</step6>
+        <step7>3,10</step7>
     </layer>
     <layer>
-        <curve>2</curve>
-        <cFreq>3.087999821</cFreq>
+        <curve>6</curve>
+        <cFreq>0</cFreq>
         <cDir>0</cDir>
-        <cTime>3</cTime>
-        <colorA>0</colorA>
-        <colorB>0</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <cTime>5</cTime>
+        <colorA>14</colorA>
+        <colorB>7</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>0,3</step0>
+        <step1>0</step1>
+        <step2>0,5</step2>
+        <step3>0</step3>
+        <step4>0,7</step4>
+        <step5>0,9</step5>
+        <step6>0</step6>
+        <step7>0,11</step7>
     </layer>
 </patroon>
 <patroon>
     <id>2</id>
     <layer>
         <curve>6</curve>
-        <cFreq>3.000000000</cFreq>
-        <cDir>3</cDir>
-        <cTime>1</cTime>
+        <cFreq>0</cFreq>
+        <cDir>0</cDir>
+        <cTime>3</cTime>
         <colorA>10</colorA>
-        <colorB>0</colorB>
-        <step0>2,3</step0>
+        <colorB>8</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>0,1,12</step0>
         <step1>2,3</step1>
-        <step2>2,3</step2>
+        <step2>2,7</step2>
         <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
+        <step4>3,9</step4>
+        <step5>2</step5>
+        <step6>2,3,11</step6>
         <step7>2,3</step7>
     </layer>
     <layer>
         <curve>4</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
-        <cTime>1</cTime>
+        <cFreq>0</cFreq>
+        <cDir>0</cDir>
+        <cTime>2</cTime>
         <colorA>6</colorA>
         <colorB>0</colorB>
-        <step0>2,3</step0>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>0,1,12</step0>
         <step1>2,3</step1>
-        <step2>2,3</step2>
+        <step2>2,7,9,11</step2>
         <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
+        <step4>3,9,10</step4>
+        <step5>2,7</step5>
+        <step6>2,3,11</step6>
         <step7>2,3</step7>
     </layer>
 </patroon>
@@ -107,11 +119,52 @@
     <id>3</id>
     <layer>
         <curve>5</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
-        <cTime>1</cTime>
+        <cFreq>0</cFreq>
+        <cDir>3</cDir>
+        <cTime>3</cTime>
+        <colorA>8</colorA>
+        <colorB>9</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>8</step0>
+        <step1>3,7,9</step1>
+        <step2>8</step2>
+        <step3>3,7,9</step3>
+        <step4>8</step4>
+        <step5>3,7,9</step5>
+        <step6>8</step6>
+        <step7>3,7,9</step7>
+    </layer>
+    <layer>
+        <curve>6</curve>
+        <cFreq>0</cFreq>
+        <cDir>4</cDir>
+        <cTime>3</cTime>
+        <colorA>1</colorA>
+        <colorB>0</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>3,7,9</step0>
+        <step1>8</step1>
+        <step2>3,7,9</step2>
+        <step3>8</step3>
+        <step4>3,7,9</step4>
+        <step5>8</step5>
+        <step6>3,7,9</step6>
+        <step7>0</step7>
+    </layer>
+</patroon>
+<patroon>
+    <id>4</id>
+    <layer>
+        <curve>4</curve>
+        <cFreq>0</cFreq>
+        <cDir>4</cDir>
+        <cTime>6</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -123,46 +176,13 @@
     </layer>
     <layer>
         <curve>6</curve>
-        <cFreq>4.000000000</cFreq>
-        <cDir>4</cDir>
-        <cTime>1</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
-    </layer>
-</patroon>
-<patroon>
-    <id>4</id>
-    <layer>
-        <curve>4</curve>
-        <cFreq>4.000000000</cFreq>
-        <cDir>4</cDir>
-        <cTime>0</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
-    </layer>
-    <layer>
-        <curve>4</curve>
-        <cFreq>2.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>2</cDir>
-        <cTime>0</cTime>
+        <cTime>6</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -176,47 +196,53 @@
 <patroon>
     <id>5</id>
     <layer>
-        <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
+        <curve>6</curve>
+        <cFreq>3</cFreq>
+        <cDir>0</cDir>
         <cTime>1</cTime>
-        <colorA>0</colorA>
+        <colorA>11</colorA>
         <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.625000000</phaseFreq>
+        <step0>2,3,9,12</step0>
+        <step1>2,3,10,12</step1>
+        <step2>2,3,11,12</step2>
+        <step3>2,3,10,12</step3>
+        <step4>2,3,11,12</step4>
+        <step5>2,3,10,12</step5>
+        <step6>2,3,9,12</step6>
+        <step7>2,3,10,12</step7>
     </layer>
     <layer>
-        <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
-        <cTime>1</cTime>
-        <colorA>0</colorA>
+        <curve>5</curve>
+        <cFreq>6</cFreq>
+        <cDir>3</cDir>
+        <cTime>4</cTime>
+        <colorA>14</colorA>
         <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <phaseCurve>1065353216</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>2,3,11,12</step0>
+        <step1>2,3,11,12</step1>
+        <step2>2,3,11,12</step2>
+        <step3>2,3,11,12</step3>
+        <step4>2,3,11,12</step4>
+        <step5>2,3,11,12</step5>
+        <step6>2,3,11,12</step6>
+        <step7>2,3,11,12</step7>
     </layer>
 </patroon>
 <patroon>
     <id>6</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -228,11 +254,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -247,11 +275,13 @@
     <id>7</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -263,11 +293,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -282,11 +314,13 @@
     <id>8</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -298,11 +332,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -317,15 +353,17 @@
     <id>9</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
-        <step3>2,3</step3>
+        <step3>0</step3>
         <step4>2,3</step4>
         <step5>2,3</step5>
         <step6>2,3</step6>
@@ -333,15 +371,17 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
-        <step3>2,3</step3>
+        <step3>0</step3>
         <step4>2,3</step4>
         <step5>2,3</step5>
         <step6>2,3</step6>
@@ -352,11 +392,13 @@
     <id>10</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -368,11 +410,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -387,11 +431,13 @@
     <id>11</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
+        <colorA>11</colorA>
+        <colorB>7</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -402,12 +448,14 @@
         <step7>2,3</step7>
     </layer>
     <layer>
-        <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
+        <curve>3</curve>
+        <cFreq>0</cFreq>
+        <cDir>10</cDir>
         <cTime>1</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
+        <colorA>9</colorA>
+        <colorB>13</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -422,11 +470,13 @@
     <id>12</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -438,11 +488,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -457,81 +509,91 @@
     <id>13</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
+        <cFreq>0</cFreq>
+        <cDir>7</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>0,1,2,3,4,5</step0>
+        <step1>2,3,5</step1>
         <step2>2,3</step2>
         <step3>2,3</step3>
         <step4>2,3</step4>
         <step5>2,3</step5>
-        <step6>2,3</step6>
+        <step6>2,3,6</step6>
         <step7>2,3</step7>
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>0,1,2,3,4,5</step0>
+        <step1>2,3,5</step1>
         <step2>2,3</step2>
         <step3>2,3</step3>
         <step4>2,3</step4>
         <step5>2,3</step5>
-        <step6>2,3</step6>
+        <step6>2,3,6</step6>
         <step7>2,3</step7>
     </layer>
 </patroon>
 <patroon>
     <id>14</id>
     <layer>
-        <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
+        <curve>2</curve>
+        <cFreq>0</cFreq>
+        <cDir>2</cDir>
         <cTime>1</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <colorA>3</colorA>
+        <colorB>8</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>2,6,8</step0>
+        <step1>9</step1>
+        <step2>1,4,8</step2>
+        <step3>6,9</step3>
+        <step4>8</step4>
+        <step5>0,9</step5>
+        <step6>2,5,8</step6>
+        <step7>1,4,9</step7>
     </layer>
     <layer>
-        <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
-        <cDir>1</cDir>
-        <cTime>1</cTime>
-        <colorA>0</colorA>
-        <colorB>1</colorB>
-        <step0>2,3</step0>
-        <step1>2,3</step1>
-        <step2>2,3</step2>
-        <step3>2,3</step3>
-        <step4>2,3</step4>
-        <step5>2,3</step5>
-        <step6>2,3</step6>
-        <step7>2,3</step7>
+        <curve>2</curve>
+        <cFreq>0</cFreq>
+        <cDir>2</cDir>
+        <cTime>3</cTime>
+        <colorA>13</colorA>
+        <colorB>3</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
+        <step0>11</step0>
+        <step1>11</step1>
+        <step2>11</step2>
+        <step3>11</step3>
+        <step4>11</step4>
+        <step5>11</step5>
+        <step6>11</step6>
+        <step7>11</step7>
     </layer>
 </patroon>
 <patroon>
     <id>15</id>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000000</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
@@ -543,11 +605,13 @@
     </layer>
     <layer>
         <curve>0</curve>
-        <cFreq>1.000000000</cFreq>
+        <cFreq>0</cFreq>
         <cDir>1</cDir>
         <cTime>1</cTime>
         <colorA>0</colorA>
         <colorB>1</colorB>
+        <phaseCurve>0</phaseCurve>
+        <phaseFreq>0.000000224</phaseFreq>
         <step0>2,3</step0>
         <step1>2,3</step1>
         <step2>2,3</step2>
