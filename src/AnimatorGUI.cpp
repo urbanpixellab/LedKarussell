@@ -114,13 +114,17 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
         ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
         _patLiveButtons.push_back(l);
     }
+    //adding post effects
     
     int x = COLLUMNLIVE + (w*2.2);
     y = RowsEdit[0] + (h * 1.1);
-    // buttons for post effects
     Button *pFlash = new Button();
     pFlash->setup(ofRectangle(780,550,w,h), "Flash", true);
     _postEffectsButtons.push_back(pFlash);
+
+    Button *pInvert = new Button();
+    pInvert->setup(ofRectangle(780+w*1.1,550,w,h), "Invert", true);
+    _postEffectsButtons.push_back(pInvert);
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)

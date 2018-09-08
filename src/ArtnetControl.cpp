@@ -456,32 +456,27 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     }
     //test flash
     
-    bool _isFlash = _GUI->getPostEffectButton(0)->getState();
+    if(_GUI->getPostEffectButton(0)->getState() == true) _flashCount = 255;
     //paint white over it if false reduce the value and if value == 0 stop it
-    if (_isFlash)
+    if (_flashCount > 5)
     {
-        _flashCount = 255;
         ofColor white(_flashCount);
         float f = 0;
         for (int seg = 0; seg < 33; seg++)
         {
-            animator->drawToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
+            animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
+        }
+        _flashCount -= 5;
+    }
+    //test invert
+    if (_GUI->getPostEffectButton(1)->getState() == true)
+    {
+        for (int seg = 0; seg < 33; seg++)
+        {
+            animator->invert(segments[seg]->getArray(), segments[seg]->getLength());
         }
     }
-    else
-    {
-        //check if flashcount > 0
-        _flashCount -= 5;
-        if (_flashCount > 5)
-        {
-            ofColor white(_flashCount);
-            float f = 0;
-            for (int seg = 0; seg < 33; seg++)
-            {
-                animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
-            }
-        };
-    }
+    
 }
 
 float ArtnetControl::frequenzShift(int curve,float time, float freq)

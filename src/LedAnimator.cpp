@@ -302,3 +302,11 @@ void LedAnimator::BuitenBinnenArray(float *array, int length)
         array[i] = tmp[i*2];
     }
 }
+
+void LedAnimator::invert(u_int8_t * selectionArrays,int &length)
+{
+    for (int i = 0; i < length; i++)
+    {
+       selectionArrays[i] = 255 - selectionArrays[i];
+    }
+}
