@@ -249,6 +249,8 @@ void ArtnetControl::loadPatroon()
         int dir[sel.getNumTags("layer")];
         int time[sel.getNumTags("layer")];
         int color[sel.getNumTags("layer") * 2];
+        int phaseCurve[sel.getNumTags("layer")];
+        int phaseFreq[sel.getNumTags("layer")];
         
         for (int l = 0; l < sel.getNumTags("layer"); l++)
         {
@@ -259,10 +261,18 @@ void ArtnetControl::loadPatroon()
             time[l] = sel.getValue("cTime", 2);
             color[(l * 2) + 0] = sel.getValue("colorA", 0);
             color[(l * 2) + 1] = sel.getValue("colorB", 0);
+            phaseCurve[l] = sel.getValue("phaseCurve", 0);// getColorIDs()[(l*2) + 0]);
+            phaseFreq[l] = sel.getValue("phaseFreq", 0);// getColorIDs()[(l*2) + 0]);
+
             sel.popTag();
         }
         Patroon p(id,curve[0],curve[1],freq[0],freq[1],dir[0],dir[1],time[0],time[1],color[0],color[1],color[2],color[3]);
         // add the sequence matrix based on the indices
+        *p.getPhase(0) = phaseCurve[0];
+        *p.getPhase(1) = phaseCurve[1];
+        *p.getFreq(0) = phaseFreq[0];
+        *p.getFreq(1) = phaseFreq[1];
+        
         //vector<int>
         string steps[8] = {"step0","step1","step2","step3","step4","step5","step6","step7"};
         for (int l = 0; l < sel.getNumTags("layer"); l++)
@@ -308,6 +318,8 @@ void ArtnetControl::savePatroon()
             settings.addValue("cTime", *_patronen[p].getTime(l));
             settings.addValue("colorA", _patronen[p].getColorIDs()[(l*2) + 0]);
             settings.addValue("colorB", _patronen[p].getColorIDs()[(l*2) + 1]);
+            settings.addValue("phaseCurve", *_patronen[p].getPhase((l*2) + 0));// getColorIDs()[(l*2) + 0]);
+            settings.addValue("phaseFreq", *_patronen[p].getPhaseFreq((l*2) + 1));
             
             if(l == 0)
             {
@@ -397,7 +409,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    float segShift = sin(i/float(s) * TWO_PI * _GUI->getPhaseFreqSliderA()->getValueMapped()); // based on the curve and the frequency and the index
+                    float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
                     //muss nur einmal hier berechnet werden
                     
                     animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2,segShift);
@@ -413,7 +425,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    float segShift = i/float(s); // based on the setup and the index
+                    float segShift = cos(i/float(s) * TWO_PI * *pattern->getPhaseFreq(1)); // based on the curve
+                    
                     animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3,segShift);
                 }
             }
@@ -570,8 +583,8 @@ void ArtnetControl::sliderChanged(bool & value)
     *_editPatroon->getPhase(0) = _GUI->getSlidersAMapped(4);
     *_editPatroon->getPhase(1) = _GUI->getSlidersBMapped(4);
 
-    *_editPatroon->getPhaseFreq(0) = _GUI->getSlidersAMapped(5);
-    *_editPatroon->getPhaseFreq(1) = _GUI->getSlidersBMapped(5);
+    *_editPatroon->getPhaseFreq(0) = _GUI->getPhaseFreqSliderA()->getValue();
+    *_editPatroon->getPhaseFreq(1) = _GUI->getPhaseFreqSliderB()->getValue();
 }
 
 void ArtnetControl::PlayPatronPressed(int & id)

@@ -32,7 +32,7 @@ public:
     int *getDir(int id){return &_dir[id];};
     int *getTime(int id){return &_time[id];};
     int *getPhase(int id){return &_curvePhase[id];};
-    int *getPhaseFreq(int id){return &_freqPhase[id];};
+    float *getPhaseFreq(int id){return &_freqPhase[id];};
     
     void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
     void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};
@@ -56,7 +56,7 @@ private:
     bool            _sequenceA[8][14];
     bool            _sequenceB[8][14];
     int             _curvePhase[2] = {0,0};
-    int             _freqPhase[2] = {1,1};
+    float           _freqPhase[2] = {0,0};
     int             _step;
     
 
