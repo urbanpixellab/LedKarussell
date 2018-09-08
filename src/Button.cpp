@@ -18,6 +18,7 @@ Button::Button()
     Active = ofColor(255,0,0);
     textColor = ofColor(0);
     isPressed = false;
+    _verdana.load("verdana.ttf", 10, true, true);
 }
 
 Button::Button(int id,ofRectangle area, string name, bool toogle):id(id), drawArea(area),name(name),isToggle(toogle)
@@ -27,6 +28,7 @@ Button::Button(int id,ofRectangle area, string name, bool toogle):id(id), drawAr
     Active = ofColor(255,0,0);
     textColor = ofColor(0);
     isPressed = false;
+    _verdana.load("verdana.ttf", 10, true, true);
 }
 
 Button::~Button()
@@ -54,6 +56,14 @@ void Button::setColors(ofColor nonactive, ofColor active, ofColor text){
     textColor = text;
 }
 
+void  Button::drawTextCentered(string text, ofRectangle area)
+{
+    ofRectangle r = _verdana.getStringBoundingBox(text, 0,0);
+    int x = area.x + area.getWidth()/2 - r.getWidth()/2;
+    int y = area.y + area.getHeight()/2 + r.getHeight()/2;
+    _verdana.drawString(name, x, y);
+}
+
 void Button::draw()
 {
     if (isPressed) ofSetColor(Active);
@@ -61,7 +71,7 @@ void Button::draw()
     ofFill();
     ofDrawRectRounded(drawArea.x + 2,drawArea.y + 2,drawArea.getWidth() - 4,drawArea.getHeight() - 4, 4);
     ofSetColor(textColor);
-    ofDrawBitmapString(name, drawArea.x + 6, drawArea.y + 14);
+    drawTextCentered(name, drawArea);    
 }
 
 void Button::drawRedPulsing(float &dt)
