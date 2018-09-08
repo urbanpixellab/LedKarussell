@@ -141,7 +141,7 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
     
     
     // Debug
-    
+    /*
    for (int i = 0; i < selections.size(); i++)
    {
         cout << selections[i]->name << " i: " << i << " ";
@@ -150,5 +150,6 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
         }
         cout << endl;
     }
+     */
      
 }

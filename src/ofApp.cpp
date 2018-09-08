@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
 // TODO: if we clear the segment selecot and then load the app all the sequence steps are set to 0
-// FIXME: Saves different range for rotarysliders ?
+// FIXME: Rotary slider snap to zero when first used after loading
 //--------------------------------------------------------------
 void ofApp::setup()
 {

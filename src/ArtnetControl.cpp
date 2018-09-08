@@ -241,8 +241,6 @@ void ArtnetControl::loadNodes()
 
 void ArtnetControl::loadPatroon()
 {
-    // FIXME: last segment is not being loaded ?
-    
     cout << "Loading Patroonen" << endl;
     ofxXmlSettings sel("patroonen.xml");
     for (int i = 0; i < sel.getNumTags("patroon"); i++)
@@ -278,8 +276,6 @@ void ArtnetControl::loadPatroon()
         
         Patroon p(id,curve[0],curve[1],freq[0],freq[1],dir[0],dir[1],time[0],time[1],color[0],color[1],color[2],color[3],phaseCurve[0],phaseCurve[1],phaseFreq[0],phaseFreq[1]);
         
-        cout << "loading i: " << i << " id: " << id << " patroon id: " << p.getID() << endl;
-
         
         //vector<int>
         // add the sequence matrix based on the indices
@@ -312,12 +308,12 @@ void ArtnetControl::savePatroon()
 {
     cout << "SAVE PATROON " << endl;
     ofxXmlSettings settings;
-    int maxSel = 13;
+    int maxSel = getNumSelections();
     int maxStep = getNumStepsSequence();
     for (int p = 0; p < _patronen.size(); p++)//patron
     {
-        cout << "saving number: " << p <<" with id: " << _patronen[p].getID() << endl;
-        _patronen[p].printPatroon();
+        //cout << "saving number: " << p <<" with id: " << _patronen[p].getID() << endl;
+        //_patronen[p].printPatroon();
         
         settings.addTag("patroon");
         settings.pushTag("patroon",p);
@@ -337,7 +333,6 @@ void ArtnetControl::savePatroon()
     
             if(l == 0)
             {
-                cout << "steps layer 0" << endl;
                 for (int s = 0; s < maxStep; s++)
                 {
                     string step = "";
@@ -347,7 +342,6 @@ void ArtnetControl::savePatroon()
                     }
                     if(step.length() > 1)step.erase(step.length()-1);
                     settings.addValue("step"+ofToString(s), step);
-                    cout << "step"+ofToString(s) << " -> " << step << endl;
                 }
             }
             else if(l == 1)
@@ -420,7 +414,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     fillWithBackgroundColor(black,segments);
     if(solo)
     {
-        for (int stepElement = 0; stepElement < 14; stepElement++)
+        for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
         {
             if(pattern->getSeqStepA(_step)[stepElement] ==  true)
             {
@@ -436,7 +430,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             }
         }
         //add now the second color
-        for (int stepElement = 0; stepElement < 14; stepElement++)
+        for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
         {
             if(_editPatroon->getSeqStepB(_step)[stepElement] ==  true)
             {
@@ -554,9 +548,7 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
     //we have selected a segment in a seguence sent to edit patroon
     cout << "ArtnetControl::segmentSelectPressed " << endl;
     
-    // FIXME: Why do we need the getSegmenselectorA for the call?
     // FIXME: do we need a function in patroon to set the whole sequence in one go?
-    // FIXEM: Do we loos one row when saving ?
     // Loop through segment selection
     for(int s=0; s < getNumSelections(); s++)
     {
@@ -574,13 +566,7 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
     }
     
     // DEBUG
-    _editPatroon->printMatrix();
-    
-
-    
-    // First _editpatroon to the patronen
-    // _patronen[_editPatroon->getID()] = *_editPatroon;
-    
+    //_editPatroon->printMatrix();
     
 }
 
@@ -589,7 +575,7 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
     _test++;
-    _test = _test%14;
+    _test = _test%getNumSelections();
     cout << key.keycode << endl;
     
 }
@@ -612,13 +598,10 @@ void ArtnetControl::sliderChanged(bool & value)
     *_editPatroon->getPhase(0) = _GUI->getSlidersAMapped(4);
     *_editPatroon->getPhase(1) = _GUI->getSlidersBMapped(4);
 
-    //*_editPatroon->getPhaseFreq(0) = _GUI->getSlidersAMapped(5);
-    //*_editPatroon->getPhaseFreq(1) = _GUI->getSlidersBMapped(5);
-    *_editPatroon->getPhaseFreq(0) = _GUI->getPhaseFreqSliderA()->getValue();
-    *_editPatroon->getPhaseFreq(1) = _GUI->getPhaseFreqSliderB()->getValue();
+    *_editPatroon->getPhaseFreq(0) = _GUI->getSlidersAMapped(5);
+    *_editPatroon->getPhaseFreq(1) = _GUI->getSlidersBMapped(5);
     
-    cout << "SLIDER CHANGED -------- " << endl;
-    _editPatroon->printPatroon();
+    //_editPatroon->printPatroon();
 }
 
 void ArtnetControl::PlayPatronPressed(int & id)
@@ -631,7 +614,7 @@ void ArtnetControl::EditPatronPressed(int & iD)
     //turn all of and only the right one on
     _editPatroon = &_patronen[iD];
     
-    _editPatroon->printPatroon();
+    //_editPatroon->printPatroon();
     
     //update the GUI
     _GUI->getCurveSlidersA()->setValueMapped(float(*_editPatroon->getCurve(0)));
