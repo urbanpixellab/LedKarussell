@@ -65,6 +65,10 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->getColorselectorB().colorPressed, this, &ArtnetControl::colorPressed);
     ofAddListener(_GUI->getSegmenselectorA().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
     ofAddListener(_GUI->getSegmenselectorA().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
+    ofAddListener(_GUI->getPhaseCurveSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getPhaseCurveSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getPhaseFreqSliderA()->newValue, this, &ArtnetControl::sliderChanged);
+    ofAddListener(_GUI->getPhaseFreqSliderA()->newValue, this, &ArtnetControl::sliderChanged);
 
 }
 
@@ -393,7 +397,10 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2);
+                    float segShift = sin(i/float(s) * TWO_PI * _GUI->getPhaseFreqSliderA()->getValueMapped()); // based on the curve and the frequency and the index
+                    //muss nur einmal hier berechnet werden
+                    
+                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2,segShift);
                 }
             }
         }
@@ -406,7 +413,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    animator->drawToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3);
+                    float segShift = i/float(s); // based on the setup and the index
+                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3,segShift);
                 }
             }
         }
@@ -558,6 +566,12 @@ void ArtnetControl::sliderChanged(bool & value)
 
     *_editPatroon->getDir(0) = _GUI->getSlidersAMapped(3);
     *_editPatroon->getDir(1) = _GUI->getSlidersBMapped(3);
+
+    *_editPatroon->getPhase(0) = _GUI->getSlidersAMapped(4);
+    *_editPatroon->getPhase(1) = _GUI->getSlidersBMapped(4);
+
+    *_editPatroon->getPhaseFreq(0) = _GUI->getSlidersAMapped(5);
+    *_editPatroon->getPhaseFreq(1) = _GUI->getSlidersBMapped(5);
 }
 
 void ArtnetControl::PlayPatronPressed(int & id)
@@ -578,6 +592,11 @@ void ArtnetControl::EditPatronPressed(int & iD)
     _GUI->getTimeSliderB()->setValueMapped(float(*_editPatroon->getTime(1)));
     _GUI->getDirSliderA()->setValueMapped(float(*_editPatroon->getDir(0)));
     _GUI->getDirSliderB()->setValueMapped(float(*_editPatroon->getDir(1)));
+
+    _GUI->getPhaseCurveSliderA()->setValueMapped(float(*_editPatroon->getPhase(0)));
+    _GUI->getPhaseCurveSliderB()->setValueMapped(float(*_editPatroon->getPhase(1)));
+    _GUI->getPhaseFreqSliderA()->setValueMapped(float(*_editPatroon->getPhaseFreq(0)));
+    _GUI->getPhaseFreqSliderB()->setValueMapped(float(*_editPatroon->getPhaseFreq(1)));
 
     //set the colors from edit
     _GUI->colorselectorA.setColorFromIDs(_editPatroon->getColorID(0),_editPatroon->getColorID(1));

@@ -31,6 +31,8 @@ public:
     int *getFreq(int id){return &_freq[id];};
     int *getDir(int id){return &_dir[id];};
     int *getTime(int id){return &_time[id];};
+    int *getPhase(int id){return &_curvePhase[id];};
+    int *getPhaseFreq(int id){return &_freqPhase[id];};
     
     void setSeqA(int step, int row, bool value){_sequenceA[step][row] = value;};
     void setSeqB(int step, int row, bool value){_sequenceB[step][row] = value;};
@@ -53,6 +55,8 @@ private:
     int             _color[4] = {0,0,0,0};
     bool            _sequenceA[8][14];
     bool            _sequenceB[8][14];
+    int             _curvePhase[2] = {0,0};
+    int             _freqPhase[2] = {1,1};
     int             _step;
     
 

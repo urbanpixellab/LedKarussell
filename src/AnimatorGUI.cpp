@@ -55,9 +55,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _slidersA[2] = freqA;
     RotarySlider *dirA = new RotarySlider(ofRectangle(CollumnEdit1+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersA[3] = dirA;
-    RotarySlider *phaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0],60,60),ofVec2f(0,3),0,true,true,20,"phaseC");
+    RotarySlider *phaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"phaseC");
     _slidersA[4] = phaseA;
-    RotarySlider *freqPhaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"freqP");
+    RotarySlider *freqPhaseA = new RotarySlider(ofRectangle(CollumnEdit1+160,RowsEdit[0]+80,60,60),ofVec2f(0,5),0,true,false,20,"freqP");
     _slidersA[5] = freqPhaseA;
 
     // COLLUMNEDIT2
@@ -70,9 +70,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _slidersB[2] = freqB;
     RotarySlider *dirB = new RotarySlider(ofRectangle(CollumnEdit2+80,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"dir");
     _slidersB[3] = dirB;
-    RotarySlider *phaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0],60,60),ofVec2f(0,3),0,true,true,20,"phaseC");
+    RotarySlider *phaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0],60,60),ofVec2f(0,animationCount-1),0,true,true,20,"phaseC");
     _slidersB[4] = phaseB;
-    RotarySlider *freqPhaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0]+80,60,60),ofVec2f(0,3),0,true,true,20,"freqP");
+    RotarySlider *freqPhaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0]+80,60,60),ofVec2f(0,5),0,true,false,20,"freqP");
     _slidersB[5] = freqPhaseB;
     
     // Create colorselectorS

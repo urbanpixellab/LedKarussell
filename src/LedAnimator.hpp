@@ -47,13 +47,12 @@ public:
     LedAnimator(MidiControl *mc);
     ~LedAnimator();
 
-    void drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
-    void addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b);//dt is already existing
+    void drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
+    void addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
     
     
     
 private:
-    
     void reverseArray(float *array, int length);
     void BinnenBuitenArray(float *array, int length);
     void BuitenBinnenArray(float *array, int length);

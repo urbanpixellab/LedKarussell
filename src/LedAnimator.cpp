@@ -22,7 +22,7 @@ LedAnimator::~LedAnimator()
 
 //////////////////////niew
 
-void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
+void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
 {
     int blendMode = 0;// direct
     // frequency moet op en draaiknop !!!
@@ -52,8 +52,8 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             {
                 float delta = len/freq;
                 float value = 0;
-                float shift = _MC->getDtMulti(time)*delta;
-                if(fmod(i+delta+shift,delta) > delta/2) value = 1;
+                float timeShift = _MC->getDtMulti(time)*delta;
+                if(fmod(i+delta+timeShift+shift,delta) > delta/2) value = 1;
                 values[i] = value;
             }
             
@@ -63,7 +63,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                values[i] = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
+                values[i] = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
             }
             
             break;
@@ -72,7 +72,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                values[i] = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
+                values[i] = 1.0 - fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
             }
             
             break;
@@ -82,7 +82,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             for (int i = 0; i < len; i++) //reduce to pixel
             {
                 //have some glitch in the middle
-                float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
+                float value = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
                 if(value > 1.0) value = 1.0-value;
                 values[i] = value;
             }
@@ -93,7 +93,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                values[i] = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
+                values[i] = (0.5+(sin((shift+(i/len))*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
             }
             
             break;
@@ -103,7 +103,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                values[i] = ofNoise(ofGetElapsedTimef())*(0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);;
+                values[i] = ofNoise(ofGetElapsedTimef())*(0.5+(sin((shift + i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);;
             }
             
             break;
@@ -142,12 +142,11 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
     
 }
 
-void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b)
+void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
 {
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
     float values[int(len)];
-    
     
     //implement the color function
     switch (drawFunction) {
@@ -167,8 +166,8 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
             {
                 float delta = len/freq;
                 float value = 0;
-                float shift = _MC->getDtMulti(time)*delta;
-                if(fmod(i+delta+shift,delta) > delta/2) value = 1;
+                float timeShift = _MC->getDtMulti(time)*delta;
+                if(fmod(i+delta+timeShift+shift,delta) > delta/2) value = 1;
                 values[i] = value;
             }
             
@@ -176,13 +175,13 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
         }
         case CURVE::RAMP:
         {
-            for (int i = 0; i < len; i++) values[i] = fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
+            for (int i = 0; i < len; i++) values[i] = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
             
             break;
         }
         case CURVE::SAW:
         {
-            for (int i = 0; i < len; i++) values[i] = 1.0 - fmod(((i/len) + _MC->getDtMulti(time))*freq,1);
+            for (int i = 0; i < len; i++) values[i] = 1.0 - fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
             
             break;
         }
@@ -191,7 +190,7 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
             for (int i = 0; i < len; i++) //reduce to pixel
             {
                 //have some glitch in the middle
-                float value = fmod(((i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
+                float value = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
                 if(value > 1.0) value = 1.0-value;
                 values[i] = value;
             }
@@ -200,7 +199,7 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
         }
         case CURVE::SINE:
         {
-            for (int i = 0; i < len; i++) values[i] = (0.5+(sin((i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
+            for (int i = 0; i < len; i++) values[i] = (0.5+(sin((shift+(i/len))*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
             break;
         }
             
