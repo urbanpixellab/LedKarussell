@@ -14,14 +14,33 @@ RotarySlider::RotarySlider()
     ofAddListener(ofEvents().mousePressed, this, &RotarySlider::mousePressed);
     ofAddListener(ofEvents().mouseReleased, this, &RotarySlider::mouseReleased);
     xStart = -1;
-//    font.load("verdana.ttf", 10);
+    font[0].load("verdana.ttf", 8);
+    font[1].load("verdana.ttf", 12);
     resolution = 128;
     comma = 0;
     active = false;
     value = 1;
     valueMapped = value;
     name = "";
+    _isInt = false;
 }
+
+RotarySlider::RotarySlider(ofRectangle area,ofVec2f minMax,float startValue,bool type,int isInt,int res, string n):name(n),_isInt(isInt),resolution(res)
+{
+    ofAddListener(ofEvents().mouseDragged, this, &RotarySlider::mouseDragged);
+    ofAddListener(ofEvents().mousePressed, this, &RotarySlider::mousePressed);
+    ofAddListener(ofEvents().mouseReleased, this, &RotarySlider::mouseReleased);
+    xStart = startValue;
+    font[0].load("verdana.ttf", 8);
+    font[1].load("verdana.ttf", 12);
+    comma = 0;
+    active = false;
+    value = 1;
+    valueMapped = value;
+    setup(area, minMax, startValue, type);
+    cout << "name is " << name << endl;
+}
+
 
 RotarySlider::~RotarySlider()
 {
@@ -49,7 +68,6 @@ void RotarySlider::setup(ofRectangle area,ofVec2f minMax,float startValue,bool t
     circleCenter = ofVec2f(fbo.getWidth() / 2,fbo.getHeight() * 2 / 5);
     redraw = true;
     valueMapped = ofMap(value,0,1,range.x,range.y);
-    name = "";
 
 }
 
@@ -72,7 +90,6 @@ void RotarySlider::setup(ofRectangle area,ofVec2f minMax,float startValue,bool t
     circleCenter = ofVec2f(fbo.getWidth() / 2,fbo.getHeight() * 2 / 5);
     redraw = true;
     valueMapped = ofMap(value,0,1,range.x,range.y);
-    name = "";
 }
 
 
@@ -95,9 +112,9 @@ void RotarySlider::updateSlider()
     ofDrawRectangle(0,0,fbo.getWidth(),fbo.getHeight());
     // draw markers
     bool markers = true;
+    int count = range.y-range.x;// numbers of helplines
     if(markers)
     {
-        int count = 6;// numbers of helplines
         ofColor mc = ofColor(255);
         ofSetColor(mc);
         ofSetLineWidth(1);
@@ -110,10 +127,12 @@ void RotarySlider::updateSlider()
             float x2 = circleCenter.x + (1.3 * radius * cos(angle));
             float y2 = circleCenter.y + (1.3 * radius * sin(angle));
             ofDrawLine(x1, y1, x2, y2);
-            //font.drawString(ofToString(i * (range.y - range.x) / float(count),0),x2,y2 );
+            if(i < _bezeichner.size()) font[0].drawString(_bezeichner[i],x2,y2 );
         }
         ofNoFill();
         ofDrawCircle(circleCenter, radius * 0.8);
+        //noch nen anderer angeschnittener circle
+        
     }
     
     ofSetLineWidth(4);
@@ -123,8 +142,15 @@ void RotarySlider::updateSlider()
     
     if (type) // is line
     {
+        float shift = 270 / float(count);
+
         ofSetLineWidth(4);
         float angle = offset + (TWO_PI * 0.75 * value);// from
+        if (_isInt)
+        {
+            int i = ofMap(value,0,1, range.x, range.y);
+            angle = (0.375 + i * shift / 360.) * TWO_PI;
+        }
         float x1 = circleCenter.x + (radius * 0.8 * cos(angle));
         float y1 = circleCenter.y + (radius * 0.8 * sin(angle));
         ofDrawLine(circleCenter.x, circleCenter.y,x1,y1);
@@ -155,10 +181,9 @@ void RotarySlider::updateSlider()
         m.draw();
          */
     }
-    string number = ofToString(range.x + ((range.y - range.x) * value),comma);
-//    float shift = font.getStringBoundingBox(number, 0, 0).width / 2.;
-//    font.drawString(number, circleCenter.x - shift, fbo.getHeight() - 2);
-    ofDrawBitmapString(name, 10, fbo.getHeight());
+    float shift = font[1].getStringBoundingBox(name, 0, 0).width / 2.;
+    font[1].drawString(name, circleCenter.x - shift, fbo.getHeight() - 2);
+    //ofDrawBitmapString(name, 10, fbo.getHeight());
     fbo.end();
 
     
@@ -169,6 +194,7 @@ void RotarySlider::draw()
 {
     if(redraw) updateSlider();
     fbo.draw(drawArea);
+    cout << name << endl;
 }
 
 void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
@@ -177,9 +203,12 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
 
     if (xStart > -1)
     {
+        //mappe mal die entfernung von ursprung im radius von
+        // anstieg, muss in die maus richtung drehen wo der zeiger hindreh vom ursprung
+        
         int dir = evt.x - xStart;
-        if (dir > 0 && mouseValue < resolution)mouseValue++;
-        else if (dir < 0 && mouseValue > 0 )mouseValue--;
+        if (dir > 0 && mouseValue < resolution)mouseValue += 4;
+        else if (dir < 0 && mouseValue > 0 )mouseValue -= 4;
         // notify or direct update the value
         value = ofMap(mouseValue, 0, resolution, 0, 1);
         cout << value << endl;
@@ -195,7 +224,6 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
 {
     if (drawArea.inside(evt.x, evt.y))
     {
-        // anstieg
         //ofVec2f rCenter = ofVec2f(drawArea.x + drawArea.width * 0.5,drawArea.y + drawArea.height * 0.5);
         //ofVec2f cM = ofVec2f(evt.x, evt.y) - rCenter;//centerMouse
         //ofVec2f zero = ofVec2f(1,0);
@@ -213,6 +241,15 @@ void RotarySlider::mouseReleased(ofMouseEventArgs &evt)
     xStart = -1;
     active  = false;
 }
+
+void RotarySlider::addBezeichner(string * bez,int len)
+{
+    for (int i = 0; i < len; i++)
+    {
+        _bezeichner.push_back(bez[i]);
+    }
+}
+
 
 void RotarySlider::reset()
 {

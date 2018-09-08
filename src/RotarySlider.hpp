@@ -16,6 +16,7 @@ class RotarySlider
 {
 public:
     RotarySlider();
+    RotarySlider(ofRectangle area,ofVec2f minMax,float startValue,bool type,int isInt,int resolution, string n);
     ~RotarySlider();
     
     void setup(ofRectangle area,ofVec2f minMax,float startValue,bool type);
@@ -37,7 +38,9 @@ public:
     ofEvent<bool>  newValue;
     void setName(string n){name = n;};
     float getValueMapped(){return valueMapped;}
+    int getValueInt(){return valueMapped;};
     void setValueMapped(float value);
+    void addBezeichner(string * bez,int leng);
   
 private:
     bool            active;
@@ -54,9 +57,12 @@ private:
     float           xStart;
     bool            redraw;
     bool            type;//line drawing or mesh
-//    ofTrueTypeFont  font;
+    bool            _isInt;//int slider with steps or float
+    ofTrueTypeFont  font[2];
     int             resolution;// resolution for mouse movement
     int             comma;
+    ofPolyline      _lineGraphics;//if we want to add some line graphics_
+    vector<string>  _bezeichner;
 };
 
 #endif /* RotarySlider_hpp */
