@@ -32,6 +32,7 @@ public:
     void activateListener();
     void deactivateListener();
     void setColors(ofColor _nonActive, ofColor _active, ofColor text);
+    void drawTextCentered(string text, ofRectangle area);
     
     ofEvent<string>   buttonPressed;
     ofEvent<int>      buttonIDPressed;
@@ -46,6 +47,7 @@ private:
     bool            isToggle;
     bool            isPressed;
     float           pressTimeout;
+    ofTrueTypeFont	_verdana;
     
     ofColor nonActive;
     ofColor Active;
