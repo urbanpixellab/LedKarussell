@@ -30,7 +30,7 @@ public:
         TRI,
         RECT,
         SINE,
-        NOISE,
+        COS,
         CURVE_COUNT
     };
     
@@ -49,6 +49,7 @@ public:
 
     void drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
     void addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
+    void maxToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
     
     
     

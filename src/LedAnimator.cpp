@@ -99,11 +99,11 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             break;
         }
             
-        case CURVE::NOISE:
+        case CURVE::COS:
         {
             for (int i = 0; i < len; i++) //reduce to pixel
             {
-                values[i] = ofNoise(ofGetElapsedTimef())*(0.5+(sin((shift + i/len)*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);;
+                values[i] = (0.5+(sin((shift+(i/len))*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
             }
             
             break;
@@ -203,6 +203,12 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
             break;
         }
             
+        case CURVE::COS:
+        {
+            for (int i = 0; i < len; i++) values[i] = (0.5+(cos((shift+(i/len))*TWO_PI*freq + _MC->getDtMulti(time) * TWO_PI))*0.5);
+            break;
+        }
+            
         default:
             break;
     }
@@ -232,6 +238,22 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
         selectionArrays[(i * 3) + 0] += a.r * values[i] + b.r * (1 - values[i]);
         selectionArrays[(i * 3) + 1] += a.g * values[i] + b.r * (1 - values[i]);
         selectionArrays[(i * 3) + 2] += a.b * values[i] + b.r * (1 - values[i]);
+    }
+}
+
+void LedAnimator::maxToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
+{
+    // frequency moet op en draaiknop !!!
+    float len = (length/3); // convert to pixel position
+    float values[int(len)];
+    
+    //now write to array
+    for (int i = 0; i < len; i++) //reduce to pixel
+    {
+        // compare the existing to the color, the max color is set
+        if (a.r > selectionArrays[(i * 3) + 0]) selectionArrays[(i * 3) + 0] = a.r;
+        if (a.g > selectionArrays[(i * 3) + 1]) selectionArrays[(i * 3) + 1] = a.g;
+        if (a.b > selectionArrays[(i * 3) + 2]) selectionArrays[(i * 3) + 2] = a.b;
     }
 }
 

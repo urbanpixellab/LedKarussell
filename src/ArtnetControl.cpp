@@ -387,6 +387,8 @@ void ArtnetControl::update()
     //dont forget the fade out function to the beat and the blink function
     // use the postarray of the segments for this functions
     
+    //test flash
+    
     
     
     
@@ -428,7 +430,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
+                    float segShift = frequenzShift(*pattern->getPhase(0), i/float(s), *pattern->getPhaseFreq(0));
+                    //float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
                     //muss nur einmal hier berechnet werden
                     
                     animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2,segShift);
@@ -444,13 +447,141 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-                    float segShift = cos(i/float(s) * TWO_PI * *pattern->getPhaseFreq(1)); // based on the curve
+                    float segShift = frequenzShift(*pattern->getPhase(1), i/float(s), *pattern->getPhaseFreq(1));
                     
                     animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3,segShift);
                 }
             }
         }
     }
+    //test flash
+    
+    bool _isFlash = _GUI->getPostEffectButton(0)->getState();
+    //paint white over it if false reduce the value and if value == 0 stop it
+    if (_isFlash)
+    {
+        _flashCount = 255;
+        ofColor white(_flashCount);
+        float f = 0;
+        for (int seg = 0; seg < 33; seg++)
+        {
+            animator->drawToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
+        }
+    }
+    else
+    {
+        //check if flashcount > 0
+        _flashCount -= 5;
+        if (_flashCount > 5)
+        {
+            ofColor white(_flashCount);
+            float f = 0;
+            for (int seg = 0; seg < 33; seg++)
+            {
+                animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
+            }
+        };
+    }
+}
+
+float ArtnetControl::frequenzShift(int curve,float time, float freq)
+{
+    //FIXME add curves
+    /*
+     WHITEOUT,1
+     RAMP,2
+     SAW,3
+     TRI,4
+     RECT,5
+     SINE,6
+     COS,7
+
+     */
+    float segShift = 0;//     BLACKOUT = 0,
+
+    switch (curve) {
+        case 1:
+            segShift = 1;//whiteout
+            break;
+            
+        case 2:
+            segShift = fmod(time,1);//ramp
+            break;
+            
+        case 3:
+            segShift = 1;
+            break;
+            
+        case 4:
+            segShift = 1;
+            break;
+            
+        case 5:
+            
+            segShift = 1;
+            break;
+            
+        case 6:
+            segShift = sin(time * TWO_PI * freq);
+            break;
+            
+        case 7:
+            segShift = cos(time * TWO_PI * freq);
+            break;
+            
+        default:
+            break;
+    }
+    return segShift;
+    /*
+     case CURVE::RECT://add frequency in repetition
+     {
+     for (int i = 0; i < len; i++) //reduce to pixel
+     {
+     float delta = len/freq;
+     float value = 0;
+     float timeShift = _MC->getDtMulti(time)*delta;
+     if(fmod(i+delta+timeShift+shift,delta) > delta/2) value = 1;
+     values[i] = value;
+     }
+     
+     break;
+     }
+     case CURVE::RAMP:
+     {
+     for (int i = 0; i < len; i++) //reduce to pixel
+     {
+     values[i] = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
+     }
+     
+     break;
+     }
+     case CURVE::SAW:
+     {
+     for (int i = 0; i < len; i++) //reduce to pixel
+     {
+     values[i] = 1.0 - fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1);
+     }
+     
+     break;
+     }
+     case CURVE::TRI:
+     {
+     for (int i = 0; i < len; i++) //reduce to pixel
+     {
+     //have some glitch in the middle
+     float value = fmod(((shift + i/len) + _MC->getDtMulti(time))*freq,1) * 2.;
+     if(value > 1.0) value = 1.0-value;
+     values[i] = value;
+     }
+     
+     break;
+     }
+
+     */
+    //float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
+    //muss nur einmal hier berechnet werden
+
 }
 
 

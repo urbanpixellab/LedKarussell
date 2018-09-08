@@ -55,6 +55,8 @@ public:
     ofEvent<int>    patronPLAYSTEPPED;
     ofEvent<bool>   colorSelectPressed;
     
+    ofEvent<int>    postFxPressed;
+    
 //    void setColor(string &c);
     
     ColorSelector colorselectorA;
@@ -102,12 +104,15 @@ public:
     int RowsEdit[5] = {50,200,280,380,520};
     int RowsLive[5] = {50,150,280,620,740};
     
+    Button *getPostEffectButton(int id){return _postEffectsButtons[id];};
+    
 private:
 
     ofRectangle         _drawArea;
     ofMesh              _realStructure;// the mesh to paint on
     vector<Button*>     _patLiveButtons;//the buttons to select a patron for playing or edit selectie
     vector<Button*>     _patEditButtons;//the buttons to select a patron for playing or edit selectie
+    
     int                 _isPlay;
     int                 _isEdit;
     int                 _isPlayStepped;
@@ -115,6 +120,8 @@ private:
     
     RotarySlider*   _slidersA[SLIDERS];
     RotarySlider*   _slidersB[SLIDERS];
+    
+    vector<Button*> _postEffectsButtons;
 };
 
 #endif /* AnimatorGUI_hpp */
