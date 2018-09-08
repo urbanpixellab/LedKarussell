@@ -25,7 +25,7 @@ segmentSelector::~segmentSelector(){}
 void segmentSelector::setup(ofRectangle area){
     drawArea = area;
     
-    cout << "SETUP Segmentselector..." << endl;
+    //cout << "SETUP Segmentselector..." << endl;
     
     ofxXmlSettings sel("selector.xml");
     numSelections = sel.getNumTags("select");
@@ -50,7 +50,7 @@ void segmentSelector::setup(ofRectangle area){
             s->stepbuttons[j] = b;
         }
         selections.push_back(s);
-        cout << "select " << s->name << endl;
+        //cout << "select " << s->name << endl;
         sel.popTag();
     }
     
@@ -91,7 +91,7 @@ void segmentSelector::draw(){
 // i: is the step sequence: is an array with all the selections for that step
 void segmentSelector::setSequence(int i,bool sequence[]){
     
-    cout << " i: " << i << " ";
+    //cout << " i: " << i << " ";
     for (int j = 0; j < selections.size(); j++)
     {
             selections[j]->sequence[i] =  sequence[j];
@@ -99,9 +99,9 @@ void segmentSelector::setSequence(int i,bool sequence[]){
             {
                 selections[j]->stepbuttons[i]->setState(true);
             }
-            cout << sequence[j] << " ";
+            //cout << sequence[j] << " ";
     }
-    cout << endl;
+    //cout << endl;
 }
 
 void segmentSelector::clearStepsOfSegments(){
@@ -125,7 +125,7 @@ void segmentSelector::mousePressed(ofMouseEventArgs &args)
             if(selections[i]->stepbuttons[j]->getArea().inside(args.x, args.y))
             {
                 selections[i]->sequence[j] = ! selections[i]->sequence[j];
-                cout << "HIERO " << selections[i]->name << " j " << ofToString(j) << " state " << selections[i]->sequence[j] <<  endl;
+                //cout << "HIERO " << selections[i]->name << " j " << ofToString(j) << " state " << selections[i]->sequence[j] <<  endl;
             }
             
         }

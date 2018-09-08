@@ -177,8 +177,11 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 {
 }
+
+// sets state to false of all buttons except the one being pressed
 void AnimatorGUI::editButtonPressed(int &id)
 {
+    cout << "AnimatorGUI::editButtonPressed id: " <<id << endl;
     for (int i=0; i < _patEditButtons.size(); i++)
     {
         if(i == id) continue;
@@ -187,8 +190,10 @@ void AnimatorGUI::editButtonPressed(int &id)
     ofNotifyEvent(patronEDIT,id);
 }
 
+// sets state to false of all buttons except the one being pressed
 void AnimatorGUI::liveButtonPressed(int &id)
 {
+    cout << "AnimatorGUI::_patLiveButtons id: " <<id << endl;
     for (int i=0; i < _patLiveButtons.size(); i++)
     {
         if(i == id) continue;
@@ -197,4 +202,14 @@ void AnimatorGUI::liveButtonPressed(int &id)
     ofNotifyEvent(patronPLAY,id);
 }
 
-//}
+void AnimatorGUI::setEditButtonState(int &id, bool state)
+{
+    _patEditButtons[id]->setState(state);
+}
+
+void AnimatorGUI::setLiveButtonState(int &id, bool state)
+{
+    _patLiveButtons[id]->setState(state);
+}
+
+

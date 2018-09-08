@@ -38,7 +38,7 @@ RotarySlider::RotarySlider(ofRectangle area,ofVec2f minMax,float startValue,bool
     value = 1;
     valueMapped = value;
     setup(area, minMax, startValue, type);
-    cout << "name is " << name << endl;
+    //cout << "name is " << name << endl;
 }
 
 
@@ -194,7 +194,6 @@ void RotarySlider::draw()
 {
     if(redraw) updateSlider();
     fbo.draw(drawArea);
-    cout << name << endl;
 }
 
 void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
@@ -211,7 +210,7 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
         else if (dir < 0 && mouseValue > 0 )mouseValue -= 4;
         // notify or direct update the value
         value = ofMap(mouseValue, 0, resolution, 0, 1);
-        cout << value << endl;
+        //cout << value << endl;
         value = ofClamp(value, 0, 1);
         valueMapped = ofMap(value,0,1,range.x,range.y);
         redraw = true;
