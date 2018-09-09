@@ -61,9 +61,11 @@ public:
     
     ColorSelector colorselectorA;
     ColorSelector colorselectorB;
+    ColorSelector colorselectorLive;
 
     ColorSelector &getColorselectorA(){return colorselectorA;};
     ColorSelector &getColorselectorB(){return colorselectorB;};
+    ColorSelector &getColorselectorLive(){return colorselectorLive;};
 
     float getSlidersAMapped(int id){return _slidersA[id]->getValueMapped();};
     float getSlidersBMapped(int id){return _slidersB[id]->getValueMapped();};

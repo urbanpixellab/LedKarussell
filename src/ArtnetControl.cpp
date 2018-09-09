@@ -56,6 +56,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->patronPLAY, this, &ArtnetControl::PlayPatronPressed);
     ofAddListener(_GUI->patronEDIT, this, &ArtnetControl::EditPatronPressed);
     ofAddListener(_GUI->patronPLAYSTEPPED, this, &ArtnetControl::PlaySteppedPatronPressed);
+    // FIXME: NOT needed ?
     ofAddListener(_GUI->colorSelectPressed, this,&ArtnetControl::colorPressed);
     
     ofAddListener(_GUI->getCurveSlidersA()->newValue, this, &ArtnetControl::sliderChanged);
@@ -68,6 +69,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->getDirSliderB()->newValue, this, &ArtnetControl::sliderChanged);
     ofAddListener(_GUI->getColorselectorA().colorPressed, this, &ArtnetControl::colorPressed);
     ofAddListener(_GUI->getColorselectorB().colorPressed, this, &ArtnetControl::colorPressed);
+    ofAddListener(_GUI->getColorselectorLive().colorPressed, this, &ArtnetControl::colorLivePressed);
     ofAddListener(_GUI->getSegmenselectorA().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
     ofAddListener(_GUI->getSegmenselectorB().segmentPressed, this, &ArtnetControl::segmentSelectPressed);
     ofAddListener(_GUI->getPhaseCurveSliderA()->newValue, this, &ArtnetControl::sliderChanged);
@@ -669,26 +671,32 @@ void ArtnetControl::colorPressed(bool &pressed)
     _editPatroon->setColors(colors, 4);
 }
 
+void ArtnetControl::colorLivePressed(bool &pressed)
+{
+    // We changed live colours let's do soemthing with it..
+    cout << "We changed live colours let's do soemthing with it.. " << endl;
+}
+
 void ArtnetControl::segmentSelectPressed(bool &pressed)
 {
     //we have selected a segment in a seguence sent to edit patroon
-    cout << "ArtnetControl::segmentSelectPressed " << endl;
+    //cout << "ArtnetControl::segmentSelectPressed " << endl;
     
     // FIXME: do we need a function in patroon to set the whole sequence in one go?
     // Loop through segment selection
     for(int s=0; s < getNumSelections(); s++)
     {
-        cout << "numselection: " << s << endl;
+        //cout << "numselection: " << s << endl;
         // loop through sequence step
         for(int i=0;i< getNumStepsSequence();i++){
             // get the sequence step i for segemnt s
             bool valueA = _GUI->getSegmenselectorA().getSequence(s)[i];
             bool valueB = _GUI->getSegmenselectorB().getSequence(s)[i];
-            cout <<" "<< i << ":" << valueA << "," << valueB;
+            //cout <<" "<< i << ":" << valueA << "," << valueB;
             _editPatroon->setSeqA(i, s, valueA);
             _editPatroon->setSeqB(i, s, valueB);
         }
-        cout << endl;
+        //cout << endl;
     }
     
     // DEBUG

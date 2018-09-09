@@ -70,6 +70,7 @@ public:
     void curveBPressed(int & id){_editPatroon->setCurve(1, id);};
     
     void colorPressed(bool &pressed);
+    void colorLivePressed(bool &pressed);
     void segmentSelectPressed(bool &pressed);
     void sliderChanged(bool & value);
     int getNumStepsSequence(){ return _numStepsInSequnce; }
