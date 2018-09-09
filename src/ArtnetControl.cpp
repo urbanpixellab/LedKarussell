@@ -12,12 +12,14 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
 {
     // set number of steps in the segment sequence
     _numStepsInSequnce = 8;
+    _flashCount = 0;
+    _isFlash = false;
     
     _GUI = new AnimatorGUI(ofRectangle(100,50,500,500));
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
 
-    _preAnimator = new LedAnimator(_MC);
-    _liveAnimator = new LedAnimator(_MC);
+    _preAnimator = new LedAnimator(_MC,_GUI->getMasterBrightnessKnob().getValueNormalized());
+    _liveAnimator = new LedAnimator(_MC,_GUI->getMasterBrightnessKnob().getValueNormalized());
     
     //init the gui
     _test = false;
@@ -372,11 +374,13 @@ void ArtnetControl::savePatroon()
 
 void ArtnetControl::update()
 {
+    _GUI->update();
     if(_MC->getBeat())
     {
         _step++;
         if(_step >= getNumStepsSequence()) _step = 0;
     }
+    
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
     
@@ -453,9 +457,18 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             }
         }
     }
-    //test flash
+    //black
+    if (_GUI->getPostEffectButton(0)->getState() == true)
+    {
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            animator->blackout(segments[seg]->getArray(), segments[seg]->getLength());
+        }
+    }
     
-    if(_GUI->getPostEffectButton(0)->getState() == true) _flashCount = 255;
+    //flash
+    
+    if(_GUI->getPostEffectButton(1)->getState() == true) _flashCount = 255;
     //paint white over it if false reduce the value and if value == 0 stop it
     if (_flashCount > 5)
     {
@@ -467,8 +480,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         }
         _flashCount -= 5;
     }
-    //test invert
-    if (_GUI->getPostEffectButton(1)->getState() == true)
+    //invert
+    if (_GUI->getPostEffectButton(2)->getState() == true)
     {
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
@@ -476,7 +489,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         }
     }
     //test datamosh
-    
     //test stage looplicht
     //make all segments black only the visible not
     

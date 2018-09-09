@@ -27,22 +27,13 @@
 class AnimatorGUI
 {
 public:
-    /*
-    struct Button
-    {
-        int id;
-        string name;
-        ofRectangle area;
-        ofColor color;
-        bool toggle;
-        bool isPressed;
-    };
-    */
+    
     AnimatorGUI(ofRectangle area);
     ~AnimatorGUI();
     
     void init();
     void createAnimationGUI(int animationCount);
+    void update();
     void draw(ofImage &pre, ofImage &live);
     
     ofMesh &getMesh(){return _realStructure;}; //here we can work on the mesh
@@ -107,6 +98,8 @@ public:
     int RowsLive[5] = {50,150,280,620,740};
     
     Button *getPostEffectButton(int id){return _postEffectsButtons[id];};
+    RotarySlider &getMasterBrightnessKnob(){return _masterBrightness;};
+    Button &getAutoButton(){return _autoPattern;};
     
 private:
 
@@ -124,6 +117,10 @@ private:
     RotarySlider*   _slidersB[SLIDERS];
     
     vector<Button*> _postEffectsButtons;
+    
+    RotarySlider    _masterBrightness;
+    
+    Button          _autoPattern;
 };
 
 #endif /* AnimatorGUI_hpp */
