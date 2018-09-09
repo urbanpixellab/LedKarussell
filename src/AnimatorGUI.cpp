@@ -79,21 +79,6 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     RotarySlider *freqPhaseB = new RotarySlider(ofRectangle(CollumnEdit2+160,RowsEdit[0]+80,60,60),ofVec2f(0,10),0,true,false,20,"freqP");
     _slidersB[5] = freqPhaseB;
     
-    // Create colorselectorS
-    colorselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[1],200,200));
-    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],200,200));
-    
-    // RowsEdit[2] --> Is the preview image
-    // RowsEdit[3] --> Is the preview mesh
-    
-    //Create SegmentSelector
-    segmenselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[4],200,200));
-    segmenselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[4],200,200));
-
-   
-    
-    // Create LightControl
-    lightcontrol.setup(ofRectangle(COLLUMNLIVE,RowsLive[4],200,200));
     
     //create patern select buttons for edit and live with double edit size
     w = 65;
@@ -101,21 +86,39 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
    
     for (int i = 0; i < 16; i++)
     {
+        // EDIT BUTTONS
         string name = "Edit_" + ofToString(i);
         int x = CollumnEdit2 + ((i%4)*w*1.05);
         y = RowsEdit[3] + ((i / 4) * h * 1.05);
         Button *e = new Button(i,ofRectangle(x,y,w,h),name,true);
         ofAddListener(e->buttonIDPressed, this, &AnimatorGUI::editButtonPressed);
         _patEditButtons.push_back(e);
+        // LIVE BUTTONS
         name = "Pattern_" + ofToString(i);
-        x = COLLUMNLIVE + ((i%4)*w*2.2);
+        x = COLLUMNLIVE + ((i%4)*w*2.4);
         y = RowsEdit[0] + ((i / 4) * h * 1.1);
-        Button *l = new Button(i,ofRectangle(x,y,w*2,h),name,true);
+        Button *l = new Button(i,ofRectangle(x,y,w*2.3,h),name,true);
         ofAddListener(l->buttonIDPressed, this, &AnimatorGUI::liveButtonPressed);
         _patLiveButtons.push_back(l);
     }
-    //adding post effects
     
+    // Create colorselectorS
+    colorselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[1],200,200));
+    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],200,200));
+    colorselectorLive.setup(ofRectangle(COLLUMNLIVE+(2*w*2.4),RowsLive[1],(2*w*2.3),340));
+    
+    // RowsEdit[2] --> Is the preview image
+    // RowsEdit[3] --> Is the preview mesh
+    
+    //Create SegmentSelector
+    segmenselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[4],200,200));
+    segmenselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[4],200,200));
+    
+    // Create LightControl
+    lightcontrol.setup(ofRectangle(COLLUMNLIVE,RowsLive[4],200,200));
+
+    
+    //adding post effects
     int x = COLLUMNLIVE + (w*2.2);
     y = RowsEdit[0] + (h * 1.1);
     Button *pFlash = new Button();
@@ -152,7 +155,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     
     ofSetColor(255);
     pre.draw(CollumnEdit1, RowsEdit[3],Collumnwidth,100);
-    live.draw(COLLUMNLIVE, RowsLive[1],200,100);
+    live.draw(COLLUMNLIVE, RowsLive[1],Collumnwidth+20,140);
     
     //draw it under the preview windows
     ofPushMatrix();
@@ -180,6 +183,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     // Color Selector
     colorselectorA.draw();
     colorselectorB.draw();
+    colorselectorLive.draw();
     
     // SegmentSelector
     segmenselectorA.draw();
