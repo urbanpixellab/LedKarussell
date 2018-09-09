@@ -15,6 +15,7 @@ segmentSelector::segmentSelector()
     fontSize = 10;
     verdana14.load("verdana.ttf", fontSize, true, true);
     spacingVert = 20;   // offset buttons versus the text
+    _step = 0;
     
     ofAddListener(ofEvents().mousePressed, this, &segmentSelector::mousePressed);
 }
@@ -30,8 +31,8 @@ void segmentSelector::setup(ofRectangle area){
     ofxXmlSettings sel("selector.xml");
     numSelections = sel.getNumTags("select");
     
-    int button_size = 20;
-    int textLength = 100;
+    button_size = 20;
+    textLength = 100;
     int numSelections = sel.getNumTags("select");
 
     for (int i = 0; i < numSelections; i++)
@@ -41,7 +42,7 @@ void segmentSelector::setup(ofRectangle area){
         s->name = sel.getValue("name", "untitled");
         
         int x = drawArea.x + textLength;
-        int y = drawArea.y + i * button_size;
+        int y = drawArea.y + button_size + i * button_size; // one button size offset
         
         for(int j=0;j<SEQUENCESTEPS;j++)
         {
@@ -57,8 +58,10 @@ void segmentSelector::setup(ofRectangle area){
     // button to clear sequence
     clearButton = new Button();
     int x = drawArea.x + textLength + (SEQUENCESTEPS-2)*button_size;
-    int y = drawArea.y + button_size/3+(numSelections-1) * button_size;
-    clearButton->setup(ofRectangle(x,y,button_size*2.5,button_size*1.5),"clear",false);
+    int y = drawArea.y + button_size/4+(numSelections) * button_size;
+    clearButton->setup(ofRectangle(x,y,button_size*2.5,button_size*1.2),"clear",false);
+    
+    
 
 }
 
@@ -70,10 +73,22 @@ void segmentSelector::clearSequence(int &id)
 void segmentSelector::draw(){
     
     ofPushStyle();
+    // draw rectangle to show in which step we are
+    for (int j = 0; j < SEQUENCESTEPS; j++){
+        ofSetColor(200);
+        if(j == _step) ofSetColor(120,0,0);
+        
+        ofFill();
+        int x = drawArea.getX() + textLength + j * (button_size);
+        int y = drawArea.getY() - button_size;
+        ofDrawRectRounded(x,y,button_size-4,button_size-4, 4);
+    }
+    
+    // draw buttons
     for (int i = 0; i < selections.size(); i++)
     {
         int x = drawArea.getX();
-        int y = drawArea.getY() + i * spacingVert;
+        int y = drawArea.getY() + button_size + i * spacingVert; // one button size offset
         ofSetColor(255);
         verdana14.drawString(selections[i]->name, x, y);
         

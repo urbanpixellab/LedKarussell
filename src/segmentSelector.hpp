@@ -42,12 +42,16 @@ public:
     ofEvent<bool> segmentPressed;
     void clearStepsOfSegments();
     void clearSequence(int &id);
+    void setStep(int s){ _step = s;};
     
 
 private:
     int numSelections;
     int spacingVert;
     int fontSize;
+    int button_size;
+    int textLength;
+    int _step;
     
     ofRectangle drawArea;
     Button*  clearButton;

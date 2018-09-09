@@ -348,7 +348,7 @@ void ArtnetControl::savePatroon()
             }
             else if(l == 1)
             {
-                cout << "steps layer 1" << endl;
+                //cout << "steps layer 1" << endl;
                 for (int s = 0; s < maxStep; s++)
                 {
                     string step = "";
@@ -358,7 +358,7 @@ void ArtnetControl::savePatroon()
                     }
                     if(step.length() > 1)step.erase(step.length()-1);
                     settings.addValue("step"+ofToString(s), step);
-                    cout << "step"+ofToString(s) << " -> " << step << endl;
+                   // cout << "step"+ofToString(s) << " -> " << step << endl;
                 }
             }
             settings.popTag();
@@ -379,6 +379,9 @@ void ArtnetControl::update()
     }
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
+    
+    _GUI->segmenselectorA.setStep(_step);
+    _GUI->segmenselectorB.setStep(_step);
 
     //dont forget the fade out function to the beat and the blink function
     // use the postarray of the segments for this functions
