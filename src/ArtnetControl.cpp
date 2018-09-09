@@ -456,7 +456,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     {
         ofColor white(_flashCount);
         float f = 0;
-        for (int seg = 0; seg < 33; seg++)
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
         }
@@ -465,11 +465,15 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     //test invert
     if (_GUI->getPostEffectButton(1)->getState() == true)
     {
-        for (int seg = 0; seg < 33; seg++)
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             animator->invert(segments[seg]->getArray(), segments[seg]->getLength());
         }
     }
+    //test datamosh
+    
+    //test stage looplicht
+    //make all segments black only the visible not
     
 }
 
