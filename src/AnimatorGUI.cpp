@@ -38,6 +38,10 @@ AnimatorGUI::~AnimatorGUI()
 
 void AnimatorGUI::createAnimationGUI(int animationCount)
 {
+    
+    _masterBrightness = RotarySlider(ofRectangle(20,200,60,60),ofVec2f(0,1),0,true,false,20,"MASTER");
+
+    
     //create curve buttons
     int w = 50;
     int h = 30;
@@ -120,14 +124,33 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     
     //adding post effects
     int x = COLLUMNLIVE + (w*2.2);
+
+    Button *pBlack = new Button();
+    pBlack->setup(ofRectangle(780,550,w,h), "Blackout", true);
+    _postEffectsButtons.push_back(pBlack);
+    
     y = RowsEdit[0] + (h * 1.1);
     Button *pFlash = new Button();
-    pFlash->setup(ofRectangle(780,550,w,h), "Flash", true);
+    pFlash->setup(ofRectangle(780 + w,550,w,h), "Flash", true);
     _postEffectsButtons.push_back(pFlash);
 
     Button *pInvert = new Button();
-    pInvert->setup(ofRectangle(780+w*1.1,550,w,h), "Invert", true);
+    pInvert->setup(ofRectangle(780+w*2.2,550,w,h), "Invert", true);
     _postEffectsButtons.push_back(pInvert);
+
+    //the auto button
+    _autoPattern.setup(ofRectangle(ofGetWidth()-w*3,ofGetHeight()-h*3,w*3,h*3), "GetDrinks", true);
+}
+
+void AnimatorGUI::update()
+{
+    /*
+    //do the auto function here
+    int old =
+    int sel = fmod(ofGetElapsedTimef(),16);
+    _patLiveButtons[sel]->pressedControler();
+    //also press the button or better pre
+     */
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
@@ -204,6 +227,10 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     {
         _postEffectsButtons[i]->draw();
     }
+    //master broightness
+    ofSetColor(255);
+    _masterBrightness.draw();
+    _autoPattern.draw();
 }
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)

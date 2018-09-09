@@ -8,7 +8,7 @@
 
 #include "LedAnimator.hpp"
 
-LedAnimator::LedAnimator(MidiControl * mc): _MC(mc)
+LedAnimator::LedAnimator(MidiControl * mc,float *masterBright): _MC(mc),_masterBrightness(masterBright)
 {
     //only have to been called once;
     // is working on array getting in and function select + parameters like direction and color
@@ -135,9 +135,9 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
     
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-        selectionArrays[(i * 3) + 0] = a.r * values[i] + b.r * (1 - values[i]);
-        selectionArrays[(i * 3) + 1] = a.g * values[i] + b.r * (1 - values[i]);
-        selectionArrays[(i * 3) + 2] = a.b * values[i] + b.r * (1 - values[i]);
+        selectionArrays[(i * 3) + 0] = (a.r * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
+        selectionArrays[(i * 3) + 1] = (a.g * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
+        selectionArrays[(i * 3) + 2] = (a.b * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
     }
     
 }
@@ -235,9 +235,9 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
     //now write to array
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-        selectionArrays[(i * 3) + 0] += a.r * values[i] + b.r * (1 - values[i]);
-        selectionArrays[(i * 3) + 1] += a.g * values[i] + b.r * (1 - values[i]);
-        selectionArrays[(i * 3) + 2] += a.b * values[i] + b.r * (1 - values[i]);
+        selectionArrays[(i * 3) + 0] += (a.r * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
+        selectionArrays[(i * 3) + 1] += (a.g * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
+        selectionArrays[(i * 3) + 2] += (a.b * values[i] + b.r * (1 - values[i]))* *_masterBrightness;
     }
 }
 
@@ -251,9 +251,9 @@ void LedAnimator::maxToArray(int drawFunction,int dir,int time,float freq,u_int8
     for (int i = 0; i < len; i++) //reduce to pixel
     {
         // compare the existing to the color, the max color is set
-        if (a.r > selectionArrays[(i * 3) + 0]) selectionArrays[(i * 3) + 0] = a.r;
-        if (a.g > selectionArrays[(i * 3) + 1]) selectionArrays[(i * 3) + 1] = a.g;
-        if (a.b > selectionArrays[(i * 3) + 2]) selectionArrays[(i * 3) + 2] = a.b;
+        if (a.r > selectionArrays[(i * 3) + 0]) selectionArrays[(i * 3) + 0] = a.r* *_masterBrightness;
+        if (a.g > selectionArrays[(i * 3) + 1]) selectionArrays[(i * 3) + 1] = a.g* *_masterBrightness;
+        if (a.b > selectionArrays[(i * 3) + 2]) selectionArrays[(i * 3) + 2] = a.b* *_masterBrightness;
     }
 }
 
@@ -307,6 +307,14 @@ void LedAnimator::invert(u_int8_t * selectionArrays,int &length)
 {
     for (int i = 0; i < length; i++)
     {
-       selectionArrays[i] = 255 - selectionArrays[i];
+        selectionArrays[i] = (255 - selectionArrays[i])* *_masterBrightness;
+    }
+}
+
+void LedAnimator::blackout(u_int8_t * selectionArrays,int &length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        selectionArrays[i] = 0;
     }
 }

@@ -41,6 +41,7 @@ public:
     int getValueInt(){return valueMapped;};
     void setValueMapped(float value);
     void addBezeichner(string * bez,int leng);
+    float *getValueNormalized(){return &value;};
   
 private:
     bool            active;
