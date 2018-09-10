@@ -419,8 +419,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     vector<int> getColorIDs = pattern->getColorIDs();
     ofColor c1 = _GUI->getColorselectorA().getColorFromID(getColorIDs[0]);
     ofColor c2 = _GUI->getColorselectorA().getColorFromID(getColorIDs[1]);
-    ofColor c3 = _GUI->getColorselectorA().getColorFromID(getColorIDs[2]);
-    ofColor c4 = _GUI->getColorselectorA().getColorFromID(getColorIDs[3]);
+    ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
+    ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     fillWithBackgroundColor(black,segments);
     if(solo)
@@ -766,9 +766,6 @@ void ArtnetControl::EditPatronPressed(int & iD)
 {
     //turn all of and only the right one on
     _editPatroon = &_patronen[iD];
-    
-    //_editPatroon->printPatroon();
-    
     //update the GUI
     _GUI->getCurveSlidersA()->setValueMapped(float(*_editPatroon->getCurve(0)));
     _GUI->getCurveSlidersB()->setValueMapped(float(*_editPatroon->getCurve(1)));

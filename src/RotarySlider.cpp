@@ -204,7 +204,6 @@ void RotarySlider::mouseDragged(ofMouseEventArgs &evt)
     {
         //mappe mal die entfernung von ursprung im radius von
         // anstieg, muss in die maus richtung drehen wo der zeiger hindreh vom ursprung
-        
         int dir = evt.x - xStart;
         if (dir > 0 && mouseValue < resolution)mouseValue += 4;
         else if (dir < 0 && mouseValue > 0 )mouseValue -= 4;
@@ -230,7 +229,7 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
         //cout << angle << endl;
         xStart = evt.x;
         active = true;
-        valueMapped = ofMap(value,0,1,range.x,range.y);
+        //valueMapped = ofMap(value,0,1,range.x,range.y);
         ofNotifyEvent(newValue, active);
     }
 }
@@ -266,5 +265,7 @@ void RotarySlider::setValueMapped(float val)
     valueMapped = val;
     // value is the internal value for the slider which is always between 0-1
     value = ofMap(val, range.x, range.y, 0., 1.);
+    //also set the mouse value mapped to 128
+    mouseValue = value*resolution;
     updateSlider();
 }

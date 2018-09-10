@@ -35,7 +35,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
         {
             //sinewave on array with freq = 3 on length of input array
             //
-            for (int i = 0; i < len; i++) values[i] = 0;
+            for (int i = 0; i < len; i++) values[i] = 1;
             break;
         }
         case CURVE::WHITEOUT:
@@ -43,7 +43,7 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
             
         //sinewave on array with freq = 3 on length of input array
             //
-            for (int i = 0; i < len; i++) values[i] = 1;
+            for (int i = 0; i < len; i++) values[i] = 0;
             break;
         }
         case CURVE::RECT://add frequency in repetition
@@ -152,12 +152,12 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
     switch (drawFunction) {
         case CURVE::BLACKOUT:
         {
-            for (int i = 0; i < len; i++) values[i] = 0;
+            for (int i = 0; i < len; i++) values[i] = 1;
             break;
         }
         case CURVE::WHITEOUT:
         {
-            for (int i = 0; i < len; i++) values[i] = 1;
+            for (int i = 0; i < len; i++) values[i] = 0;
             break;
         }
         case CURVE::RECT://add frequency in repetition
