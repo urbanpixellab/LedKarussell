@@ -95,7 +95,7 @@ public:
     int Collumnwidth;
     int Padding;
     int RowsEdit[5] = {50,200,280,380,520};
-    int RowsLive[5] = {50,150,280,620,740};
+    int RowsLive[5] = {50,130,340,620,740};
     
     Button *getPostEffectButton(int id){return _postEffectsButtons[id];};
     RotarySlider &getMasterBrightnessKnob(){return _masterBrightness;};

@@ -107,9 +107,9 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     }
     
     // Create colorselectorS
-    colorselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[1],200,200));
-    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],200,200));
-    colorselectorLive.setup(ofRectangle(COLLUMNLIVE+(2*w*2.4),RowsLive[1],(2*w*2.3),340));
+    colorselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[1],240,200));
+    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],240,200));
+    colorselectorLive.setup(ofRectangle(COLLUMNLIVE+(2*w*2.4),RowsLive[2],(2*w*2.3),340));
     
     // RowsEdit[2] --> Is the preview image
     // RowsEdit[3] --> Is the preview mesh
@@ -178,7 +178,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     
     ofSetColor(255);
     pre.draw(CollumnEdit1, RowsEdit[3],Collumnwidth,100);
-    live.draw(COLLUMNLIVE, RowsLive[1],Collumnwidth+20,140);
+    live.draw(COLLUMNLIVE, RowsLive[2],Collumnwidth+20,140);
     
     //draw it under the preview windows
     ofPushMatrix();
@@ -190,7 +190,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofPopMatrix();
 
     ofPushMatrix();
-    ofTranslate(COLLUMNLIVE,RowsLive[2]);
+    ofTranslate(COLLUMNLIVE,RowsLive[1]);
     ofScale(800, 200);
     live.bind();
     _realStructure.draw();
