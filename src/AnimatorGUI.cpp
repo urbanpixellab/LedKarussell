@@ -108,7 +108,7 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     
     // Create colorselectorS
     colorselectorA.setup(ofRectangle(CollumnEdit1,RowsEdit[1],240,200));
-    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],24    0,200));
+    colorselectorB.setup(ofRectangle(CollumnEdit2,RowsEdit[1],240,200));
     colorselectorLive.setup(ofRectangle(COLLUMNLIVE+(2*w*2.4),RowsLive[2],(2*w*2.3),340));
     
     // RowsEdit[2] --> Is the preview image
