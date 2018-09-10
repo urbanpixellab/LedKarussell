@@ -15,7 +15,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     _flashCount = 0;
     _isFlash = false;
     
-    _GUI = new AnimatorGUI(ofRectangle(100,50,500,500));
+    _GUI = new AnimatorGUI(ofRectangle(100,50,500,500),_MC);
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
 
     _preAnimator = new LedAnimator(_MC,_GUI->getMasterBrightnessKnob().getValueNormalized());
@@ -472,11 +472,13 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     //paint white over it if false reduce the value and if value == 0 stop it
     if (_flashCount > 5)
     {
-        ofColor white(_flashCount);
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]) * (_flashCount/255.));
+        //ofColor col = ofColor(_flashCount);
+        cout << _GUI->getColorselectorLive().getColorFromID(0) << endl;
         float f = 0;
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),white,white,f);
+            animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),col,col,f);
         }
         _flashCount -= 5;
     }

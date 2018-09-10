@@ -229,7 +229,7 @@ void RotarySlider::mousePressed(ofMouseEventArgs &evt)
         //cout << angle << endl;
         xStart = evt.x;
         active = true;
-        //valueMapped = ofMap(value,0,1,range.x,range.y);
+        valueMapped = ofMap(value,0,1,range.x,range.y);
         ofNotifyEvent(newValue, active);
     }
 }

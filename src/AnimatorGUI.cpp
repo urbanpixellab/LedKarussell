@@ -8,10 +8,12 @@
 
 #include "AnimatorGUI.hpp"
 
-AnimatorGUI::AnimatorGUI(ofRectangle area):_drawArea(area)
+AnimatorGUI::AnimatorGUI(ofRectangle area,MidiControl *mc):_drawArea(area),_MC(mc)
 {
     ofAddListener(ofEvents().mousePressed, this, &AnimatorGUI::mousePressed);
     _verdana.load("verdana.ttf", 18, true, true);
+    _autoCounter = 0;
+    _maxSteps = 4;
 }
 AnimatorGUI::~AnimatorGUI()
 {
@@ -151,6 +153,44 @@ void AnimatorGUI::update()
     _patLiveButtons[sel]->pressedControler();
     //also press the button or better pre
      */
+    if(_MC->getBeat() == true)
+    {
+        if (_autoPattern.getState() == true)
+        {
+            cout << "beat" << _autoCounter << endl;
+            if(_autoCounter >= _maxSteps)
+            {
+                _maxSteps = ofRandom(2,10);
+                //choose new live pattern
+                
+            }
+            _autoCounter++;
+            if (_autoCounter >= _maxSteps)
+            {
+                _autoCounter = 0;
+                //trigger event to choose a new patroon randomlye
+                int newPattern = floor(ofRandom(0,16));
+                _maxSteps = ofRandom(8)*8;
+                //deselect all others
+                for (int i = 0; i < _patLiveButtons.size(); i++)
+                {
+                    if(_patLiveButtons[i]->getState() == true)
+                    {
+                        _patLiveButtons[i]->setState(false);
+                    }
+                    
+                }
+                _patLiveButtons[newPattern]->pressedControler();
+                ofNotifyEvent(patronPLAY,newPattern);
+            }
+        }
+        else if(_autoPattern.getState() == false && _oldAutoState == true)
+        {
+            _autoCounter = 0;
+        }
+        
+    }
+    _oldAutoState = _autoPattern.getState() ;
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
