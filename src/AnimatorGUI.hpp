@@ -16,6 +16,7 @@
 #include "RotarySlider.hpp"
 #include "segmentSelector.hpp"
 #include "LightControl.hpp"
+#include "MidiControl.hpp"
 
 
 #define SLIDERS 6
@@ -28,7 +29,7 @@ class AnimatorGUI
 {
 public:
     
-    AnimatorGUI(ofRectangle area);
+    AnimatorGUI(ofRectangle area, MidiControl *mc);
     ~AnimatorGUI();
     
     void init();
@@ -120,7 +121,11 @@ private:
     
     RotarySlider    _masterBrightness;
     
+    MidiControl     *_MC;
     Button          _autoPattern;
+    int             _autoCounter;
+    int             _maxSteps;
+    bool            _oldAutoState;
 };
 
 #endif /* AnimatorGUI_hpp */

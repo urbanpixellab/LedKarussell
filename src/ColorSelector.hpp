@@ -40,6 +40,7 @@ public:
     
     vector <ofColor> colors;
     ofEvent<bool> colorPressed;
+    
     int *getSelectedColorIDs(){return _selectedColorIDs;};
     void addListeners();
     void removeListeners();
