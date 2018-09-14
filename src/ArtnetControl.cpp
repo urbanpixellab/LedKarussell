@@ -394,12 +394,13 @@ void ArtnetControl::update()
         _step++;
         if(_step >= getNumStepsSequence()) _step = 0;
     }
+    /*
     for (int i = 0; i < _liveSegments.size(); i++)
     {
         fillWithBackgroundColor(_black,_preSegments);
         fillWithBackgroundColor(_black,_liveSegments);
     }
-    
+    */
     
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
@@ -435,6 +436,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
     // fix ?
+
     if(solo)
     {
         for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
@@ -505,19 +507,18 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         }
     }
     // datamosh
-/*
+
     // stage looplicht a
-    bool stageLooplichtv1 = true; //link to button
-    if(stageLooplichtv1 == true)
+    if(_GUI->getPostEffectButton(3)->getState() == true)
     {
         int segOff = 9; //offset from triangle
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             if(seg == segOff+_step || seg == segOff+8+_step) continue;
-            animator->blackout(segments[seg]->getArray(), segments[seg]->getLength());
+            animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
         }
     }
-*/
+
     // stage looplicht b
     
     // stage looplicht c
