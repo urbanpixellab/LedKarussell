@@ -26,6 +26,7 @@ public:
     u_int8_t *getPixel(int id);
     void setPixel(int id, int r, int g, int b);
     void setPixel(int id, ofColor color);
+    void setPostPixel(int id, ofColor color);
     void setAllPixel(ofColor &color);
     u_int8_t getPixelLength(){return _pixLength;};
     
@@ -36,6 +37,7 @@ public:
     int &getLength(){return _length;};
     bool &getInverse(){return _isInverse;};
     
+    void copyPostToArray();
     
 private:
     int             _universe;//maybe more than on if it has more than one unoverse

@@ -21,6 +21,7 @@ Segment::Segment(int nodeID,int universe,int beginLed,int endLed,int segmentID):
     for (int i = 0; i < 512; i++)
     {
         _values[i] = 0;//black
+        _postValues[i] = 0;
     }
     _pixel[0] = &_values[0];
     _pixel[1] = &_values[1];
@@ -38,9 +39,9 @@ u_int8_t *Segment::getPixel(int id)
 {
     //check range
     if(id >= _pixLength) return *_pixel;
-    _pixel[0] = &_values[(id * 3) + 0];
-    _pixel[1] = &_values[(id * 3) + 1];
-    _pixel[2] = &_values[(id * 3) + 2];
+    _pixel[0] = &_values[_begin + (id * 3) + 0];
+    _pixel[1] = &_values[_begin + (id * 3) + 1];
+    _pixel[2] = &_values[_begin + (id * 3) + 2];
     return *_pixel;
 };
 
@@ -54,15 +55,31 @@ void Segment::setAllPixel(ofColor &c)
 
 void Segment::setPixel(int id,int r,int g,int b)
 {
-    _values[(id*3) + 0] = r;
-    _values[(id*3) + 1] = g;
-    _values[(id*3) + 2] = b;
+    _values[_begin + (id*3) + 0] = r;
+    _values[_begin + (id*3) + 1] = g;
+    _values[_begin + (id*3) + 2] = b;
 }
 
 void Segment::setPixel(int id,ofColor color)
 {
     if(id*3 > _length) return;
-    _values[(id*3) + 0] = color.r;
-    _values[(id*3) + 1] = color.g;
-    _values[(id*3) + 2] = color.b;
+    _values[_begin + (id*3) + 0] = color.r;
+    _values[_begin + (id*3) + 1] = color.g;
+    _values[_begin + (id*3) + 2] = color.b;
+}
+
+void Segment::setPostPixel(int id,ofColor color)
+{
+    if(id*3 > _length) return;
+    _postValues[_begin + (id*3) + 0] = color.r;
+    _postValues[_begin + (id*3) + 1] = color.g;
+    _postValues[_begin + (id*3) + 2] = color.b;
+}
+
+void Segment::copyPostToArray()
+{
+    for (int i = 0; i < 512; i++)
+    {
+        _values[i] = _postValues[i];
+    }
 }

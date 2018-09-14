@@ -50,7 +50,7 @@ public:
     void update();
     void doLedAnimation(Patroon * pattern,LedAnimator * animator,vector<Segment*> segments,int &step);
     void drawGui();
-    void fillWithBackgroundColor(ofColor & color,vector<Segment*> segments);
+    void fillWithBackgroundColor(ofColor & color);
     void specialFunction(int id);
     //more listeners
     void PlayPatronPressed(int & id);

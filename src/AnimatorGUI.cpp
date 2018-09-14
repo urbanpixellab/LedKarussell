@@ -146,6 +146,10 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     pLoopLichtP1->setup(ofRectangle(780+w*3.2,550,w,h), "LoopP1", true);
     _postEffectsButtons.push_back(pLoopLichtP1);
     
+    Button *pBlink1 = new Button();
+    pBlink1->setup(ofRectangle(780+w*4.2,550,w,h), "Blink_FF", true);
+    _postEffectsButtons.push_back(pBlink1);
+    
 
     //the auto button
     _autoPattern.setup(ofRectangle(ofGetWidth()-w*3,ofGetHeight()-h*3,w*3,h*3), "GetDrinks", true);

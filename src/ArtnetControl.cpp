@@ -394,13 +394,7 @@ void ArtnetControl::update()
         _step++;
         if(_step >= getNumStepsSequence()) _step = 0;
     }
-    /*
-    for (int i = 0; i < _liveSegments.size(); i++)
-    {
-        fillWithBackgroundColor(_black,_preSegments);
-        fillWithBackgroundColor(_black,_liveSegments);
-    }
-    */
+    fillWithBackgroundColor(_black);
     
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
@@ -435,9 +429,8 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
     ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
-    // fix ?
 
-    if(solo)
+    if(_GUI->getPostEffectButton(4)->getState() == false)
     {
         for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
         {
@@ -449,8 +442,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                     int seg = _selections[stepElement].items[i];
 
                     float segShift = frequenzShift(*pattern->getPhase(0), i/float(s), *pattern->getPhaseFreq(0));
-                    //float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
-                    //muss nur einmal hier berechnet werden
                     
                     animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
                     
@@ -473,15 +464,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             }
         }
     }
-    //black
-    if (_GUI->getPostEffectButton(0)->getState() == true)
-    {
-        for (int seg = 0; seg < _liveSegments.size(); seg++)
-        {
-            animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength());
-        }
-    }
-    
     //flash
     
     if(_GUI->getPostEffectButton(1)->getState() == true) _flashCount = 255;
@@ -523,7 +505,29 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     
     // stage looplicht c
     
-    // blink blink
+    // blink blink fast
+    if(_GUI->getPostEffectButton(4)->getState() == true)
+    {
+        //first call clear the arrau
+        // then add random points in white
+        for (int i = 0; i < _liveSegments.size(); i++)
+        {
+            for(int p = 0;p < _liveSegments[i]->getLength();p++)
+            {
+                if(_liveSegments[i]->getPostArray()[p] > 5) _liveSegments[i]->getPostArray()[p] -= 5;
+                else _liveSegments[i]->getPostArray()[p] = 0;
+            }
+            //now add random pixels
+            int r = ofRandom(0,2);
+            for (int sp = 0; sp < r; sp++)
+            {
+                int rp = ofRandom(_liveSegments[i]->getLength()/3);
+                _liveSegments[i]->setPostPixel(rp, _GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
+                
+            }
+            _liveSegments[i]->copyPostToArray();
+        }
+    }
     
     //make all segments black only the visible not
     
@@ -632,11 +636,12 @@ float ArtnetControl::frequenzShift(int curve,float time, float freq)
 }
 
 
-void ArtnetControl::fillWithBackgroundColor(ofColor & color,vector<Segment*> segments)
+void ArtnetControl::fillWithBackgroundColor(ofColor & color)
 {
-    for (int i = 0; i < segments.size(); i++)
+    for(int i = 0;i < _preSegments.size();i++)
     {
-        segments[i]->setAllPixel(color);
+        _preSegments[i]->setAllPixel(_black);
+        _liveSegments[i]->setAllPixel(_black);
     }
 }
 
@@ -669,28 +674,58 @@ void ArtnetControl::drawGui()
 
 void ArtnetControl::sendToNodes()
 {
+    cout << "array 7/150 " << _preSegments[7]->getArray()[150] << endl;
+
     if(!_isMuted)
     {
-        //copy segment arrays to nodes
-        int nodeID,universe,first,last = 0;
-        for (int i = 0; i < _liveSegments.size(); i++)
+        //black
+        if (_GUI->getPostEffectButton(0)->getState() == true)
         {
-            //each segment is drawn by the Segment abstraction
-            
-            nodeID = _liveSegments[i]->getNodeID();
-            universe = _liveSegments[i]->getUniverse();
-            first = _liveSegments[i]->getBegin();
-            last = _liveSegments[i]->getEnd();
-            for (int cell = first; cell < last; cell++)
+            //copy segment arrays to nodes
+            int nodeID,universe,first,last = 0;
+            for (int i = 0; i < _liveSegments.size(); i++)
             {
-                //get the array where to write which function
-                //and write it to the nodes
-    //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
-                u_int64_t data = _liveSegments[i]->getArray()[cell];
-                // mach was damit
-                _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
+                //each segment is drawn by the Segment abstraction
+                
+                nodeID = _liveSegments[i]->getNodeID();
+                universe = _liveSegments[i]->getUniverse();
+                first = _liveSegments[i]->getBegin();
+                last = _liveSegments[i]->getEnd();
+                for (int cell = first; cell < last; cell++)
+                {
+                    //get the array where to write which function
+                    //and write it to the nodes
+                    //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+                    u_int64_t data = _liveSegments[i]->getArray()[cell];
+                    // mach was damit
+                    _nodes[nodeID]->universes[universe][cell] = 0;
+                }
             }
         }
+        else
+        {
+            //copy segment arrays to nodes
+            int nodeID,universe,first,last = 0;
+            for (int i = 0; i < _liveSegments.size(); i++)
+            {
+                //each segment is drawn by the Segment abstraction
+                
+                nodeID = _liveSegments[i]->getNodeID();
+                universe = _liveSegments[i]->getUniverse();
+                first = _liveSegments[i]->getBegin();
+                last = _liveSegments[i]->getEnd();
+                for (int cell = first; cell < last; cell++)
+                {
+                    //get the array where to write which function
+                    //and write it to the nodes
+                    //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+                    u_int64_t data = _liveSegments[i]->getArray()[cell];
+                    // mach was damit
+                    _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
+                }
+            }
+        }
+
         //then send the nodes
         //basic sending
         //int universe = 0;
