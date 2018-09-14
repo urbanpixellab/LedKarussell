@@ -142,6 +142,11 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
 
     //the auto button
     _autoPattern.setup(ofRectangle(ofGetWidth()-w*3,ofGetHeight()-h*3,w*3,h*3), "GetDrinks", true);
+    
+    // the mute artnet button
+    _muteArtnet.setup(ofRectangle(20,300,50,50), "MUTE", true);
+    ofAddListener(_muteArtnet.buttonIDPressed, this, &AnimatorGUI::muteArtnetButtonPressed);
+
 }
 
 void AnimatorGUI::update()
@@ -271,6 +276,7 @@ void AnimatorGUI::draw(ofImage &pre, ofImage &live)
     ofSetColor(255);
     _masterBrightness.draw();
     _autoPattern.draw();
+    _muteArtnet.draw();
 }
 
 void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
@@ -301,6 +307,13 @@ void AnimatorGUI::liveButtonPressed(int &id)
     ofNotifyEvent(patronPLAY,id);
 }
 
+
+void AnimatorGUI::muteArtnetButtonPressed(int &id)
+{
+    cout << "mute button pressed" << endl;
+    bool state =_muteArtnet.getState();
+    ofNotifyEvent(muteButtonPressed,state);
+}
 
 void AnimatorGUI::setEditButtonState(int &id, bool state)
 {
