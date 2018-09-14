@@ -55,6 +55,7 @@ public:
     //more listeners
     void PlayPatronPressed(int & id);
     void EditPatronPressed(int & id);
+    void muteArtnetPressed(bool & state);
     void PlaySteppedPatronPressed(int & id);
     float frequenzShift(int curve,float time, float freq);
     
@@ -111,6 +112,7 @@ private:
     float                   _freqences[16] = {0,125.25,.5,.75,1,2,3,4,5,6,7,8,12,16,20,24}; //length goes to gui
     int                     _flashCount;
     bool                    _isFlash;
+    bool                    _isMuted;
 };
 
 #endif /* ArtnetControl_hpp */
