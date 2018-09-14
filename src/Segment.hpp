@@ -50,6 +50,7 @@ private:
     u_int8_t        _pixLength;
     int             _nodeID;
     bool            _isInverse;//ins it inverse or not, based on the input led
+    int             _id;
     
 };
 

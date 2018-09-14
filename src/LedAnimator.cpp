@@ -22,13 +22,12 @@ LedAnimator::~LedAnimator()
 
 //////////////////////niew
 
-void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
+void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &begin,int &length,ofColor &a,ofColor &b,float &shift)
 {
     int blendMode = 0;// direct
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
     float values[int(len)];
-    
     //implement the color function
     switch (drawFunction) {
         case CURVE::BLACKOUT:
@@ -135,17 +134,18 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
     
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-        selectionArrays[(i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
-        selectionArrays[(i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
-        selectionArrays[(i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
+        values[i] = pow(values[i], 4);
+        selectionArrays[begin + (i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[begin + (i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[begin + (i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
     }
     
 }
 
-void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
+void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &begin,int &length,ofColor &a,ofColor &b,float &shift)
 {
     // frequency moet op en draaiknop !!!
-    float len = (length/3); // convert to pixel position
+    float len = ((length)/3); // convert to pixel position
     float values[int(len)];
     
     //implement the color function
@@ -235,15 +235,15 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
     //now write to array
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-
-        selectionArrays[(i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
-        selectionArrays[(i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
-        selectionArrays[(i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
+        values[i] = pow(values[i], 4);
+        selectionArrays[begin + (i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[begin + (i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[begin + (i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
 
     }
 }
 
-void LedAnimator::maxToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &length,ofColor &a,ofColor &b,float &shift)
+void LedAnimator::maxToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &begin,int &length,ofColor &a,ofColor &b,float &shift)
 {
     // frequency moet op en draaiknop !!!
     float len = (length/3); // convert to pixel position
@@ -253,9 +253,9 @@ void LedAnimator::maxToArray(int drawFunction,int dir,int time,float freq,u_int8
     for (int i = 0; i < len; i++) //reduce to pixel
     {
         // compare the existing to the color, the max color is set
-        if (a.r > selectionArrays[(i * 3) + 0]) selectionArrays[(i * 3) + 0] = a.r* *_masterBrightness;
-        if (a.g > selectionArrays[(i * 3) + 1]) selectionArrays[(i * 3) + 1] = a.g* *_masterBrightness;
-        if (a.b > selectionArrays[(i * 3) + 2]) selectionArrays[(i * 3) + 2] = a.b* *_masterBrightness;
+        if (a.r > selectionArrays[begin + (i * 3) + 0]) selectionArrays[begin + (i * 3) + 0] = a.r* *_masterBrightness;
+        if (a.g > selectionArrays[begin + (i * 3) + 1]) selectionArrays[begin + (i * 3) + 1] = a.g* *_masterBrightness;
+        if (a.b > selectionArrays[begin + (i * 3) + 2]) selectionArrays[begin + (i * 3) + 2] = a.b* *_masterBrightness;
     }
 }
 
@@ -305,17 +305,17 @@ void LedAnimator::BuitenBinnenArray(float *array, int length)
     }
 }
 
-void LedAnimator::invert(u_int8_t * selectionArrays,int &length)
+void LedAnimator::invert(u_int8_t * selectionArrays,int &begin,int &length)
 {
-    for (int i = 0; i < length; i++)
+    for (int i = begin; i < length; i++)
     {
         selectionArrays[i] = (255 - selectionArrays[i])* *_masterBrightness;
     }
 }
 
-void LedAnimator::blackout(u_int8_t * selectionArrays,int &length)
+void LedAnimator::blackout(u_int8_t * selectionArrays,int &begin,int &length)
 {
-    for (int i = 0; i < length; i++)
+    for (int i = begin; i < length; i++)
     {
         selectionArrays[i] = 0;
     }

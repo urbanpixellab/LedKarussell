@@ -105,6 +105,11 @@ public:
     RotarySlider &getMasterBrightnessKnob(){return _masterBrightness;};
     Button &getAutoButton(){return _autoPattern;};
     
+    
+    //midi
+    void NoteOn(int &id);
+    void NoteOff(int &id);
+    
 private:
 
     ofRectangle         _drawArea;
@@ -130,6 +135,12 @@ private:
     int             _autoCounter;
     int             _maxSteps;
     bool            _oldAutoState;
+    
+    int             _MidiSequenzerButtons[16] = {36,37,42,53,59,38,50,52,44,46,47,48,45,57,56,43};//36,37,42,53,59,38,50,52,44,46,47,48,45,57,56,43
+    int             _MidiSelector[6] = {39,41,58,55,40,54};//left to right
+    int             _midiSelect;
+
+    
 };
 
 #endif /* AnimatorGUI_hpp */

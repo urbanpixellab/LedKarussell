@@ -25,6 +25,7 @@ Segment::Segment(int nodeID,int universe,int beginLed,int endLed,int segmentID):
     _pixel[0] = &_values[0];
     _pixel[1] = &_values[1];
     _pixel[2] = &_values[2];
+    _id = segmentID;
 }
 
 Segment::~Segment(){}

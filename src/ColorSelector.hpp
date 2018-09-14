@@ -45,6 +45,8 @@ public:
     void addListeners();
     void removeListeners();
     
+    Button &getColorButtonA(int id){return buttonsA[id];}
+    Button &getColorButtonB(int id){return buttonsA[id];}
     
 private:
     ofRectangle drawArea;
