@@ -46,6 +46,8 @@ public:
     ofEvent<int>    patronEDIT;
     ofEvent<int>    patronPLAYSTEPPED;
     ofEvent<bool>   colorSelectPressed;
+    ofEvent<bool>   muteButtonPressed;
+
     
     ofEvent<int>    postFxPressed;
     
@@ -85,6 +87,7 @@ public:
     
     void editButtonPressed(int &id);
     void liveButtonPressed(int &id);
+    void muteArtnetButtonPressed(int &id);
     
     // needed for set initial state of buttons
     void setEditButtonState(int &id, bool state);
@@ -128,6 +131,7 @@ private:
     
     MidiControl     *_MC;
     Button          _autoPattern;
+    Button          _muteArtnet;
     int             _autoCounter;
     int             _maxSteps;
     bool            _oldAutoState;

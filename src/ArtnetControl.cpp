@@ -14,6 +14,7 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     _numStepsInSequnce = 8;
     _flashCount = 0;
     _isFlash = false;
+    _isMuted = false;
     
     _GUI = new AnimatorGUI(ofRectangle(100,50,500,500),_MC);
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
@@ -78,6 +79,9 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     ofAddListener(_GUI->getPhaseCurveSliderB()->newValue, this, &ArtnetControl::sliderChanged);
     ofAddListener(_GUI->getPhaseFreqSliderA()->newValue, this, &ArtnetControl::sliderChanged);
     ofAddListener(_GUI->getPhaseFreqSliderB()->newValue, this, &ArtnetControl::sliderChanged);
+    
+    // Catch listener
+    ofAddListener(_GUI->muteButtonPressed, this, &ArtnetControl::muteArtnetPressed);
 
 }
 
@@ -664,40 +668,40 @@ void ArtnetControl::drawGui()
 
 void ArtnetControl::sendToNodes()
 {
-    //copy segment arrays to nodes
-    int nodeID,universe,first,last = 0;
-    
-    for (int i = 0; i < _liveSegments.size(); i++)
+    if(!_isMuted)
     {
-        //each segment is drawn by the Segment abstraction
-        nodeID = _liveSegments[i]->getNodeID();
-        universe = _liveSegments[i]->getUniverse();
-        first = _liveSegments[i]->getBegin();
-        last = _liveSegments[i]->getEnd();
-        for (int cell = first; cell < last; cell++)
+        //copy segment arrays to nodes
+        int nodeID,universe,first,last = 0;
+        for (int i = 0; i < _liveSegments.size(); i++)
         {
-            //get the array where to write which function
-            //and write it to the nodes
-            //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
-            u_int64_t data = _liveSegments[i]->getArray()[cell];
-            // mach was damit
+            //each segment is drawn by the Segment abstraction
             
-//            cout << "seg " << i << " first " << first << " last " << last << " cell " << cell << " data " << data << endl;
-            _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
+            nodeID = _liveSegments[i]->getNodeID();
+            universe = _liveSegments[i]->getUniverse();
+            first = _liveSegments[i]->getBegin();
+            last = _liveSegments[i]->getEnd();
+            for (int cell = first; cell < last; cell++)
+            {
+                //get the array where to write which function
+                //and write it to the nodes
+    //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+                u_int64_t data = _liveSegments[i]->getArray()[cell];
+                // mach was damit
+                _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
+            }
         }
-        
-    }
-    //then send the nodes
-    //basic sending
-    //int universe = 0;
-    //int chnCount = 450;//33 leds * 3
-    //artnet.send(universe1,universe,chnCount);
-    for (int n = 0; n < _nodes.size(); n++)
-    {
-        for (int u = 0; u < 8; u++)
+        //then send the nodes
+        //basic sending
+        //int universe = 0;
+        //int chnCount = 450;//33 leds * 3
+        //artnet.send(universe1,universe,chnCount);
+        for (int n = 0; n < _nodes.size(); n++)
         {
-            // we set the length to 3x170 = 510 has to been tested
-            _nodes[n]->artnet.send(_nodes[n]->universes[u],u,510);
+            for (int u = 0; u < 8; u++)
+            {
+                // we set the length to 3x170 = 510 has to been tested
+                _nodes[n]->artnet.send(_nodes[n]->universes[u],u,510);
+            }
         }
     }
 }
@@ -767,6 +771,11 @@ void ArtnetControl::keyPressed(ofKeyEventArgs &key)
         loadNodes();
         cout << key.key << endl;
     }
+}
+
+void ArtnetControl::muteArtnetPressed(bool & state){
+    cout << "ArtnetControl:: mute button pressed state -> " << state << endl;
+    _isMuted = state;
 }
 
 void ArtnetControl::sliderChanged(bool & value)
