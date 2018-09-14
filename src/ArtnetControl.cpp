@@ -390,26 +390,25 @@ void ArtnetControl::update()
         _step++;
         if(_step >= getNumStepsSequence()) _step = 0;
     }
+    for (int i = 0; i < _liveSegments.size(); i++)
+    {
+        fillWithBackgroundColor(_black,_preSegments);
+        fillWithBackgroundColor(_black,_liveSegments);
+    }
+    
     
     doLedAnimation(_editPatroon, _preAnimator,_preSegments,_step);
     doLedAnimation(_livePatroon, _liveAnimator,_liveSegments,_step);
-    
+
     _GUI->segmenselectorA.setStep(_step);
     _GUI->segmenselectorB.setStep(_step);
 
     //dont forget the fade out function to the beat and the blink function
     // use the postarray of the segments for this functions
     
-    //test flash
-    
-    
-    
-    
-
     // now updaste the arrays to the visualizer
     writeSegmentsToImage(_preSegments, _preIMG);
     writeSegmentsToImage(_liveSegments, _liveIMG);
-    
     sendToNodes();
 }
 
@@ -423,7 +422,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     
     bool solo = true; // solo means that every segment is treated seperate otherwise we melt it to one big array
     //first fill all with background color
-    ofColor black(0,0,0);
     
     // Get colors from editPatroon
     vector<int> getColorIDs = pattern->getColorIDs();
@@ -432,7 +430,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     ofColor c3 = _GUI->getColorselectorB().getColorFromID(getColorIDs[2]);
     ofColor c4 = _GUI->getColorselectorB().getColorFromID(getColorIDs[3]);
     // to do add index shift function to phaseshift the curve from index by a curve and freq
-    fillWithBackgroundColor(black,segments);
+    // fix ?
     if(solo)
     {
         for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
@@ -443,11 +441,13 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
+
                     float segShift = frequenzShift(*pattern->getPhase(0), i/float(s), *pattern->getPhaseFreq(0));
                     //float segShift = sin(i/float(s) * TWO_PI * *pattern->getPhaseFreq(0)); // based on the curve and the frequency and the index
                     //muss nur einmal hier berechnet werden
                     
-                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(), segments[seg]->getLength(),c1,c2,segShift);
+                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
+                    
                 }
             }
         }
@@ -462,7 +462,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                     int seg = _selections[stepElement].items[i];
                     float segShift = frequenzShift(*pattern->getPhase(1), i/float(s), *pattern->getPhaseFreq(1));
                     
-                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c3,c4,segShift);
+                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c3,c4,segShift);
                 }
             }
         }
@@ -472,7 +472,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     {
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            animator->blackout(segments[seg]->getArray(), segments[seg]->getLength());
+            animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength());
         }
     }
     
@@ -484,11 +484,11 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     {
         ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]) * (_flashCount/255.));
         //ofColor col = ofColor(_flashCount);
-        cout << _GUI->getColorselectorLive().getColorFromID(0) << endl;
+//        cout << _GUI->getColorselectorLive().getColorFromID(0) << endl;
         float f = 0;
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            animator->maxToArray(0,0,0,0, segments[seg]->getArray(), segments[seg]->getLength(),col,col,f);
+            animator->maxToArray(0,0,0,0, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),col,col,f);
         }
         _flashCount -= 5;
     }
@@ -497,11 +497,11 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     {
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            animator->invert(segments[seg]->getArray(), segments[seg]->getLength());
+            animator->invert(segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength());
         }
     }
     // datamosh
-
+/*
     // stage looplicht a
     bool stageLooplichtv1 = true; //link to button
     if(stageLooplichtv1 == true)
@@ -513,7 +513,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             animator->blackout(segments[seg]->getArray(), segments[seg]->getLength());
         }
     }
-
+*/
     // stage looplicht b
     
     // stage looplicht c
@@ -666,10 +666,10 @@ void ArtnetControl::sendToNodes()
 {
     //copy segment arrays to nodes
     int nodeID,universe,first,last = 0;
+    
     for (int i = 0; i < _liveSegments.size(); i++)
     {
         //each segment is drawn by the Segment abstraction
-        
         nodeID = _liveSegments[i]->getNodeID();
         universe = _liveSegments[i]->getUniverse();
         first = _liveSegments[i]->getBegin();
@@ -678,11 +678,14 @@ void ArtnetControl::sendToNodes()
         {
             //get the array where to write which function
             //and write it to the nodes
-//            u_int64_t data = _preSegments[i]->getArray()[first+cell];
-            u_int64_t data = _liveSegments[i]->getArray()[first+cell];
+            //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
+            u_int64_t data = _liveSegments[i]->getArray()[cell];
             // mach was damit
+            
+//            cout << "seg " << i << " first " << first << " last " << last << " cell " << cell << " data " << data << endl;
             _nodes[nodeID]->universes[universe][cell] = data;//_liveSegments[i]->getArray()[first+cell];
         }
+        
     }
     //then send the nodes
     //basic sending
@@ -725,7 +728,7 @@ void ArtnetControl::colorPressed(bool &pressed)
 void ArtnetControl::colorLivePressed(bool &pressed)
 {
     // We changed live colours let's do soemthing with it..
-    cout << "We changed live colours let's do soemthing with it.. " << endl;
+ //   cout << "We changed live colours let's do soemthing with it.. " << endl;
 }
 
 void ArtnetControl::segmentSelectPressed(bool &pressed)

@@ -3,239 +3,238 @@
 	<node>0</node>
 	<universe>0</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>123</length>
 </segment>
 <segment>
 	<id>1</id>
 	<node>0</node>
 	<universe>1</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>123</length>
 </segment>
 <segment>
 	<id>2</id>
 	<node>0</node>
 	<universe>2</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>124</length>
 </segment>
 <segment>
 	<id>3</id>
 	<node>0</node>
 	<universe>3</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>79</length>
 </segment>
 <segment>
 	<id>4</id>
 	<node>1</node>
-	<universe>4</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>81</length>
 </segment>
 <segment>
 	<id>5</id>
 	<node>1</node>
-	<universe>5</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>90</length>
 </segment>
 <segment>
 	<id>6</id>
 	<node>1</node>
-	<universe>6</universe>
-	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<universe>2</universe>
+	<beginPixel>1</beginPixel>
+	<length>39</length>
 </segment>
 <segment>
 	<id>7</id>
 	<node>1</node>
-	<universe>7</universe>
-	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<universe>2</universe>
+	<beginPixel>41</beginPixel>
+	<length>77</length>
 </segment>
-
 <segment>
 	<id>8</id>
-	<node>2</node>
-	<universe>0</universe>
-	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<node>1</node>
+	<universe>2</universe>
+	<beginPixel>80</beginPixel>
+	<length>121</length>
 </segment>
 <segment>
 	<id>9</id>
 	<node>2</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>10</id>
 	<node>2</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>11</id>
 	<node>2</node>
-	<universe>3</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>12</id>
-	<node>3</node>
-	<universe>0</universe>
+	<node>2</node>
+	<universe>3</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>13</id>
 	<node>3</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>14</id>
 	<node>3</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>15</id>
 	<node>3</node>
-	<universe>3</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 
 <segment>
 	<id>16</id>
-	<node>4</node>
-	<universe>0</universe>
+	<node>3</node>
+	<universe>3</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>17</id>
 	<node>4</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>18</id>
 	<node>4</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>19</id>
 	<node>4</node>
-	<universe>3</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>20</id>
-	<node>5</node>
-	<universe>0</universe>
+	<node>4</node>
+	<universe>3</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>21</id>
 	<node>5</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>22</id>
 	<node>5</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>23</id>
 	<node>5</node>
-	<universe>3</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 
 <segment>
 	<id>24</id>
-	<node>6</node>
-	<universe>0</universe>
+	<node>5</node>
+	<universe>3</universe>
 	<beginPixel>0</beginPixel>
 	<length>150</length>
 </segment>
 <segment>
 	<id>25</id>
 	<node>6</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>123</length>
 </segment>
 <segment>
 	<id>26</id>
 	<node>6</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>122</length>
 </segment>
 <segment>
 	<id>27</id>
 	<node>6</node>
-	<universe>3</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>123</length>
 </segment>
 <segment>
 	<id>28</id>
-	<node>7</node>
-	<universe>0</universe>
+	<node>6</node>
+	<universe>3</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>91</length>
 </segment>
 <segment>
 	<id>29</id>
 	<node>7</node>
-	<universe>1</universe>
+	<universe>0</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>94</length>
 </segment>
 <segment>
 	<id>30</id>
 	<node>7</node>
-	<universe>2</universe>
+	<universe>1</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>88</length>
 </segment>
 <segment>
 	<id>31</id>
 	<node>7</node>
-	<universe>3</universe>
-	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<universe>2</universe>
+	<beginPixel>40</beginPixel>
+	<length>78</length>
 </segment>
 <segment>
 	<id>32</id>
 	<node>7</node>
-	<universe>0</universe>
-	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<universe>2</universe>
+	<beginPixel>80</beginPixel>
+	<length>120</length>
 </segment>
 <segment>
 	<id>33</id>
 	<node>7</node>
-	<universe>1</universe>
+	<universe>2</universe>
 	<beginPixel>0</beginPixel>
-	<length>150</length>
+	<length>37</length>
 </segment>

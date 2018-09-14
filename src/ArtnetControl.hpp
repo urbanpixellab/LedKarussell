@@ -111,6 +111,7 @@ private:
     float                   _freqences[16] = {0,125.25,.5,.75,1,2,3,4,5,6,7,8,12,16,20,24}; //length goes to gui
     int                     _flashCount;
     bool                    _isFlash;
+    ofColor                 _black = ofColor(0,0,0);
 };
 
 #endif /* ArtnetControl_hpp */

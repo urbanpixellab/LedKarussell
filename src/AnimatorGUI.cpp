@@ -14,6 +14,8 @@ AnimatorGUI::AnimatorGUI(ofRectangle area,MidiControl *mc):_drawArea(area),_MC(m
     _verdana.load("verdana.ttf", 18, true, true);
     _autoCounter = 0;
     _maxSteps = 4;
+    ofAddListener(_MC->noteON, this, &AnimatorGUI::NoteOn);
+    ofAddListener(_MC->noteOFF, this, &AnimatorGUI::NoteOff);
 }
 AnimatorGUI::~AnimatorGUI()
 {
@@ -313,3 +315,88 @@ void AnimatorGUI::setLiveButtonState(int &id, bool state)
 }
 
 
+void AnimatorGUI::NoteOn(int &id)
+{
+    //first check select buttons
+    _midiSelect = 0;//live buttons
+    for (int i = 0; i < 6; i++)
+    {
+        if(id == _MidiSelector[i])
+        {
+            // we have a midi select knop pressed
+            if (id == _MidiSelector[0]) _midiSelect = 1; //color a
+            else if (id == _MidiSelector[2]) _midiSelect = 2; //color b
+            else if (id == _MidiSelector[3]) _midiSelect = 3; //color c
+            else if (id == _MidiSelector[5]) _midiSelect = 4; //color d
+            break;
+        }
+    }
+    cout << "midoi select " << _midiSelect << endl;
+    switch (_midiSelect) {
+        case 0://live pattern
+            for (int i = 0; i < 16; i++)
+            {
+                if (_MidiSequenzerButtons[i] == id)
+                {
+                    _patLiveButtons[i]->pressedControler();
+                    liveButtonPressed(i);
+                }
+            }
+            break;
+            
+        case 1://color a
+            for (int i = 0; i < 16; i++)
+            {
+                if (_MidiSequenzerButtons[i] == id)
+                {
+                    colorselectorA.getColorButtonA(i).pressedControler();
+                }
+            }
+            break;
+            
+        case 2://color b
+            for (int i = 0; i < 16; i++)
+            {
+                if (_MidiSequenzerButtons[i] == id)
+                {
+                    colorselectorA.getColorButtonB(i).pressedControler();
+                }
+            }
+            break;
+            
+        case 3://color a
+            for (int i = 0; i < 16; i++)
+            {
+                if (_MidiSequenzerButtons[i] == id)
+                {
+                    colorselectorB.getColorButtonA(i).pressedControler();
+                }
+            }
+            break;
+            
+        case 4://color b
+            for (int i = 0; i < 16; i++)
+            {
+                if (_MidiSequenzerButtons[i] == id)
+                {
+                    colorselectorB.getColorButtonB(i).pressedControler();
+                }
+            }
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+void AnimatorGUI::NoteOff(int &id)
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if(id == _MidiSelector[i])
+        {
+            _midiSelect = 0;
+        }
+    }
+}
