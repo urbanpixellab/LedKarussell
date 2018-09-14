@@ -135,9 +135,9 @@ void LedAnimator::drawToArray(int drawFunction,int dir,int time,float freq,u_int
     
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-        selectionArrays[(i * 3) + 0] = (a.r + b.r * values[i])* *_masterBrightness;
-        selectionArrays[(i * 3) + 1] = (a.g + b.r * values[i])* *_masterBrightness;
-        selectionArrays[(i * 3) + 2] = (a.b + b.r * values[i])* *_masterBrightness;
+        selectionArrays[(i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[(i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[(i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
     }
     
 }
@@ -235,9 +235,11 @@ void LedAnimator::addToArray(int drawFunction,int dir,int time,float freq,u_int8
     //now write to array
     for (int i = 0; i < len; i++) //reduce to pixel
     {
-        selectionArrays[(i * 3) + 0] = (a.r + b.r * values[i])* *_masterBrightness;
-        selectionArrays[(i * 3) + 1] = (a.g + b.r * values[i])* *_masterBrightness;
-        selectionArrays[(i * 3) + 2] = (a.b + b.r * values[i])* *_masterBrightness;
+
+        selectionArrays[(i * 3) + 0] = std::max(int(a.r * values[i]),int(b.r * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[(i * 3) + 1] = std::max(int(a.g * values[i]),int(b.g * (1-values[i]))) * *_masterBrightness;
+        selectionArrays[(i * 3) + 2] = std::max(int(a.b * values[i]),int(b.b * (1-values[i]))) * *_masterBrightness;
+
     }
 }
 

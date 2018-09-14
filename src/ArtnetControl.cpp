@@ -112,6 +112,14 @@ void ArtnetControl::clearNodes()
         delete _nodes[i];
     }
     _nodes.clear();
+    for (int i = 0; i < _preSegments.size(); i++)
+    {
+        delete _preSegments[i];
+        delete _liveSegments[i];
+    }
+    _preSegments.clear();
+    _liveSegments.clear();
+    
 }
 
 void ArtnetControl::loadNodes()
@@ -128,7 +136,7 @@ void ArtnetControl::loadNodes()
         Node *n = new Node();
         n->ip = nodes.getValue("ip", "127.0.0.1");
         n->name = nodes.getValue("name", "A1");
-        cout << n->ip << " " << n->name << endl;
+//        cout << n->ip << " " << n->name << endl;
         //string ip = "192.168.12."+ ofToString(200+i);
         n->artnet.begin(n->ip.c_str());
         //fill universes black
@@ -142,6 +150,7 @@ void ArtnetControl::loadNodes()
         _nodes.push_back(n);
         nodes.popTag();
     }
+    cout << "num nodes " << _nodes.size() << endl;
     // now load the segments
     _preSegments.clear();
     _liveSegments.clear();
@@ -174,6 +183,7 @@ void ArtnetControl::loadNodes()
     
     //load the selections from xml and create buttons for every selection with the name and id
     ofxXmlSettings sel("selector.xml");
+    _selections.clear();
     for (int i = 0; i < sel.getNumTags("select"); i++)
     {
         sel.pushTag("select",i);
@@ -208,10 +218,10 @@ void ArtnetControl::loadNodes()
         float x = 0.25 + (i * (0.5/16.));
         float y = 0.10;
         _GUI->getMesh().addVertex(ofVec2f(x,y));
-        _GUI->getMesh().addTexCoord(ofVec2f(0,i + offset)); // offset of 9 rows
+        _GUI->getMesh().addTexCoord(ofVec2f(150,i + offset)); // offset of 9 rows
         y = 1-y;
         _GUI->getMesh().addVertex(ofVec2f(x,y));
-        _GUI->getMesh().addTexCoord(ofVec2f(150,i + offset));
+        _GUI->getMesh().addTexCoord(ofVec2f(0,i + offset));
     }
     // to fix the texture is right for the leds, but it is not sharp on the preview
     
@@ -444,7 +454,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         //add now the second color
         for (int stepElement = 0; stepElement < getNumSelections(); stepElement++)
         {
-            if(_editPatroon->getSeqStepB(_step)[stepElement] ==  true)
+            if(pattern->getSeqStepB(_step)[stepElement] ==  true)
             {
                 int s = _selections[stepElement].items.size();
                 for (int i = 0; i < s; i++)
@@ -452,7 +462,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                     int seg = _selections[stepElement].items[i];
                     float segShift = frequenzShift(*pattern->getPhase(1), i/float(s), *pattern->getPhaseFreq(1));
                     
-                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c2,c3,segShift);
+                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(), segments[seg]->getLength(),c3,c4,segShift);
                 }
             }
         }
@@ -490,8 +500,26 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             animator->invert(segments[seg]->getArray(), segments[seg]->getLength());
         }
     }
-    //test datamosh
-    //test stage looplicht
+    // datamosh
+
+    // stage looplicht a
+    bool stageLooplichtv1 = true; //link to button
+    if(stageLooplichtv1 == true)
+    {
+        int segOff = 9; //offset from triangle
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg == segOff+_step || seg == segOff+8+_step) continue;
+            animator->blackout(segments[seg]->getArray(), segments[seg]->getLength());
+        }
+    }
+
+    // stage looplicht b
+    
+    // stage looplicht c
+    
+    // blink blink
+    
     //make all segments black only the visible not
     
 }
@@ -516,21 +544,23 @@ float ArtnetControl::frequenzShift(int curve,float time, float freq)
             segShift = 1;//whiteout
             break;
             
-        case 2:
-            segShift = fmod(time,1);//ramp
+        case 2://ramp
+            segShift = fmod(time,1./freq) * (1-(1./freq));
             break;
             
-        case 3:
-            segShift = 1;
+        case 3://saw
+            segShift = (1.-(fmod(time,1./freq))) * (1-(1./freq));
             break;
             
-        case 4:
-            segShift = 1;
+        case 4://tri
+            segShift = fmod(time,1./freq) * (1-(1./freq));
+            if(fmod(time,freq) < 0.5) segShift = 0;
             break;
             
-        case 5:
+        case 5://rect
             
-            segShift = 1;
+            segShift = fmod(time,1./freq);
+            if((fmod(time,1./freq) * (1-(1./freq))) < 0.5) segShift = 0;
             break;
             
         case 6:
@@ -729,10 +759,11 @@ void ArtnetControl::segmentSelectPressed(bool &pressed)
 
 void ArtnetControl::keyPressed(ofKeyEventArgs &key)
 {
-    _test++;
-    _test = _test%getNumSelections();
-    cout << key.keycode << endl;
-    
+    if(key.key == 114)
+    {
+        loadNodes();
+        cout << key.key << endl;
+    }
 }
 
 void ArtnetControl::sliderChanged(bool & value)
