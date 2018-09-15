@@ -92,6 +92,7 @@ public:
     // needed for set initial state of buttons
     void setEditButtonState(int &id, bool state);
     void setLiveButtonState(int &id, bool state);
+    void setMuteArtnetButtonState(bool state);
     
     //Positioning GUI
     int CollumnEdit1;

@@ -28,7 +28,7 @@ void LightControl::setup(ofRectangle area){
     loadCommands();
     
     // setup the node
-    node.ip = "127.0.0.1";
+    node.ip = "10.0.0.1";
     node.name = "LightDesk";
     node.nodeID = 0;
     node.artnet.begin(node.ip.c_str());

@@ -14,10 +14,12 @@ ArtnetControl::ArtnetControl(MidiControl *mc):_MC(mc)
     _numStepsInSequnce = 8;
     _flashCount = 0;
     _isFlash = false;
-    _isMuted = false;
+    _isMuted = true;
     
     _GUI = new AnimatorGUI(ofRectangle(100,50,500,500),_MC);
     _GUI->createAnimationGUI(LedAnimator::CURVE_COUNT);
+    
+    _GUI->setMuteArtnetButtonState(_isMuted);
 
     _preAnimator = new LedAnimator(_MC,_GUI->getMasterBrightnessKnob().getValueNormalized());
     _liveAnimator = new LedAnimator(_MC,_GUI->getMasterBrightnessKnob().getValueNormalized());
