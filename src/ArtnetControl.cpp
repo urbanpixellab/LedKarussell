@@ -441,10 +441,15 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-
+                    int dir = *pattern->getDir(0);
+                    if(seg == 1 || seg == 26)
+                    {
+                        if(dir == 0) dir = 1;
+                        else if(dir == 1) dir = 0;
+                    }
                     float segShift = frequenzShift(*pattern->getPhase(0), i/float(s), *pattern->getPhaseFreq(0));
                     
-                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
+                    animator->drawToArray(*pattern->getCurve(0),dir,*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
                     
                 }
             }
@@ -458,9 +463,16 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
+                    int dir = *pattern->getDir(1);
+                    if(seg == 1 || seg == 26)
+                    {
+                        if(dir == 0) dir = 1;
+                        else if(dir == 1) dir = 0;
+                    }
+
                     float segShift = frequenzShift(*pattern->getPhase(1), i/float(s), *pattern->getPhaseFreq(1));
                     
-                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c3,c4,segShift);
+                    animator->addToArray(*pattern->getCurve(1),dir,*pattern->getTime(1),*freqB, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c3,c4,segShift);
                 }
             }
         }

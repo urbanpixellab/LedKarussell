@@ -315,10 +315,9 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 // sets state to false of all buttons except the one being pressed
 void AnimatorGUI::editButtonPressed(int &id)
 {
-    cout << "AnimatorGUI::editButtonPressed id: " <<id << endl;
     for (int i=0; i < _patEditButtons.size(); i++)
     {
-        if(i == id) _patEditButtons[i]->getState() = true;
+        if(i == id) continue;
         _patEditButtons[i]->getState() = false;
     }
     ofNotifyEvent(patronEDIT,id);
@@ -327,7 +326,6 @@ void AnimatorGUI::editButtonPressed(int &id)
 // sets state to false of all buttons except the one being pressed
 void AnimatorGUI::liveButtonPressed(int &id)
 {
-    cout << "AnimatorGUI::_patLiveButtons id: " <<id << endl;
     for (int i=0; i < _patLiveButtons.size(); i++)
     {
         if(i == id) continue;
@@ -339,7 +337,6 @@ void AnimatorGUI::liveButtonPressed(int &id)
 
 void AnimatorGUI::muteArtnetButtonPressed(int &id)
 {
-    cout << "mute button pressed" << endl;
     bool state =_muteArtnet.getState();
     ofNotifyEvent(muteButtonPressed,state);
 }
@@ -372,7 +369,6 @@ void AnimatorGUI::NoteOn(int &id)
             break;
         }
     }
-    cout << "midoi select " << _midiSelect << endl;
     switch (_midiSelect) {
         case 0://live pattern
             for (int i = 0; i < 16; i++)
