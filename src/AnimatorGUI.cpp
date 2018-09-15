@@ -351,6 +351,11 @@ void AnimatorGUI::setLiveButtonState(int &id, bool state)
     _patLiveButtons[id]->setState(state);
 }
 
+void AnimatorGUI::setMuteArtnetButtonState(bool state)
+{
+    _muteArtnet.setState(state);
+}
+
 
 
 void AnimatorGUI::NoteOn(int &id)
