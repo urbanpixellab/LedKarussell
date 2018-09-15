@@ -28,6 +28,8 @@ public:
     void setColorFromIDs(int colorIDa,int colorIDb);
     void setColorA(string &s);
     void setColorB(string &s);
+    void setColorAId(int id);
+    void setColorBId(int id);
     void setColorIDs(int *ids);
     void colorSwap(string &s);
 //    ofColor &getColorFromID(int id){return _selectedColors[id];};

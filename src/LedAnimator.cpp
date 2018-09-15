@@ -320,3 +320,11 @@ void LedAnimator::blackout(u_int8_t * selectionArrays,int &begin,int &length)
         selectionArrays[i] = 0;
     }
 }
+
+void LedAnimator::white(u_int8_t * selectionArrays,int &begin,int &length)
+{
+    for (int i = begin; i < length; i++)
+    {
+        selectionArrays[i] = 255;
+    }
+}

@@ -13,7 +13,8 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update()
+{
     _MC.update();
     _AC->update();
 }

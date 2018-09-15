@@ -408,6 +408,7 @@ void ArtnetControl::update()
     // now updaste the arrays to the visualizer
     writeSegmentsToImage(_preSegments, _preIMG);
     writeSegmentsToImage(_liveSegments, _liveIMG);
+    
     sendToNodes();
 }
 
@@ -478,7 +479,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         {
             animator->maxToArray(0,0,0,0, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),col,col,f);
         }
-        _flashCount -= 5;
+        _flashCount -= 25;
     }
     //invert
     if (_GUI->getPostEffectButton(2)->getState() == true)
@@ -489,26 +490,10 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         }
     }
     // datamosh
-
-    // stage looplicht a
+    // blink blink fast
     if(_GUI->getPostEffectButton(3)->getState() == true)
     {
-        int segOff = 9; //offset from triangle
-        for (int seg = 0; seg < _liveSegments.size(); seg++)
-        {
-            if(seg == segOff+_step || seg == segOff+8+_step) continue;
-            animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
-        }
-    }
-
-    // stage looplicht b
-    
-    // stage looplicht c
-    
-    // blink blink fast
-    if(_GUI->getPostEffectButton(4)->getState() == true)
-    {
-        //first call clear the arrau
+        //first call clear the array
         // then add random points in white
         for (int i = 0; i < _liveSegments.size(); i++)
         {
@@ -529,7 +514,93 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         }
     }
     
-    //make all segments black only the visible not
+
+    // stage looplicht a
+    if(_GUI->getPostEffectButton(4)->getState() == true)
+    {
+        int segOff = 9;
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg == segOff+_step || seg == segOff+8+_step)
+            {
+                continue;
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+            
+        }
+    }
+    
+    // stage looplicht b
+    if(_GUI->getPostEffectButton(5)->getState() == true)
+    {
+        int segOff = 9;
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg == segOff+_step || seg == 24-_step)
+            {
+                continue;
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+        }
+    }
+    
+    // stage looplicht c
+    if(_GUI->getPostEffectButton(6)->getState() == true)
+    {
+        int segOff = 9;
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg == 16-_step || seg == 17+_step)
+            {
+                continue;
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+        }
+    }
+    
+
+    // stage looplicht d
+    if(_GUI->getPostEffectButton(7)->getState() == true)
+    {
+        int segOff = 9; //offset from triangle
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg >= 9 && seg < 25)
+            {
+                continue;
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+        }
+    }
+    //met modulo the two colors
+
+    // random strobe
+    if(_GUI->getPostEffectButton(8)->getState() == true)
+    {
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if (ofRandom(10) > 7)
+            {
+                animator->white(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+        }
+    }
     
 }
 
@@ -674,8 +745,6 @@ void ArtnetControl::drawGui()
 
 void ArtnetControl::sendToNodes()
 {
-    cout << "array 7/150 " << _preSegments[7]->getArray()[150] << endl;
-
     if(!_isMuted)
     {
         //black
@@ -685,17 +754,12 @@ void ArtnetControl::sendToNodes()
             int nodeID,universe,first,last = 0;
             for (int i = 0; i < _liveSegments.size(); i++)
             {
-                //each segment is drawn by the Segment abstraction
-                
                 nodeID = _liveSegments[i]->getNodeID();
                 universe = _liveSegments[i]->getUniverse();
                 first = _liveSegments[i]->getBegin();
                 last = _liveSegments[i]->getEnd();
                 for (int cell = first; cell < last; cell++)
                 {
-                    //get the array where to write which function
-                    //and write it to the nodes
-                    //            u_int64_t data = _preSegments[i]->getArray()[first+cell];
                     u_int64_t data = _liveSegments[i]->getArray()[cell];
                     // mach was damit
                     _nodes[nodeID]->universes[universe][cell] = 0;
@@ -708,8 +772,6 @@ void ArtnetControl::sendToNodes()
             int nodeID,universe,first,last = 0;
             for (int i = 0; i < _liveSegments.size(); i++)
             {
-                //each segment is drawn by the Segment abstraction
-                
                 nodeID = _liveSegments[i]->getNodeID();
                 universe = _liveSegments[i]->getUniverse();
                 first = _liveSegments[i]->getBegin();
@@ -725,12 +787,7 @@ void ArtnetControl::sendToNodes()
                 }
             }
         }
-
-        //then send the nodes
-        //basic sending
-        //int universe = 0;
-        //int chnCount = 450;//33 leds * 3
-        //artnet.send(universe1,universe,chnCount);
+        
         for (int n = 0; n < _nodes.size(); n++)
         {
             for (int u = 0; u < 8; u++)

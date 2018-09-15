@@ -114,6 +114,7 @@ private:
     bool                    _isFlash;
     ofColor                 _black = ofColor(0,0,0);
     bool                    _isMuted;
+    
 };
 
 #endif /* ArtnetControl_hpp */
