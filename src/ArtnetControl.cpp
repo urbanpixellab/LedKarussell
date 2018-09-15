@@ -533,7 +533,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         int segOff = 9;
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            if(seg == segOff+_step || seg == segOff+8+_step)
+            if(seg == segOff+_step || seg == 24-_step)
             {
                 continue;
             }
@@ -541,7 +541,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             {
                 animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
             }
-            
         }
     }
     
@@ -549,11 +548,13 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     if(_GUI->getPostEffectButton(5)->getState() == true)
     {
         int segOff = 9;
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             if(seg == segOff+_step || seg == 24-_step)
             {
-                continue;
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+
             }
             else
             {
@@ -583,12 +584,14 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     // stage looplicht d
     if(_GUI->getPostEffectButton(7)->getState() == true)
     {
-        int segOff = 9; //offset from triangle
+        int segOff = 9;
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
+
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            if(seg >= 9 && seg < 25)
+            if(seg == 16-_step || seg == 17+_step)
             {
-                continue;
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
             }
             else
             {

@@ -153,15 +153,15 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _postEffectsButtons.push_back(pLoopLichtP1);
     
     Button *pLoopLichtP2 = new Button();
-    pLoopLichtP2->setup(ofRectangle(780+w*5.2,550,w,h), "LoopP2", true);
+    pLoopLichtP2->setup(ofRectangle(780+w*5.2,550,w,h), "LoopK1", true);
     _postEffectsButtons.push_back(pLoopLichtP2);
     
     Button *pLoopLichtP3 = new Button();
-    pLoopLichtP3->setup(ofRectangle(780+w*6.2,550,w,h), "LoopP3", true);
+    pLoopLichtP3->setup(ofRectangle(780+w*6.2,550,w,h), "LoopP2", true);
     _postEffectsButtons.push_back(pLoopLichtP3);
     
     Button *pLoopLichtP4 = new Button();
-    pLoopLichtP4->setup(ofRectangle(780+w*7.2,550,w,h), "LoopP4", true);
+    pLoopLichtP4->setup(ofRectangle(780+w*7.2,550,w,h), "LoopK2", true);
     _postEffectsButtons.push_back(pLoopLichtP4);
 
     Button *pStrobe = new Button();

@@ -328,3 +328,13 @@ void LedAnimator::white(u_int8_t * selectionArrays,int &begin,int &length)
         selectionArrays[i] = 255;
     }
 }
+
+void LedAnimator::color(u_int8_t * selectionArrays,int &begin,int &length,ofColor &color)
+{
+    for (int i = begin; i < length/3; i++)
+    {
+        selectionArrays[i*3 + 0] = color.r * *_masterBrightness;
+        selectionArrays[i*3 + 1] = color.g * *_masterBrightness;
+        selectionArrays[i*3 + 2] = color.b * *_masterBrightness;
+    }
+}
