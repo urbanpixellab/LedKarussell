@@ -606,11 +606,51 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     // random strobe
     if(_GUI->getPostEffectButton(8)->getState() == true)
     {
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
+
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             if (ofRandom(10) > 7)
             {
-                animator->white(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else
+            {
+                animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
+            }
+        }
+    }
+    // stage looplicht d
+    if(_GUI->getPostEffectButton(9)->getState() == true)
+    {
+        int segOff = 9;
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
+        
+        for (int seg = 0; seg < _liveSegments.size(); seg++)
+        {
+            if(seg == 0 || seg == 1)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else if(seg == 3 || seg == 4)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else if(seg == 6 || seg == 7)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else if(seg == 25 || seg == 26)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else if(seg == 28 || seg == 29)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+            }
+            else if(seg == 31 || seg == 32)
+            {
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
             }
             else
             {
