@@ -153,15 +153,15 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     _postEffectsButtons.push_back(pLoopLichtP1);
     
     Button *pLoopLichtP2 = new Button();
-    pLoopLichtP2->setup(ofRectangle(780+w*5.2,550,w,h), "LoopP2", true);
+    pLoopLichtP2->setup(ofRectangle(780+w*5.2,550,w,h), "LoopK1", true);
     _postEffectsButtons.push_back(pLoopLichtP2);
     
     Button *pLoopLichtP3 = new Button();
-    pLoopLichtP3->setup(ofRectangle(780+w*6.2,550,w,h), "LoopP3", true);
+    pLoopLichtP3->setup(ofRectangle(780+w*6.2,550,w,h), "LoopP2", true);
     _postEffectsButtons.push_back(pLoopLichtP3);
     
     Button *pLoopLichtP4 = new Button();
-    pLoopLichtP4->setup(ofRectangle(780+w*7.2,550,w,h), "LoopP4", true);
+    pLoopLichtP4->setup(ofRectangle(780+w*7.2,550,w,h), "LoopK2", true);
     _postEffectsButtons.push_back(pLoopLichtP4);
 
     Button *pStrobe = new Button();
@@ -315,10 +315,9 @@ void AnimatorGUI::mousePressed(ofMouseEventArgs &args)
 // sets state to false of all buttons except the one being pressed
 void AnimatorGUI::editButtonPressed(int &id)
 {
-    cout << "AnimatorGUI::editButtonPressed id: " <<id << endl;
     for (int i=0; i < _patEditButtons.size(); i++)
     {
-        if(i == id) _patEditButtons[i]->getState() = true;
+        if(i == id) continue;
         _patEditButtons[i]->getState() = false;
     }
     ofNotifyEvent(patronEDIT,id);
@@ -327,7 +326,6 @@ void AnimatorGUI::editButtonPressed(int &id)
 // sets state to false of all buttons except the one being pressed
 void AnimatorGUI::liveButtonPressed(int &id)
 {
-    cout << "AnimatorGUI::_patLiveButtons id: " <<id << endl;
     for (int i=0; i < _patLiveButtons.size(); i++)
     {
         if(i == id) continue;
@@ -339,7 +337,6 @@ void AnimatorGUI::liveButtonPressed(int &id)
 
 void AnimatorGUI::muteArtnetButtonPressed(int &id)
 {
-    cout << "mute button pressed" << endl;
     bool state =_muteArtnet.getState();
     ofNotifyEvent(muteButtonPressed,state);
 }
@@ -372,7 +369,6 @@ void AnimatorGUI::NoteOn(int &id)
             break;
         }
     }
-    cout << "midoi select " << _midiSelect << endl;
     switch (_midiSelect) {
         case 0://live pattern
             for (int i = 0; i < 16; i++)

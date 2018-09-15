@@ -441,10 +441,15 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
-
+                    int dir = *pattern->getDir(0);
+                    if(seg == 1 || seg == 26)
+                    {
+                        if(dir == 0) dir = 1;
+                        else if(dir == 1) dir = 0;
+                    }
                     float segShift = frequenzShift(*pattern->getPhase(0), i/float(s), *pattern->getPhaseFreq(0));
                     
-                    animator->drawToArray(*pattern->getCurve(0),*pattern->getDir(0),*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
+                    animator->drawToArray(*pattern->getCurve(0),dir,*pattern->getTime(0),*freqA, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c1,c2,segShift);
                     
                 }
             }
@@ -458,9 +463,16 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
                 for (int i = 0; i < s; i++)
                 {
                     int seg = _selections[stepElement].items[i];
+                    int dir = *pattern->getDir(1);
+                    if(seg == 1 || seg == 26)
+                    {
+                        if(dir == 0) dir = 1;
+                        else if(dir == 1) dir = 0;
+                    }
+
                     float segShift = frequenzShift(*pattern->getPhase(1), i/float(s), *pattern->getPhaseFreq(1));
                     
-                    animator->addToArray(*pattern->getCurve(1),*pattern->getDir(1),*pattern->getTime(1),*freqB, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c3,c4,segShift);
+                    animator->addToArray(*pattern->getCurve(1),dir,*pattern->getTime(1),*freqB, segments[seg]->getArray(),segments[seg]->getBegin(), segments[seg]->getLength(),c3,c4,segShift);
                 }
             }
         }
@@ -521,7 +533,7 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
         int segOff = 9;
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            if(seg == segOff+_step || seg == segOff+8+_step)
+            if(seg == segOff+_step || seg == 24-_step)
             {
                 continue;
             }
@@ -529,7 +541,6 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
             {
                 animator->blackout(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength());
             }
-            
         }
     }
     
@@ -537,11 +548,13 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     if(_GUI->getPostEffectButton(5)->getState() == true)
     {
         int segOff = 9;
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
             if(seg == segOff+_step || seg == 24-_step)
             {
-                continue;
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
+
             }
             else
             {
@@ -571,12 +584,14 @@ void ArtnetControl::doLedAnimation(Patroon * pattern,LedAnimator * animator,vect
     // stage looplicht d
     if(_GUI->getPostEffectButton(7)->getState() == true)
     {
-        int segOff = 9; //offset from triangle
+        int segOff = 9;
+        ofColor col = ofColor(_GUI->getColorselectorLive().getColorFromID(_GUI->getColorselectorLive().getSelectedColorIDs()[0]));
+
         for (int seg = 0; seg < _liveSegments.size(); seg++)
         {
-            if(seg >= 9 && seg < 25)
+            if(seg == 16-_step || seg == 17+_step)
             {
-                continue;
+                animator->color(segments[seg]->getArray(),segments[seg]->getBegin() ,segments[seg]->getLength(),col);
             }
             else
             {

@@ -11,7 +11,7 @@
 Segment::Segment(int nodeID,int universe,int beginLed,int endLed,int segmentID):_universe(universe),_begin(beginLed),_end(endLed),_nodeID(nodeID)
 {
     _isInverse= false;
-    if(_begin<_end) _isInverse= true;
+    //if(segmentID == 1 ||segmentID == 26) _isInverse= true;
     _pixLength = _end - _begin;
     _begin *= 3;
     _end *= 3;
@@ -37,8 +37,8 @@ Segment::~Segment(){}
 
 u_int8_t *Segment::getPixel(int id)
 {
-    //check range
     if(id >= _pixLength) return *_pixel;
+    //check range
     _pixel[0] = &_values[_begin + (id * 3) + 0];
     _pixel[1] = &_values[_begin + (id * 3) + 1];
     _pixel[2] = &_values[_begin + (id * 3) + 2];

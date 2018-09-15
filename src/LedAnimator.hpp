@@ -53,6 +53,7 @@ public:
     void invert(u_int8_t * selectionArrays,int &begin,int &length);
     void blackout(u_int8_t * selectionArrays,int &begin,int &length);
     void white(u_int8_t * selectionArrays,int &begin,int &length);
+    void color(u_int8_t * selectionArrays,int &begin,int &length,ofColor &color);
     
     
 private:
