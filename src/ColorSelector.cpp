@@ -111,6 +111,18 @@ void ColorSelector::setColorFromIDs(int idA,int idB)
     _selectedColors[1] = colors[_selectedColorIDs[1]];
 }
 
+void ColorSelector::setColorAId(int id)
+{
+    _selectedColorIDs[0] = id;
+    _selectedColors[0] = colors[_selectedColorIDs[0]];
+}
+
+void ColorSelector::setColorBId(int id)
+{
+    _selectedColorIDs[1] = id;
+    _selectedColors[1] = colors[_selectedColorIDs[1]];
+}
+
 
 void ColorSelector::setColorA(string &s)
 {    

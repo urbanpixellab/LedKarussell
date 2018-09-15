@@ -110,6 +110,8 @@ public:
     void NoteOn(int &id);
     void NoteOff(int &id);
     
+    void ControlChange(int &id);
+    
 private:
 
     ofRectangle         _drawArea;

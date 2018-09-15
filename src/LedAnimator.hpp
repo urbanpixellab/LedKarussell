@@ -52,6 +52,7 @@ public:
     void maxToArray(int drawFunction,int dir,int time,float freq,u_int8_t * selectionArrays,int &begin,int &length,ofColor &a,ofColor &b,float &shift);//dt is already existing
     void invert(u_int8_t * selectionArrays,int &begin,int &length);
     void blackout(u_int8_t * selectionArrays,int &begin,int &length);
+    void white(u_int8_t * selectionArrays,int &begin,int &length);
     
     
 private:

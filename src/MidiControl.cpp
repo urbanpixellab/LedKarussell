@@ -93,6 +93,11 @@ void MidiControl::newTapEvent(string &s)
     _clk.tap();
 }
 
+void MidiControl::newTap()
+{
+    _clk.tap();
+}
+
 
 void MidiControl::newMidiMessage(ofxMidiMessage& msg) {
     

@@ -31,6 +31,7 @@ public:
     
     void tapControler();
     void newTapEvent(string &name); //tap bpm
+    void newTap(); //tap bpm
     void resetTapCount();
     
     void newMidiMessage(ofxMidiMessage& eventArgs);
