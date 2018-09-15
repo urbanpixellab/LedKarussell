@@ -44,22 +44,22 @@
 	<id>6</id>
 	<node>1</node>
 	<universe>2</universe>
-	<beginPixel>1</beginPixel>
-	<length>39</length>
+	<beginPixel>41</beginPixel>
+	<length>77</length>
 </segment>
 <segment>
 	<id>7</id>
 	<node>1</node>
 	<universe>2</universe>
-	<beginPixel>41</beginPixel>
-	<length>77</length>
+	<beginPixel>80</beginPixel>
+	<length>121</length>
 </segment>
 <segment>
 	<id>8</id>
 	<node>1</node>
 	<universe>2</universe>
-	<beginPixel>80</beginPixel>
-	<length>121</length>
+	<beginPixel>1</beginPixel>
+	<length>39</length>
 </segment>
 <segment>
 	<id>9</id>
