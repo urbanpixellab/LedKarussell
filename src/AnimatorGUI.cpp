@@ -131,42 +131,46 @@ void AnimatorGUI::createAnimationGUI(int animationCount)
     //adding post effects
     int x = COLLUMNLIVE + (w*2.2);
 
-    Button *pBlack = new Button();
+    Button *pBlack = new Button();//0
     pBlack->setup(ofRectangle(780,550,w,h), "Blackout", true);
     _postEffectsButtons.push_back(pBlack);
     
     y = RowsEdit[0] + (h * 1.1);
-    Button *pFlash = new Button();
-    pFlash->setup(ofRectangle(780 + w*1.1,550,w,h), "Flash", true);
+    Button *pFlash = new Button();//1
+    pFlash->setup(ofRectangle(780 + w*1.2,550,w,h), "Flash", true);
     _postEffectsButtons.push_back(pFlash);
 
-    Button *pInvert = new Button();
+    Button *pInvert = new Button();//2
     pInvert->setup(ofRectangle(780+w*2.2,550,w,h), "Invert", true);
     _postEffectsButtons.push_back(pInvert);
 
-    Button *pBlink1 = new Button();
+    Button *pBlink1 = new Button();//3
     pBlink1->setup(ofRectangle(780+w*3.2,550,w,h), "Blink_FF", true);
     _postEffectsButtons.push_back(pBlink1);
     
-    Button *pLoopLichtP1 = new Button();
+    Button *pLoopLichtP1 = new Button();//4
     pLoopLichtP1->setup(ofRectangle(780+w*4.2,550,w,h), "LoopP1", true);
     _postEffectsButtons.push_back(pLoopLichtP1);
     
-    Button *pLoopLichtP2 = new Button();
+    Button *pLoopLichtP2 = new Button();//5
     pLoopLichtP2->setup(ofRectangle(780+w*5.2,550,w,h), "LoopK1", true);
     _postEffectsButtons.push_back(pLoopLichtP2);
     
-    Button *pLoopLichtP3 = new Button();
+    Button *pLoopLichtP3 = new Button();//6
     pLoopLichtP3->setup(ofRectangle(780+w*6.2,550,w,h), "LoopP2", true);
     _postEffectsButtons.push_back(pLoopLichtP3);
     
-    Button *pLoopLichtP4 = new Button();
+    Button *pLoopLichtP4 = new Button();//7
     pLoopLichtP4->setup(ofRectangle(780+w*7.2,550,w,h), "LoopK2", true);
     _postEffectsButtons.push_back(pLoopLichtP4);
 
-    Button *pStrobe = new Button();
+    Button *pStrobe = new Button();//8
     pStrobe->setup(ofRectangle(780,550 + h*1.1,w,h), "Rand Strobe", true);
     _postEffectsButtons.push_back(pStrobe);
+
+    Button *pArrow = new Button();//9
+    pArrow->setup(ofRectangle(780+w*1.2,550 + h*1.1,w,h), "Arrows", true);
+    _postEffectsButtons.push_back(pArrow);
     
 
     //the auto button
@@ -225,6 +229,7 @@ void AnimatorGUI::update()
         
     }
     _oldAutoState = _autoPattern.getState() ;
+    lightcontrol.sendTest();
 }
 
 void AnimatorGUI::draw(ofImage &pre, ofImage &live)
@@ -426,15 +431,6 @@ void AnimatorGUI::NoteOn(int &id)
             }
             break;
             
-        case 5://edit pattern
-            for (int i = 0; i < 16; i++)
-            {
-                if (_MidiSequenzerButtons[i] == id)
-                {
-                }
-            }
-            break;
-            
         default:
             break;
     }
@@ -445,6 +441,10 @@ void AnimatorGUI::NoteOn(int &id)
     if(id == 51) //bpm
     {
         _MC->newTap();
+    }
+    if(id == 40) //bpm
+    {
+        _postEffectsButtons[8]->pressedControler();
     }
 }
 
@@ -462,6 +462,10 @@ void AnimatorGUI::NoteOff(int &id)
     if(id == 49)
     {
         _postEffectsButtons[1]->pressedControler();
+    }
+    if(id == 40) //bpm
+    {
+        _postEffectsButtons[8]->pressedControler();
     }
 
 }

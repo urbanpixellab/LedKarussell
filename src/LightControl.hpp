@@ -50,6 +50,7 @@ public:
     void setup(ofRectangle area);
     void draw();
     void sendCommand(int &id);
+    void sendTest();
     
 private:
     vector<Command>     _commands;

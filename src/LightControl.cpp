@@ -28,7 +28,7 @@ void LightControl::setup(ofRectangle area){
     loadCommands();
     
     // setup the node
-    node.ip = "10.0.0.1";
+    node.ip = "10.0.0.160";
     node.name = "LightDesk";
     node.nodeID = 0;
     node.artnet.begin(node.ip.c_str());
@@ -121,8 +121,19 @@ void LightControl::sendCommand(int &id)
             }
         }
     }
-    node.artnet.send(node.universe,0,512);
+    node.artnet.send(node.universe,1,512);
 }
 
  
 
+void LightControl::sendTest()
+{
+    /*
+    u_int8_t testuniverse[512]; //8 full dm universes
+    for (int i = 0; i < 512; i++)
+    {
+        testuniverse[i] = 255;
+    }
+    node.artnet.send(testuniverse,1,512);
+    cout << "send artnet " << endl;*/
+}

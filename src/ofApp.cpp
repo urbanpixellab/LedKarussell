@@ -5,6 +5,7 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+    ofSetEscapeQuitsApp(false);
     ofSetBackgroundColor(21);
     ofSetLineWidth(2);
     ofTrueTypeFont::setGlobalDpi(72);
