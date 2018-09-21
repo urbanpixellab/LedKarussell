@@ -446,6 +446,10 @@ void AnimatorGUI::NoteOn(int &id)
     {
         _postEffectsButtons[8]->pressedControler();
     }
+    if(id == 41) //blink
+    {
+        _postEffectsButtons[3]->pressedControler();
+    }
 }
 
 void AnimatorGUI::NoteOff(int &id)
@@ -467,6 +471,11 @@ void AnimatorGUI::NoteOff(int &id)
     {
         _postEffectsButtons[8]->pressedControler();
     }
+    if(id == 41) //blink
+    {
+        _postEffectsButtons[3]->pressedControler();
+    }
+
 
 }
 
